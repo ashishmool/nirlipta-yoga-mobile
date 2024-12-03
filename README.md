@@ -78,7 +78,7 @@ We welcome contributions from developers and designers worldwide!
 
 ## Contact 📬  
 
-- GitHub: [Nirliptah Yoga App GitHub](https://github.com/ashishmool/nirlipta-yoga-app.git)  
+- GitHub: [Nirliptah Yoga Mobile-App GitHub](https://github.com/ashishmool/nirlipta-yoga-mobile.git)  
 - LinkedIn: [Ashish Mool](https://www.linkedin.com/in/ashish-mool/)  
 
 ## Conclusion 🌿  
