@@ -21,7 +21,7 @@ class LoginScreenView extends StatelessWidget {
               // Logo
               Center(
                 child: SvgPicture.asset(
-                  'assets/icons/logo-main.svg',
+                  'assets/icons/nirlipta-logo.svg',
                   height: 100,
                 ),
               ),
@@ -51,7 +51,12 @@ class LoginScreenView extends StatelessWidget {
                   hintStyle: const TextStyle(
                     fontFamily: 'Gilroy',
                   ),
-                  border: OutlineInputBorder(
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: primaryColor),
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: primaryColor),
                     borderRadius: BorderRadius.circular(12.0),
                   ),
                 ),
@@ -71,7 +76,12 @@ class LoginScreenView extends StatelessWidget {
                   hintStyle: const TextStyle(
                     fontFamily: 'Gilroy',
                   ),
-                  border: OutlineInputBorder(
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: secondaryColor),
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: secondaryColor),
                     borderRadius: BorderRadius.circular(12.0),
                   ),
                 ),
@@ -81,17 +91,37 @@ class LoginScreenView extends StatelessWidget {
               // Forgot Password
               Align(
                 alignment: Alignment.center,
-                child: TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    'Forgot your password?',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: secondaryColor,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: 'Gilroy',
+                child: Column(
+                  children: [
+                    TextButton(
+                      onPressed: () {},
+                      child: Text(
+                        'Forgot your password?',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: secondaryColor,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'Gilroy',
+                        ),
+                      ),
                     ),
-                  ),
+                    // Register Text
+                    TextButton(
+                      onPressed: () {
+                        // Navigate to Register
+                        Navigator.pushNamed(context, '/register');
+                      },
+                      child: Text(
+                        "Don't have an account? Register.",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: primaryColor,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'Gilroy',
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 24),

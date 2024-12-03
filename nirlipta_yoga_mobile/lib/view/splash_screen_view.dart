@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:lottie/lottie.dart';
 
 class SplashScreenView extends StatelessWidget {
   const SplashScreenView({super.key});
@@ -20,20 +19,16 @@ class SplashScreenView extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // SVG Logo
+              // Lottie.asset(
+              //   'assets/animations/loading.json',
+              //   height: 200,
+              //   repeat: true,
+              // ),
               SvgPicture.asset(
-                'assets/icons/logo-main.svg',
-                height: 120,
-                colorFilter: null, // Use original colors
+                'assets/icons/nirlipta-logo.svg',
+                height: 100,
               ),
               const SizedBox(height: 40),
-
-              // Lottie Loading Animation
-              Lottie.asset(
-                'assets/animations/loading.json',
-                height: 100,
-                repeat: true,
-              ),
             ],
           ),
         ),
