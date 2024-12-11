@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import '../../common/logo.dart';
+import '../../common/snackbar.dart';
 
 
 class RequestPasswordScreenView extends StatelessWidget {
@@ -14,6 +15,7 @@ class RequestPasswordScreenView extends StatelessWidget {
       appBar: AppBar(
         title: Text("Reset Password Request"),
         backgroundColor: Colors.white,
+        foregroundColor: Colors.black54,
       ),
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -27,12 +29,7 @@ class RequestPasswordScreenView extends StatelessWidget {
                 const SizedBox(height: 32),
 
                 // Logo
-                Center(
-                  child: SvgPicture.asset(
-                    'assets/icons/nirlipta-logo.svg',
-                    height: 80,
-                  ),
-                ),
+                Logo(),
                 const SizedBox(height: 32),
 
                 // Header Text
@@ -75,7 +72,9 @@ class RequestPasswordScreenView extends StatelessWidget {
                 // Submit Button
                 ElevatedButton(
                   onPressed: () {
-                    // Submit logic
+                    showMySnackbar(context, 'Password Request Sent!');
+                    // Navigate to Verification
+                    Navigator.pushNamed(context, '/verify-otp');
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: primaryColor,
@@ -93,6 +92,35 @@ class RequestPasswordScreenView extends StatelessWidget {
                       fontFamily: 'Gilroy',
                     ),
                   ),
+                ),
+                const SizedBox(height: 16),
+                // Register Redirect
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Dont have an account?',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontFamily: 'Gilroy',
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/register');
+                      },
+                      child: Text(
+                        'Register',
+                        style: TextStyle(
+                          color: primaryColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Gilroy',
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

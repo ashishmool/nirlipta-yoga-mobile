@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lottie/lottie.dart';
 
 class SplashScreenView extends StatelessWidget {
   const SplashScreenView({super.key});
@@ -8,7 +8,7 @@ class SplashScreenView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Navigate to the login screen after a delay
-    Timer(const Duration(seconds: 3), () {
+    Timer(const Duration(seconds: 7), () {
       Navigator.pushReplacementNamed(context, '/login');
     });
 
@@ -19,16 +19,16 @@ class SplashScreenView extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Lottie.asset(
-              //   'assets/animations/loading.json',
-              //   height: 200,
-              //   repeat: true,
-              // ),
-              SvgPicture.asset(
-                'assets/icons/nirlipta-logo.svg',
-                height: 100,
+              Lottie.asset(
+                'assets/animations/loading.json',
+                height: 200,
+                repeat: true,
               ),
-              const SizedBox(height: 40),
+              // SvgPicture.asset(
+              //   'assets/icons/nirlipta-logo.svg',
+              //   height: 100,
+              // ),
+              // const SizedBox(height: 40),
             ],
           ),
         ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import '../../common/logo.dart';
+import '../../common/snackbar.dart';
 
 class LoginScreenView extends StatelessWidget {
   const LoginScreenView({super.key});
@@ -21,12 +22,7 @@ class LoginScreenView extends StatelessWidget {
               children: [
                 const SizedBox(height: 32),
                 // Logo
-                Center(
-                  child: SvgPicture.asset(
-                    'assets/icons/nirlipta-logo.svg',
-                    height: 80,
-                  ),
-                ),
+                Logo(),
                 const SizedBox(height: 32),
 
                 // Welcome Text
@@ -34,7 +30,7 @@ class LoginScreenView extends StatelessWidget {
                   child: Text(
                     'Welcome!',
                     style: const TextStyle(
-                      fontSize: 28,
+                      fontSize: 24,
                       fontWeight: FontWeight.w700,
                       color: Color(0xFFB8978C),
                     ),
@@ -88,7 +84,33 @@ class LoginScreenView extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 24),
+
+                // Login Button
+                ElevatedButton(
+                  onPressed: () {
+                    showMySnackbar(context, 'Logged In Successfully');
+                    // Navigate to Provide Email
+                    Navigator.pushNamed(context, '/student-dashboard');
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: primaryColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  ),
+                  child: const Text(
+                    'Login',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Gilroy',
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 32),
 
                 // Forgot Password
                 Align(
@@ -110,70 +132,38 @@ class LoginScreenView extends StatelessWidget {
                           ),
                         ),
                       ),
-                      // Register Text
-                      TextButton(
-                        onPressed: () {
-                          // Navigate to Register
-                          Navigator.pushNamed(context, '/register');
-                        },
-                        child: Text(
-                          "Don't have an account? Register.",
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: primaryColor,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: 'Gilroy',
+
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Dont have an account?',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontFamily: 'Gilroy',
+                            ),
                           ),
-                        ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/register');
+                            },
+                            child: Text(
+                              'Register',
+                              style: TextStyle(
+                                color: primaryColor,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Gilroy',
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 24),
-
-                // Login Button
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: primaryColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  ),
-                  child: const Text(
-                    'Login',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'Gilroy',
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // // Facebook Login Button
-                // ElevatedButton.icon(
-                //   onPressed: () {},
-                //   style: ElevatedButton.styleFrom(
-                //     backgroundColor: const Color(0xFF1877F2), // Facebook Blue
-                //     shape: RoundedRectangleBorder(
-                //       borderRadius: BorderRadius.circular(12.0),
-                //     ),
-                //     padding: const EdgeInsets.symmetric(vertical: 16.0),
-                //   ),
-                //   icon: const Icon(Icons.facebook, color: Colors.white),
-                //   label: const Text(
-                //     'Continue with Facebook',
-                //     style: TextStyle(
-                //       color: Colors.white,
-                //       fontSize: 16,
-                //       fontWeight: FontWeight.w600,
-                //       fontFamily: 'Gilroy',
-                //     ),
-                //   ),
-                // ),
               ],
             ),
           ),

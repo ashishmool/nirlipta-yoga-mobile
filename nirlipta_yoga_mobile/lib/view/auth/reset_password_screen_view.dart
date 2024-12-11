@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../common/snackbar.dart';
+
 
 class ResetPasswordScreenView extends StatefulWidget {
   const ResetPasswordScreenView({super.key});
@@ -32,6 +34,7 @@ class _ResetPasswordScreenViewState extends State<ResetPasswordScreenView> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -56,9 +59,9 @@ class _ResetPasswordScreenViewState extends State<ResetPasswordScreenView> {
                 // Header Text
                 Center(
                   child: Text(
-                    'Reset Password',
+                    'New Password',
                     style: const TextStyle(
-                      fontSize: 28,
+                      fontSize: 24,
                       fontWeight: FontWeight.w700,
                       color: Color(0xFFB8978C),
                     ),
@@ -147,7 +150,7 @@ class _ResetPasswordScreenViewState extends State<ResetPasswordScreenView> {
                     child: Text(
                       _errorMessage!,
                       style: const TextStyle(
-                        color: Colors.red,
+                        color: Color(0xFF9B6763),
                         fontSize: 14,
                       ),
                     ),
@@ -158,11 +161,14 @@ class _ResetPasswordScreenViewState extends State<ResetPasswordScreenView> {
                 ElevatedButton(
                   onPressed: _errorMessage == null && _passwordController.text.isNotEmpty
                       ? () {
-                    // Reset Password logic
+                    showMySnackbar(context, 'Password Reset Successful!');
+                    // Navigate to Login
+                    Navigator.pushNamed(context, '/login');
                   }
                       : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: primaryColor,
+                    elevation: 0, // No shadow
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.0),
                     ),
@@ -172,11 +178,40 @@ class _ResetPasswordScreenViewState extends State<ResetPasswordScreenView> {
                     'Reset Password',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 18,
+                      fontSize: 16,
                       fontWeight: FontWeight.w600,
                       fontFamily: 'Gilroy',
                     ),
                   ),
+                ),
+                const SizedBox(height: 32),
+                // Login Redirect
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Already have an account?',
+                      style: TextStyle(
+                        color: secondaryColor,
+                        fontSize: 16,
+                        fontFamily: 'Gilroy',
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/login');
+                      },
+                      child: Text(
+                        'Log In',
+                        style: TextStyle(
+                          color: primaryColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Gilroy',
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

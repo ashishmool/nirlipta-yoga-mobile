@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../common/logo.dart';
+
 class RegisterScreenView extends StatefulWidget {
   const RegisterScreenView({super.key});
 
@@ -26,19 +28,14 @@ class _RegisterScreenViewState extends State<RegisterScreenView> {
         child: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              padding: const EdgeInsets.symmetric(horizontal: 32.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const SizedBox(height: 24),
 
                   // Logo
-                  Center(
-                    child: SvgPicture.asset(
-                      'assets/icons/nirlipta-logo.svg',
-                      height: 80,
-                    ),
-                  ),
+                  Logo(),
                   const SizedBox(height: 32),
 
                   // Title
@@ -46,27 +43,15 @@ class _RegisterScreenViewState extends State<RegisterScreenView> {
                     child: Text(
                       'Create an Account',
                       style: TextStyle(
-                        fontSize: 28,
+                        fontSize: 24,
                         fontWeight: FontWeight.w700,
                         color: secondaryColor,
                         fontFamily: 'Gilroy',
                       ),
                     ),
                   ),
-                  const SizedBox(height: 24),
 
-                  // // Breadcrumbs
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: [
-                  //     Icon(Icons.circle, size: 8, color: primaryColor),
-                  //     const SizedBox(width: 4),
-                  //     Icon(Icons.circle, size: 8, color: secondaryColor),
-                  //     const SizedBox(width: 4),
-                  //     Icon(Icons.circle, size: 8, color: secondaryColor),
-                  //   ],
-                  // ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 24),
 
                   // Email Field
                   TextField(
@@ -159,8 +144,8 @@ class _RegisterScreenViewState extends State<RegisterScreenView> {
                       debugPrint('Email: $email');
                       debugPrint('Medical Conditions: $medicalConditions');
 
-                      // Example: Navigate to another screen
-                      Navigator.pushNamed(context, '/welcome');
+                      //Navigate OTP Screen
+                      Navigator.pushNamed(context, '/verify-otp');
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: primaryColor,
@@ -188,7 +173,7 @@ class _RegisterScreenViewState extends State<RegisterScreenView> {
                       Text(
                         'Already have an account?',
                         style: TextStyle(
-                          color: secondaryColor,
+                          color: Colors.black,
                           fontSize: 16,
                           fontFamily: 'Gilroy',
                         ),
