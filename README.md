@@ -13,24 +13,15 @@ Whether you're a complete beginner or a seasoned yogi, Nirliptah Yoga App makes 
    - Recommendations based on user profile: gender, age, skill level (Beginner, Intermediate, Expert).  
 
 2. **Holistic Offerings** 📚  
-   - **Physical Courses**: Manage your in-person yoga classes and schedules directly from the app.  
-   - **Online Sessions**: On-demand or subscription-based virtual yoga classes for users worldwide.  
+   - **Workshops**: Manage your in-person yoga classes and schedules directly from the app.  
    - **Yoga Retreats**: Plan and book rejuvenating yoga retreats, including details about accommodation, meals, and schedules.  
 
 3. **Digital Achievements** 🎓  
    - Automatically awards verified certificates upon course completion.  
 
-4. **Advanced Analytics** 📊  
-   - Progress tracking with suggestions for improvement and tailored next steps.  
-
-5. **Modern Tech Integration** 🛠️  
+4. **Modern Tech Integration** 🛠️  
    - Flutter-based cross-platform app for Android and iOS.  
    - MVVM architecture ensures separation of concerns, making the app maintainable and scalable.  
-
-6. **AI-Powered Insights** 🤖 (Future Advancements) 
-   - **Pose Guidance (PoseNet)**: Real-time feedback for better posture and alignment (subscription-based).  
-   - **Object Detection (SSD MobileNet, Yolov2 Tiny)**: Enhances interactive sessions by recognizing props or objects.  
-   - **Image Classification (MobileNet)**: Helps detect user performance trends for tailored guidance.  
 
 ## Aims and Objectives 🎯  
 
@@ -50,13 +41,8 @@ Whether you're a complete beginner or a seasoned yogi, Nirliptah Yoga App makes 
 - **Framework**: Flutter  
 - **Programming Language**: Dart  
 - **Architecture**: MVVM  
-- **AI Models**:  
-  - PoseNet (Pose Estimation)  
-  - MobileNet (Image Classification)  
-  - SSD MobileNet, Yolov2 Tiny (Object Detection)  
 - **Tools**:  
   - Figma (UI/UX Design)  
-  - Adobe XD  
   - Draw.io (Prototyping and System Design)  
 
 ## MVVM Architecture Overview 🏗️  
