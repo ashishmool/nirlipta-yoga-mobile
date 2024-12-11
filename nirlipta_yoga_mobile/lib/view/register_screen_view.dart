@@ -22,7 +22,7 @@ class _RegisterScreenViewState extends State<RegisterScreenView> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(
-        alignment: Alignment.center,
+        alignment: Alignment.topLeft,
         child: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
@@ -30,13 +30,13 @@ class _RegisterScreenViewState extends State<RegisterScreenView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 24),
 
                   // Logo
                   Center(
                     child: SvgPicture.asset(
                       'assets/icons/nirlipta-logo.svg',
-                      height: 100,
+                      height: 80,
                     ),
                   ),
                   const SizedBox(height: 32),
@@ -55,18 +55,18 @@ class _RegisterScreenViewState extends State<RegisterScreenView> {
                   ),
                   const SizedBox(height: 24),
 
-                  // Breadcrumbs
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.circle, size: 8, color: primaryColor),
-                      const SizedBox(width: 4),
-                      Icon(Icons.circle, size: 8, color: secondaryColor),
-                      const SizedBox(width: 4),
-                      Icon(Icons.circle, size: 8, color: secondaryColor),
-                    ],
-                  ),
-                  const SizedBox(height: 32),
+                  // // Breadcrumbs
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: [
+                  //     Icon(Icons.circle, size: 8, color: primaryColor),
+                  //     const SizedBox(width: 4),
+                  //     Icon(Icons.circle, size: 8, color: secondaryColor),
+                  //     const SizedBox(width: 4),
+                  //     Icon(Icons.circle, size: 8, color: secondaryColor),
+                  //   ],
+                  // ),
+                  const SizedBox(height: 8),
 
                   // Email Field
                   TextField(
@@ -92,32 +92,6 @@ class _RegisterScreenViewState extends State<RegisterScreenView> {
                   ),
                   const SizedBox(height: 20),
 
-                  // Medical Condition Checkbox and TextField
-                  Row(
-                    children: [
-                      Checkbox(
-                        value: _hasNoMedicalConditions,
-                        activeColor: primaryColor,
-                        onChanged: (value) {
-                          setState(() {
-                            _hasNoMedicalConditions = value ?? false;
-                            if (_hasNoMedicalConditions) {
-                              _medicalConditionController.clear();
-                            }
-                          });
-                        },
-                      ),
-                      Text(
-                        'I have no medical conditions',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: secondaryColor,
-                          fontWeight: FontWeight.w500,
-                          fontFamily: 'Gilroy',
-                        ),
-                      ),
-                    ],
-                  ),
                   TextField(
                     controller: _medicalConditionController,
                     enabled: !_hasNoMedicalConditions,
@@ -143,6 +117,32 @@ class _RegisterScreenViewState extends State<RegisterScreenView> {
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                     ),
+                  ),
+                  // Medical Condition Checkbox and TextField
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: _hasNoMedicalConditions,
+                        activeColor: primaryColor,
+                        onChanged: (value) {
+                          setState(() {
+                            _hasNoMedicalConditions = value ?? false;
+                            if (_hasNoMedicalConditions) {
+                              _medicalConditionController.clear();
+                            }
+                          });
+                        },
+                      ),
+                      Text(
+                        'I have no medical conditions',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: secondaryColor,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'Gilroy',
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 24),
 
