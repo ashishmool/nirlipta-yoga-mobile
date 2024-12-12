@@ -2,13 +2,40 @@ import 'package:flutter/material.dart';
 import '../../common/logo.dart';
 import '../../common/snackbar.dart';
 
-class RequestPasswordScreenView extends StatelessWidget {
+class RequestPasswordScreenView extends StatefulWidget {
   const RequestPasswordScreenView({super.key});
+
+  @override
+  _RequestPasswordScreenViewState createState() =>
+      _RequestPasswordScreenViewState();
+}
+
+class _RequestPasswordScreenViewState extends State<RequestPasswordScreenView> {
+  final TextEditingController emailController = TextEditingController();
+  bool isEmailValid = false; // Track if the email is valid
+  String emailErrorMessage = ''; // Track the error message
+
+  // Regex pattern for email validation
+  final RegExp emailRegex = RegExp(
+    r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+  );
+
+  // Function to validate email
+  void _validateEmail() {
+    setState(() {
+      if (emailRegex.hasMatch(emailController.text)) {
+        isEmailValid = true;
+        emailErrorMessage = ''; // Clear error if valid
+      } else {
+        isEmailValid = false;
+        emailErrorMessage = 'Please enter registered email address';
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final Color primaryColor = const Color(0xFF9B6763); // Primary color
-    final TextEditingController emailController = TextEditingController();
 
     return Scaffold(
       appBar: AppBar(
@@ -35,7 +62,6 @@ class RequestPasswordScreenView extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-
                   // Logo
                   const Logo.colour(height: 80.0),
                   const SizedBox(height: 32),
@@ -74,16 +100,33 @@ class RequestPasswordScreenView extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                     ),
+                    onChanged: (value) {
+                      _validateEmail();
+                    },
                   ),
+                  const SizedBox(height: 8),
+
+                  // Email Error Message
+                  if (emailErrorMessage.isNotEmpty)
+                    Text(
+                      emailErrorMessage,
+                      style: TextStyle(
+                        color: primaryColor,
+                        fontSize: 14,
+                        fontFamily: 'Gilroy',
+                      ),
+                    ),
                   const SizedBox(height: 24),
 
                   // Submit Button
                   ElevatedButton(
-                    onPressed: () {
-                      showMySnackbar(context, 'Password Request Sent!');
-                      // Navigate to Verification
-                      Navigator.pushNamed(context, '/verify-otp');
-                    },
+                    onPressed: isEmailValid
+                        ? () {
+                            showMySnackbar(context, 'Password Request Sent!');
+                            // Navigate to Verification
+                            Navigator.pushNamed(context, '/verify-otp');
+                          }
+                        : null, // Disable button if email is invalid
                     style: ElevatedButton.styleFrom(
                       backgroundColor: primaryColor,
                       shape: RoundedRectangleBorder(

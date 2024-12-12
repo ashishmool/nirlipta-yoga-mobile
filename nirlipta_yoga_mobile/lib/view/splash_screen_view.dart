@@ -8,7 +8,7 @@ class SplashScreenView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Navigate to the login screen after a delay
-    Timer(const Duration(seconds: 7), () {
+    Timer(const Duration(seconds: 4), () {
       Navigator.pushReplacementNamed(context, '/landing');
     });
 
