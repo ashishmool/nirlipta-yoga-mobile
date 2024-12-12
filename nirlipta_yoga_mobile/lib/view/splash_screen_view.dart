@@ -9,7 +9,7 @@ class SplashScreenView extends StatelessWidget {
   Widget build(BuildContext context) {
     // Navigate to the login screen after a delay
     Timer(const Duration(seconds: 7), () {
-      Navigator.pushReplacementNamed(context, '/login');
+      Navigator.pushReplacementNamed(context, '/landing');
     });
 
     return Scaffold(
@@ -24,11 +24,6 @@ class SplashScreenView extends StatelessWidget {
                 height: 200,
                 repeat: true,
               ),
-              // SvgPicture.asset(
-              //   'assets/icons/nirlipta-logo.svg',
-              //   height: 100,
-              // ),
-              // const SizedBox(height: 40),
             ],
           ),
         ),
