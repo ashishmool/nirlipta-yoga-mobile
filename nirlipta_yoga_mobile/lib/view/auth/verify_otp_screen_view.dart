@@ -12,9 +12,11 @@ class _VerifyOtpScreenViewState extends State<VerifyOtpScreenView> {
   final int _otpLength = 6;
   final List<TextEditingController> _otpControllers =
   List.generate(6, (_) => TextEditingController());
+  final List<FocusNode> _focusNodes =
+  List.generate(6, (_) => FocusNode());
   bool _isResendEnabled = false;
   late Timer _timer;
-  int _remainingSeconds = 300;
+  int _remainingSeconds = 600;
 
   @override
   void initState() {
@@ -27,6 +29,9 @@ class _VerifyOtpScreenViewState extends State<VerifyOtpScreenView> {
     _timer.cancel();
     for (var controller in _otpControllers) {
       controller.dispose();
+    }
+    for (var focusNode in _focusNodes) {
+      focusNode.dispose();
     }
     super.dispose();
   }
@@ -45,9 +50,8 @@ class _VerifyOtpScreenViewState extends State<VerifyOtpScreenView> {
 
   void _resendOtp() {
     if (_isResendEnabled) {
-      setState(() => _remainingSeconds = 300);
+      setState(() => _remainingSeconds = 600);
       _startTimer();
-      // Add OTP resend logic here
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('OTP Resent Successfully!'),
@@ -62,9 +66,26 @@ class _VerifyOtpScreenViewState extends State<VerifyOtpScreenView> {
     return _otpControllers.map((controller) => controller.text).join();
   }
 
+  bool _areAllFieldsFilled() {
+    return _otpControllers.every((controller) => controller.text.isNotEmpty);
+  }
+
+  void _onOtpChanged(String value, int index) {
+    // Move focus to the next field if current one is filled
+    if (value.isNotEmpty && index < _otpLength - 1) {
+      FocusScope.of(context).requestFocus(_focusNodes[index + 1]);
+    }
+    // Move focus to the previous field if backspace is pressed and current field is empty
+    else if (value.isEmpty && index > 0) {
+      FocusScope.of(context).requestFocus(_focusNodes[index - 1]);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final Color primaryColor = const Color(0xFF9B6763);
+    final Color secondaryColor = const Color(0xFFB8978C);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Verify OTP'),
@@ -81,14 +102,14 @@ class _VerifyOtpScreenViewState extends State<VerifyOtpScreenView> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // Logo
-                Center(child: Icon(
-                  Icons.lock,
-                  size: 100,
-                  color: Color(0xFF9B6763),
+                Center(
+                  child: Icon(
+                    Icons.lock,
+                    size: 100,
+                    color: primaryColor,
+                  ),
                 ),
-                ),
-
-                const SizedBox(height: 32),
+                const SizedBox(height: 24),
 
                 // Header Text
                 Center(
@@ -98,6 +119,7 @@ class _VerifyOtpScreenViewState extends State<VerifyOtpScreenView> {
                       fontSize: 20,
                       fontWeight: FontWeight.w700,
                       color: primaryColor,
+                      fontFamily: 'Gilroy',
                     ),
                   ),
                 ),
@@ -111,6 +133,7 @@ class _VerifyOtpScreenViewState extends State<VerifyOtpScreenView> {
                       width: 50,
                       child: TextField(
                         controller: _otpControllers[index],
+                        focusNode: _focusNodes[index],
                         keyboardType: TextInputType.number,
                         maxLength: 1,
                         textAlign: TextAlign.center,
@@ -130,11 +153,8 @@ class _VerifyOtpScreenViewState extends State<VerifyOtpScreenView> {
                           ),
                         ),
                         onChanged: (value) {
-                          if (value.isNotEmpty && index < _otpLength - 1) {
-                            FocusScope.of(context).nextFocus();
-                          } else if (value.isEmpty && index > 0) {
-                            FocusScope.of(context).previousFocus();
-                          }
+                          _onOtpChanged(value, index);
+                          setState(() {}); // Trigger state update when OTP is entered
                         },
                       ),
                     );
@@ -152,6 +172,7 @@ class _VerifyOtpScreenViewState extends State<VerifyOtpScreenView> {
                     style: TextStyle(
                       color: _isResendEnabled ? primaryColor : Colors.grey,
                       fontWeight: FontWeight.w600,
+                      fontFamily: 'Gilroy',
                     ),
                   ),
                 ),
@@ -159,8 +180,8 @@ class _VerifyOtpScreenViewState extends State<VerifyOtpScreenView> {
 
                 // Verify Button
                 ElevatedButton(
-                  onPressed: () {
-                    // Add OTP verification logic here
+                  onPressed: _areAllFieldsFilled()
+                      ? () {
                     final otp = _getOtpValue();
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
@@ -170,7 +191,8 @@ class _VerifyOtpScreenViewState extends State<VerifyOtpScreenView> {
                       ),
                     );
                     Navigator.pushNamed(context, '/reset-password');
-                  },
+                  }
+                      : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: primaryColor,
                     shape: RoundedRectangleBorder(
@@ -184,6 +206,7 @@ class _VerifyOtpScreenViewState extends State<VerifyOtpScreenView> {
                       color: Colors.white,
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
+                      fontFamily: 'Gilroy',
                     ),
                   ),
                 ),
