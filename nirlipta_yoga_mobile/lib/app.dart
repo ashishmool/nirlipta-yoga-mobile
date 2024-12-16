@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nirlipta_yoga_mobile/view/onboarding_screen_view.dart';
 import 'package:nirlipta_yoga_mobile/view/auth/request_password_screen_view.dart';
 import 'package:nirlipta_yoga_mobile/view/auth/verify_otp_screen_view.dart';
-import 'package:nirlipta_yoga_mobile/view/dashboard/student_dashboard_screen_view.dart';
+import 'package:nirlipta_yoga_mobile/view/dashboard/user_dashboard_screen_view.dart';
 import 'package:nirlipta_yoga_mobile/view/auth/login_screen_view.dart';
 import 'package:nirlipta_yoga_mobile/view/auth/register_screen_view.dart';
 import 'package:nirlipta_yoga_mobile/view/auth/reset_password_screen_view.dart';
