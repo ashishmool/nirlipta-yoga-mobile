@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nirlipta_yoga_mobile/view/app_landing_screen_view.dart';
+import 'package:nirlipta_yoga_mobile/view/onboarding_screen_view.dart';
 import 'package:nirlipta_yoga_mobile/view/auth/request_password_screen_view.dart';
 import 'package:nirlipta_yoga_mobile/view/auth/verify_otp_screen_view.dart';
 import 'package:nirlipta_yoga_mobile/view/dashboard/student_dashboard_screen_view.dart';
@@ -21,7 +21,7 @@ class App extends StatelessWidget {
       initialRoute: '/', // Initial route
       routes: {
         '/': (context) => const SplashScreenView(), // Splash View
-        '/landing': (context) => const AppLandingScreenView(), // Splash View
+        '/landing': (context) => const OnboardingScreenView(), // Onboarding
         '/login': (context) => const LoginScreenView(), // Login View
         '/register': (context) => const RegisterScreenView(), // Register View
         '/request-password': (context) => const RequestPasswordScreenView(), // Request Password
