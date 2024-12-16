@@ -18,14 +18,16 @@ class _LoginScreenViewState extends State<LoginScreenView> {
 
   bool isPasswordVisible = false;
   bool isEmailValid = false;
+  bool isPasswordValid = false;
 
   // Regex for email validation
-  final RegExp emailRegex = RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+');
+  final RegExp emailRegex = RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+$');
 
   @override
   void initState() {
     super.initState();
-    emailController.addListener(_validateEmail);
+    emailController.addListener(_validateInputs);
+    passwordController.addListener(_validateInputs);
   }
 
   @override
@@ -41,9 +43,11 @@ class _LoginScreenViewState extends State<LoginScreenView> {
     });
   }
 
-  void _validateEmail() {
+  void _validateInputs() {
     setState(() {
+      // Validate email and password
       isEmailValid = emailRegex.hasMatch(emailController.text.trim());
+      isPasswordValid = passwordController.text.trim().isNotEmpty;
     });
   }
 
@@ -145,21 +149,24 @@ class _LoginScreenViewState extends State<LoginScreenView> {
 
                     // Login Button
                     ElevatedButton(
-                      onPressed: isEmailValid && passwordController.text.isNotEmpty
+                      onPressed: isEmailValid && isPasswordValid
                           ? () {
                         final email = emailController.text.trim();
                         final password = passwordController.text.trim();
 
-                        if (email == validEmail && password == validPassword) {
-                          showMySnackbar(context, 'Logged In Successfully');
-                          Navigator.pushNamed(context, '/student-dashboard');
+                        if (email == validEmail &&
+                            password == validPassword) {
+                          showMySnackbar(
+                              context, 'Logged In Successfully');
+                          Navigator.pushNamed(
+                              context, '/student-dashboard');
                         } else {
                           showMySnackbar(context, 'Invalid Credentials');
                         }
                       }
                           : null,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: isEmailValid && passwordController.text.isNotEmpty
+                        backgroundColor: isEmailValid && isPasswordValid
                             ? primaryColor
                             : primaryColor.withOpacity(0.5),
                         shape: RoundedRectangleBorder(
