@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../common/logo.dart';
-import '../../common/snackbar.dart';
+
+import '../../core/common/logo.dart';
+import '../../core/common/snackbar.dart';
 
 class LoginScreenView extends StatefulWidget {
   const LoginScreenView({super.key});
@@ -102,10 +103,10 @@ class _LoginScreenViewState extends State<LoginScreenView> {
                         prefixIcon: const Icon(Icons.email_outlined),
                         hintText: 'Email address',
                         hintStyle: const TextStyle(fontFamily: 'Gilroy'),
-                        errorText: emailController.text.isNotEmpty &&
-                            !isEmailValid
-                            ? 'Please enter a valid email address'
-                            : null,
+                        errorText:
+                            emailController.text.isNotEmpty && !isEmailValid
+                                ? 'Please enter a valid email address'
+                                : null,
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: primaryColor),
                           borderRadius: BorderRadius.circular(12.0),
@@ -151,19 +152,19 @@ class _LoginScreenViewState extends State<LoginScreenView> {
                     ElevatedButton(
                       onPressed: isEmailValid && isPasswordValid
                           ? () {
-                        final email = emailController.text.trim();
-                        final password = passwordController.text.trim();
+                              final email = emailController.text.trim();
+                              final password = passwordController.text.trim();
 
-                        if (email == validEmail &&
-                            password == validPassword) {
-                          showMySnackbar(
-                              context, 'Logged In Successfully');
-                          Navigator.pushNamed(
-                              context, '/student-dashboard');
-                        } else {
-                          showMySnackbar(context, 'Invalid Credentials');
-                        }
-                      }
+                              if (email == validEmail &&
+                                  password == validPassword) {
+                                showMySnackbar(
+                                    context, 'Logged In Successfully');
+                                Navigator.pushNamed(
+                                    context, '/student-dashboard');
+                              } else {
+                                showMySnackbar(context, 'Invalid Credentials');
+                              }
+                            }
                           : null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: isEmailValid && isPasswordValid

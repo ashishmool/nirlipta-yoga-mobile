@@ -34,7 +34,7 @@ dependencies:
   flutter_svg: ^2.0.16
   lottie: ^2.4.0
 
-    
+
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -84,6 +84,14 @@ flutter:
         - asset: assets/fonts/Gilroy-Heavy.ttf
         - asset: assets/fonts/Gilroy-Light.ttf
         - asset: assets/fonts/Gilroy-Medium.ttf
+
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonts/Montserrat-Light.ttf
+        - asset: assets/fonts/Montserrat-Medium.ttf
+        - asset: assets/fonts/Montserrat-Bold.ttf
+        - asset: assets/fonts/Montserrat-Italic.ttf
+        - asset: assets/fonts/Montserrat-Regular.ttf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

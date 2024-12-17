@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import '../../common/logo.dart';
-import '../../common/snackbar.dart';
+
+import '../../core/common/logo.dart';
+import '../../core/common/snackbar.dart';
 
 class ResetPasswordScreenView extends StatefulWidget {
   const ResetPasswordScreenView({super.key});
 
   @override
-  State<ResetPasswordScreenView> createState() => _ResetPasswordScreenViewState();
+  State<ResetPasswordScreenView> createState() =>
+      _ResetPasswordScreenViewState();
 }
 
 class _ResetPasswordScreenViewState extends State<ResetPasswordScreenView> {
@@ -14,7 +16,8 @@ class _ResetPasswordScreenViewState extends State<ResetPasswordScreenView> {
   final Color secondaryColor = const Color(0xFFB8978C); // Secondary color
 
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
@@ -135,7 +138,8 @@ class _ResetPasswordScreenViewState extends State<ResetPasswordScreenView> {
                           ),
                           onPressed: () {
                             setState(() {
-                              _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
+                              _isConfirmPasswordVisible =
+                                  !_isConfirmPasswordVisible;
                             });
                           },
                         ),
@@ -168,15 +172,18 @@ class _ResetPasswordScreenViewState extends State<ResetPasswordScreenView> {
 
                     // Reset Password Button
                     ElevatedButton(
-                      onPressed: _errorMessage == null && _passwordController.text.isNotEmpty
+                      onPressed: _errorMessage == null &&
+                              _passwordController.text.isNotEmpty
                           ? () {
-                        if (_passwordController.text == "admin") {
-                          showMySnackbar(context, 'Password Reset Successful!');
-                          Navigator.pushNamed(context, '/login');
-                        } else {
-                          showMySnackbar(context, 'Set Password: "admin"');
-                        }
-                      }
+                              if (_passwordController.text == "admin") {
+                                showMySnackbar(
+                                    context, 'Password Reset Successful!');
+                                Navigator.pushNamed(context, '/login');
+                              } else {
+                                showMySnackbar(
+                                    context, 'Set Password: "admin"');
+                              }
+                            }
                           : null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: primaryColor,

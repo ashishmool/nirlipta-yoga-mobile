@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../common/logo.dart';
-import '../../common/snackbar.dart';
+
+import '../../core/common/logo.dart';
+import '../../core/common/snackbar.dart';
 
 class RequestPasswordScreenView extends StatefulWidget {
   const RequestPasswordScreenView({super.key});

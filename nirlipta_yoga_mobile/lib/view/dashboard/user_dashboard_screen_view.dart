@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:nirlipta_yoga_mobile/view/dashboard/bottom_screen/about_screen_view.dart';
 import 'package:nirlipta_yoga_mobile/view/dashboard/bottom_screen/enrollments_screen_view.dart';
 import 'package:nirlipta_yoga_mobile/view/dashboard/bottom_screen/profile_screen_view.dart';
-import '../../common/snackbar.dart';
+
+import '../../core/common/snackbar.dart';
 import 'bottom_screen/home_screen_view.dart';
 
 class StudentDashboardScreenView extends StatefulWidget {
@@ -33,8 +34,6 @@ class _StudentDashboardScreenViewState
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text('Student Dashboard'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black54,
         actions: [
           InkWell(
             onTap: () {
@@ -45,12 +44,12 @@ class _StudentDashboardScreenViewState
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Row(
                 children: [
-                  Icon(Icons.logout, color: primaryColor),
+                  Icon(Icons.logout, color: secondaryColor),
                   const SizedBox(width: 8),
                   Text(
                     'Logout',
                     style: TextStyle(
-                      color: primaryColor,
+                      color: secondaryColor,
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                       fontFamily: 'Gilroy',
@@ -70,12 +69,13 @@ class _StudentDashboardScreenViewState
           BottomNavigationBarItem(
               icon: Icon(Icons.menu_book), label: "My Enrollment"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.info), label: "About"),
+          BottomNavigationBarItem(icon: Icon(Icons.info), label: "About"),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: primaryColor, // Set active item color
-        unselectedItemColor: Colors.grey, // Optional: Set inactive item color
+        selectedItemColor: primaryColor,
+        // Set active item color
+        unselectedItemColor: Colors.grey,
+        // Optional: Set inactive item color
         onTap: (index) {
           setState(() {
             _selectedIndex = index;
