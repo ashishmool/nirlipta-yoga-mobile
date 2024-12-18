@@ -28,12 +28,11 @@ class _StudentDashboardScreenViewState
   @override
   Widget build(BuildContext context) {
     final primaryColor = const Color(0xFF9B6763); // Primary color
-    final secondaryColor = const Color(0xFFB8978C); // Secondary color
 
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text('Student Dashboard'),
+        // title: const Text('Home'),
         actions: [
           InkWell(
             onTap: () {
@@ -44,12 +43,12 @@ class _StudentDashboardScreenViewState
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Row(
                 children: [
-                  Icon(Icons.logout, color: secondaryColor),
+                  Icon(Icons.logout, color: Colors.white),
                   const SizedBox(width: 8),
                   Text(
                     'Logout',
                     style: TextStyle(
-                      color: secondaryColor,
+                      color: Colors.white,
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                       fontFamily: 'Gilroy',
