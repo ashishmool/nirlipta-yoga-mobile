@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class OnboardingScreenView extends StatefulWidget {
-  const OnboardingScreenView({Key? key}) : super(key: key);
+  const OnboardingScreenView({super.key});
 
   @override
   _OnboardingScreenViewState createState() => _OnboardingScreenViewState();

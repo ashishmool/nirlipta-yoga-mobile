@@ -8,7 +8,7 @@ ThemeData getApplicationTheme() {
     fontFamily: 'Montserrat Regular',
     appBarTheme: const AppBarTheme(
       centerTitle: true,
-      color: Colors.black,
+      color: Color(0xFF9B6763),
       elevation: 4,
       shadowColor: Colors.black,
       titleTextStyle: TextStyle(

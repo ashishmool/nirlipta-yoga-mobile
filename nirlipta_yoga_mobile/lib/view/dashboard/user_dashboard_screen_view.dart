@@ -4,6 +4,7 @@ import 'package:nirlipta_yoga_mobile/view/dashboard/bottom_screen/enrollments_sc
 import 'package:nirlipta_yoga_mobile/view/dashboard/bottom_screen/profile_screen_view.dart';
 
 import '../../core/common/snackbar.dart';
+import '../../models/user.dart';
 import 'bottom_screen/home_screen_view.dart';
 
 class StudentDashboardScreenView extends StatefulWidget {
@@ -18,12 +19,31 @@ class _StudentDashboardScreenViewState
     extends State<StudentDashboardScreenView> {
   int _selectedIndex = 0;
 
-  List<Widget> lstBottomScreen = [
-    const HomeScreenView(),
-    const EnrollmentScreenView(),
-    const ProfileScreenView(),
-    const AboutScreenView(),
-  ];
+  // Dummy User Data
+  final User currentUser = User(
+    userId: '001',
+    email: 'something@gmail.com',
+    profilePicture:
+        'https://img.freepik.com/premium-photo/serene-5yearold-nepali-boy-with-composed-look_1308-151628.jpg',
+    role: 'Student',
+    age: 16,
+    gender: 'Male',
+    medicalConditions: ['Back Pain', 'Stress'],
+  );
+
+  late List<Widget> lstBottomScreen;
+
+  @override
+  void initState() {
+    super.initState();
+    lstBottomScreen = [
+      const HomeScreenView(),
+      const EnrollmentScreenView(),
+      ProfileScreenView(user: currentUser),
+      // Pass the currentUser to the ProfileScreenView
+      const AboutScreenView(),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +52,6 @@ class _StudentDashboardScreenViewState
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        // title: const Text('Home'),
         actions: [
           InkWell(
             onTap: () {
@@ -72,9 +91,7 @@ class _StudentDashboardScreenViewState
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: primaryColor,
-        // Set active item color
         unselectedItemColor: Colors.grey,
-        // Optional: Set inactive item color
         onTap: (index) {
           setState(() {
             _selectedIndex = index;

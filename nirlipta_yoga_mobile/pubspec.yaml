@@ -33,6 +33,7 @@ dependencies:
 
   flutter_svg: ^2.0.16
   lottie: ^2.4.0
+  image_picker: ^1.1.2
 
 
 

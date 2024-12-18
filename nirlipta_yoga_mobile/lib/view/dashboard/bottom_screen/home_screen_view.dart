@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nirlipta_yoga_mobile/models/category.dart';
+import 'package:nirlipta_yoga_mobile/models/user.dart';
 import 'package:nirlipta_yoga_mobile/models/workshop.dart';
+import 'package:nirlipta_yoga_mobile/view/explore/pose_screen_view.dart';
 import 'package:nirlipta_yoga_mobile/view/workshop/workshop_screen_view.dart';
 
 class HomeScreenView extends StatefulWidget {
@@ -11,6 +13,18 @@ class HomeScreenView extends StatefulWidget {
 }
 
 class _HomeScreenViewState extends State<HomeScreenView> {
+  // Dummy User Data
+  final User currentUser = User(
+    userId: '001',
+    email: 'something@gmail.com',
+    profilePicture:
+        'https://img.freepik.com/premium-photo/serene-5yearold-nepali-boy-with-composed-look_1308-151628.jpg',
+    role: 'Student',
+    age: 0,
+    gender: '',
+    medicalConditions: ['Back Pain', 'Stress'],
+  );
+
   // Test Data
   final List<Category> categories = [
     Category(id: '1', name: 'Asanas'),
@@ -62,8 +76,58 @@ class _HomeScreenViewState extends State<HomeScreenView> {
 
     return SingleChildScrollView(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
+          // User Information Section
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Profile Picture
+                CircleAvatar(
+                  radius: 30,
+                  backgroundImage: NetworkImage(currentUser.profilePicture),
+                ),
+                const SizedBox(width: 12),
+                // Email and Role
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      currentUser.email,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    Text(
+                      currentUser.role,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
+          // Explore Section
+          Text(
+            'Yoga Poses',
+            style: const TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+          ExploreYogaSection(),
+
+          // Workshops Title
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Align(
@@ -101,6 +165,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
             ),
           ),
           const SizedBox(height: 10),
+
           WorkshopScreenView(workshops: filteredWorkshops),
         ],
       ),
