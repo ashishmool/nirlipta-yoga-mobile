@@ -30,6 +30,7 @@ class _StudentDashboardScreenViewState
     age: 16,
     gender: 'Male',
     medicalConditions: ['Back Pain', 'Stress'],
+    stepsToday: 2330,
   );
 
   late List<Widget> lstBottomScreen;

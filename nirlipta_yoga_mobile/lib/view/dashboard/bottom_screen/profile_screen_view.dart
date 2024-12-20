@@ -53,9 +53,7 @@ class ProfileScreenViewState extends State<ProfileScreenView> {
           .map((e) => e.trim())
           .toList();
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        showMySnackbar(context, 'Profile Updated Successfully!'),
-      );
+      showMySnackbar(context, "Profile Updated Successfully!");
     }
   }
 

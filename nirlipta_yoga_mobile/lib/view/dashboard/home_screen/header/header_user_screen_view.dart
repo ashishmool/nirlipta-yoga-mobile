@@ -4,12 +4,14 @@ class HeaderUserScreenView extends StatelessWidget {
   final String userName;
   final String userRole;
   final String userProfilePicture;
+  final int stepsToday;
 
   const HeaderUserScreenView({
     super.key,
     required this.userName,
     required this.userRole,
     required this.userProfilePicture,
+    required this.stepsToday,
   });
 
   @override
@@ -26,17 +28,31 @@ class HeaderUserScreenView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Welcome Mesage
-            Text(
-              'Welcome!',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
+            // Welcome Message with Footsteps Count
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.directions_walk, // Footsteps Icon
+                      size: 20,
+                      color: Colors.black87,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      '$stepsToday steps', // Display steps count
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.black87,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
 
-            // User and Profile Picture
+            // User Info and Profile Picture
             Row(
               children: [
                 // User Info (Name and Role)

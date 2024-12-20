@@ -5,6 +5,7 @@ class User {
   String profilePicture;
   final String role;
   int age;
+  int stepsToday;
   String gender;
   List<String> medicalConditions;
 
@@ -15,6 +16,7 @@ class User {
     required this.profilePicture,
     required this.role,
     required this.age,
+    required this.stepsToday,
     required this.gender,
     required this.medicalConditions,
   });

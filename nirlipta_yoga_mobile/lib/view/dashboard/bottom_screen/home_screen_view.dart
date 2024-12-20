@@ -26,6 +26,7 @@ class _HomeScreenViewState extends State<HomeScreenView> {
     age: 16,
     gender: 'Male',
     medicalConditions: ['Back Pain', 'Stress'],
+    stepsToday: 2330,
   );
 
   final List<Category> categories = [
@@ -113,12 +114,12 @@ class _HomeScreenViewState extends State<HomeScreenView> {
 
           // Header Section
           SizedBox(
-            height: 100,
-            child: HeaderUserScreenView(
-                userName: currentUser.name,
-                userRole: currentUser.role,
-                userProfilePicture: currentUser.profilePicture),
-          ),
+              height: 100,
+              child: HeaderUserScreenView(
+                  userName: currentUser.name,
+                  userRole: currentUser.role,
+                  userProfilePicture: currentUser.profilePicture,
+                  stepsToday: currentUser.stepsToday)),
 
           // Explore Section
           SizedBox(
