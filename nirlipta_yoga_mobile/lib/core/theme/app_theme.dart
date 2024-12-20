@@ -19,6 +19,7 @@ ThemeData getApplicationTheme() {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
+        foregroundColor: Colors.white,
         textStyle: const TextStyle(
             fontSize: 18,
             color: Colors.white,

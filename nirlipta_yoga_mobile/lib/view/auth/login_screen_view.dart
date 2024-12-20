@@ -55,6 +55,7 @@ class _LoginScreenViewState extends State<LoginScreenView> {
   @override
   Widget build(BuildContext context) {
     final primaryColor = const Color(0xFF9B6763); // Primary color
+    // final primaryColor = const Color(0xFF9B6763); // Primary color
     final secondaryColor = const Color(0xFFB8978C); // Secondary color
 
     return Scaffold(

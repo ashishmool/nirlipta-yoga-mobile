@@ -6,10 +6,10 @@ class RegisterScreenView extends StatefulWidget {
   const RegisterScreenView({super.key});
 
   @override
-  _RegisterScreenViewState createState() => _RegisterScreenViewState();
+  RegisterScreenViewState createState() => RegisterScreenViewState();
 }
 
-class _RegisterScreenViewState extends State<RegisterScreenView> {
+class RegisterScreenViewState extends State<RegisterScreenView> {
   static const String adminEmail = "admin@email.com"; // Testing Purpose Only
 
   bool _hasNoMedicalConditions = false;

@@ -4,28 +4,30 @@ class OnboardingScreenView extends StatefulWidget {
   const OnboardingScreenView({super.key});
 
   @override
-  _OnboardingScreenViewState createState() => _OnboardingScreenViewState();
+  OnboardingScreenViewState createState() => OnboardingScreenViewState();
 }
 
-class _OnboardingScreenViewState extends State<OnboardingScreenView> {
+class OnboardingScreenViewState extends State<OnboardingScreenView> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
-  final List<Map<String, String>> onboardingData = [
+  final List<Map<String, String>> _slides = [
     {
       "image": "assets/images/onboarding-1.jpg",
-      "title": "Welcome to Nirlipta Yoga",
-      "description": "Breathe. Align. Elevate.",
+      "title": "Welcome to Nirlipta Yoga!",
+      "description":
+          "Begin your journey toward balance, mindfulness, and well-being.",
     },
     {
       "image": "assets/images/onboarding-2.jpg",
       "title": "Transform Your Mind",
-      "description": "Discover peace and balance in every moment.",
+      "description":
+          "Discover peace and inner strength in every breath you take.",
     },
   ];
 
   void _onNextPressed() {
-    if (_currentPage < onboardingData.length - 1) {
+    if (_currentPage < _slides.length - 1) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
@@ -49,96 +51,67 @@ class _OnboardingScreenViewState extends State<OnboardingScreenView> {
     return Scaffold(
       body: Stack(
         children: [
-          // PageView for Onboarding Slides
+          // PageView for onboarding slides
           PageView.builder(
             controller: _pageController,
-            itemCount: onboardingData.length,
-            onPageChanged: (index) {
-              setState(() {
-                _currentPage = index;
-              });
-            },
-            itemBuilder: (context, index) {
-              return Stack(
-                children: [
-                  // Background Image
-                  Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(onboardingData[index]["image"]!),
-                        fit: BoxFit.cover,
-                      ),
+            itemCount: _slides.length,
+            onPageChanged: (index) => setState(() => _currentPage = index),
+            itemBuilder: (context, index) => Stack(
+              children: [
+                // Background image with overlay
+                Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(_slides[index]["image"]!),
+                      fit: BoxFit.cover,
                     ),
                   ),
-                  // Content Overlay
-                  Align(
-                    alignment: Alignment.center,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 36.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          // Title
-                          Text(
-                            onboardingData[index]["title"]!,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 32,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              shadows: [
-                                Shadow(
-                                  offset: Offset(0, 2),
-                                  blurRadius: 4.0,
-                                  color: Colors.black54,
-                                ),
-                              ],
-                            ),
+                  child: Container(
+                    color: Colors.black.withOpacity(0.6),
+                  ),
+                ),
+                // Onboarding content
+                SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // Title
+                        Text(
+                          _slides[index]["title"]!,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
                           ),
-                          const SizedBox(height: 16),
+                        ),
+                        const SizedBox(height: 16),
 
-                          // Description
-                          Text(
-                            onboardingData[index]["description"]!,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              color: Colors.white,
-                              shadows: [
-                                Shadow(
-                                  offset: Offset(0, 1),
-                                  blurRadius: 3.0,
-                                  color: Colors.black45,
-                                ),
-                              ],
-                            ),
+                        // Description
+                        Text(
+                          _slides[index]["description"]!,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            color: Colors.white70,
                           ),
-                          const SizedBox(height: 40),
+                        ),
+                        const SizedBox(height: 40),
 
-                          // Breadcrumbs
-                          _buildBreadcrumb(),
-                          const SizedBox(height: 24),
+                        // Breadcrumb
+                        _buildBreadcrumb(),
 
-                          // Back and Next Buttons
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              if (_currentPage > 0)
-                                TextButton(
-                                  onPressed: _onBackPressed,
-                                  child: const Text(
-                                    'Back',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                )
-                              else
-                                const SizedBox.shrink(),
+                        const SizedBox(height: 40),
+
+                        // Navigation buttons
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            if (_currentPage > 0)
                               ElevatedButton(
-                                onPressed: _onNextPressed,
+                                onPressed: _onBackPressed,
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.transparent,
                                   shadowColor: Colors.transparent,
@@ -149,33 +122,62 @@ class _OnboardingScreenViewState extends State<OnboardingScreenView> {
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: const [
+                                    Icon(
+                                      Icons.arrow_back_ios,
+                                      color: Colors.white,
+                                      size: 18,
+                                    ),
+                                    SizedBox(width: 8),
                                     Text(
-                                      'Next',
+                                      'Back',
                                       style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.w600,
                                         color: Colors.white,
                                       ),
                                     ),
-                                    SizedBox(width: 8),
-                                    Icon(
-                                      Icons.arrow_forward_ios,
-                                      color: Colors.white,
-                                      size: 18,
-                                    ),
                                   ],
                                 ),
+                              )
+                            else
+                              const SizedBox.shrink(),
+                            ElevatedButton(
+                              onPressed: _onNextPressed,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                shadowColor: Colors.transparent,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ),
                               ),
-                            ],
-                          ),
-                          const SizedBox(height: 60),
-                        ],
-                      ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: const [
+                                  Text(
+                                    'Next',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  SizedBox(width: 8),
+                                  Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: Colors.white,
+                                    size: 18,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              );
-            },
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -185,16 +187,25 @@ class _OnboardingScreenViewState extends State<OnboardingScreenView> {
   Widget _buildBreadcrumb() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(onboardingData.length, (index) {
-        return Container(
-          margin: const EdgeInsets.symmetric(horizontal: 4),
-          width: 10,
-          height: 10,
-          decoration: BoxDecoration(
-            color: _currentPage == index ? Colors.white : Colors.grey[400],
-            shape: BoxShape.circle,
-          ),
-        );
+      children: List.generate(_slides.length, (index) {
+        if (index == _currentPage) {
+          return Container(
+            width: 24,
+            height: 4,
+            margin: const EdgeInsets.symmetric(horizontal: 4),
+            color: Colors.white,
+          );
+        } else {
+          return Container(
+            width: 10,
+            height: 10,
+            margin: const EdgeInsets.symmetric(horizontal: 4),
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.grey,
+            ),
+          );
+        }
       }),
     );
   }
