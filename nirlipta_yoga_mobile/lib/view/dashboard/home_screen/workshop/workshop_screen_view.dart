@@ -4,8 +4,7 @@ import 'package:nirlipta_yoga_mobile/models/workshop.dart';
 class WorkshopScreenView extends StatelessWidget {
   final List<Workshop> workshops;
 
-  const WorkshopScreenView({Key? key, required this.workshops})
-      : super(key: key);
+  const WorkshopScreenView({super.key, required this.workshops});
 
   @override
   Widget build(BuildContext context) {
