@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
+
+import 'package:flutter/material.dart';
 
 class VerifyOtpScreenView extends StatefulWidget {
   const VerifyOtpScreenView({super.key});
@@ -11,9 +12,8 @@ class VerifyOtpScreenView extends StatefulWidget {
 class _VerifyOtpScreenViewState extends State<VerifyOtpScreenView> {
   final int _otpLength = 6;
   final List<TextEditingController> _otpControllers =
-  List.generate(6, (_) => TextEditingController());
-  final List<FocusNode> _focusNodes =
-  List.generate(6, (_) => FocusNode());
+      List.generate(6, (_) => TextEditingController());
+  final List<FocusNode> _focusNodes = List.generate(6, (_) => FocusNode());
   bool _isResendEnabled = false;
   late Timer _timer;
   int _remainingSeconds = 600;
@@ -84,7 +84,7 @@ class _VerifyOtpScreenViewState extends State<VerifyOtpScreenView> {
   @override
   Widget build(BuildContext context) {
     final Color primaryColor = const Color(0xFF9B6763);
-    final Color secondaryColor = const Color(0xFFB8978C);
+    // final Color secondaryColor = const Color(0xFFB8978C);
 
     return Scaffold(
       appBar: AppBar(
@@ -154,7 +154,8 @@ class _VerifyOtpScreenViewState extends State<VerifyOtpScreenView> {
                         ),
                         onChanged: (value) {
                           _onOtpChanged(value, index);
-                          setState(() {}); // Trigger state update when OTP is entered
+                          setState(
+                              () {}); // Trigger state update when OTP is entered
                         },
                       ),
                     );
@@ -182,16 +183,16 @@ class _VerifyOtpScreenViewState extends State<VerifyOtpScreenView> {
                 ElevatedButton(
                   onPressed: _areAllFieldsFilled()
                       ? () {
-                    final otp = _getOtpValue();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('OTP Verified: $otp'),
-                        behavior: SnackBarBehavior.floating,
-                        duration: const Duration(seconds: 2),
-                      ),
-                    );
-                    Navigator.pushNamed(context, '/reset-password');
-                  }
+                          final otp = _getOtpValue();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('OTP Verified: $otp'),
+                              behavior: SnackBarBehavior.floating,
+                              duration: const Duration(seconds: 2),
+                            ),
+                          );
+                          Navigator.pushNamed(context, '/reset-password');
+                        }
                       : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: primaryColor,

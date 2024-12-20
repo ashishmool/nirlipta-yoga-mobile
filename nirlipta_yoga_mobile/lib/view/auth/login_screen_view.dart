@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../common/logo.dart';
-import '../../common/snackbar.dart';
+
+import '../../core/common/logo.dart';
+import '../../core/common/snackbar.dart';
 
 class LoginScreenView extends StatefulWidget {
   const LoginScreenView({super.key});
@@ -18,14 +19,16 @@ class _LoginScreenViewState extends State<LoginScreenView> {
 
   bool isPasswordVisible = false;
   bool isEmailValid = false;
+  bool isPasswordValid = false;
 
   // Regex for email validation
-  final RegExp emailRegex = RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+');
+  final RegExp emailRegex = RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+$');
 
   @override
   void initState() {
     super.initState();
-    emailController.addListener(_validateEmail);
+    emailController.addListener(_validateInputs);
+    passwordController.addListener(_validateInputs);
   }
 
   @override
@@ -41,15 +44,18 @@ class _LoginScreenViewState extends State<LoginScreenView> {
     });
   }
 
-  void _validateEmail() {
+  void _validateInputs() {
     setState(() {
+      // Validate email and password
       isEmailValid = emailRegex.hasMatch(emailController.text.trim());
+      isPasswordValid = passwordController.text.trim().isNotEmpty;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final primaryColor = const Color(0xFF9B6763); // Primary color
+    // final primaryColor = const Color(0xFF9B6763); // Primary color
     final secondaryColor = const Color(0xFFB8978C); // Secondary color
 
     return Scaffold(
@@ -98,10 +104,10 @@ class _LoginScreenViewState extends State<LoginScreenView> {
                         prefixIcon: const Icon(Icons.email_outlined),
                         hintText: 'Email address',
                         hintStyle: const TextStyle(fontFamily: 'Gilroy'),
-                        errorText: emailController.text.isNotEmpty &&
-                            !isEmailValid
-                            ? 'Please enter a valid email address'
-                            : null,
+                        errorText:
+                            emailController.text.isNotEmpty && !isEmailValid
+                                ? 'Please enter a valid email address'
+                                : null,
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: primaryColor),
                           borderRadius: BorderRadius.circular(12.0),
@@ -145,21 +151,24 @@ class _LoginScreenViewState extends State<LoginScreenView> {
 
                     // Login Button
                     ElevatedButton(
-                      onPressed: isEmailValid && passwordController.text.isNotEmpty
+                      onPressed: isEmailValid && isPasswordValid
                           ? () {
-                        final email = emailController.text.trim();
-                        final password = passwordController.text.trim();
+                              final email = emailController.text.trim();
+                              final password = passwordController.text.trim();
 
-                        if (email == validEmail && password == validPassword) {
-                          showMySnackbar(context, 'Logged In Successfully');
-                          Navigator.pushNamed(context, '/student-dashboard');
-                        } else {
-                          showMySnackbar(context, 'Invalid Credentials');
-                        }
-                      }
+                              if (email == validEmail &&
+                                  password == validPassword) {
+                                showMySnackbar(
+                                    context, 'Logged In Successfully');
+                                Navigator.pushNamed(
+                                    context, '/student-dashboard');
+                              } else {
+                                showMySnackbar(context, 'Invalid Credentials');
+                              }
+                            }
                           : null,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: isEmailValid && passwordController.text.isNotEmpty
+                        backgroundColor: isEmailValid && isPasswordValid
                             ? primaryColor
                             : primaryColor.withOpacity(0.5),
                         shape: RoundedRectangleBorder(

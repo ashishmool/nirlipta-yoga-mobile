@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
-import '../../common/logo.dart';
+
+import '../../core/common/logo.dart';
 
 class RegisterScreenView extends StatefulWidget {
   const RegisterScreenView({super.key});
 
   @override
-  _RegisterScreenViewState createState() => _RegisterScreenViewState();
+  RegisterScreenViewState createState() => RegisterScreenViewState();
 }
 
-class _RegisterScreenViewState extends State<RegisterScreenView> {
+class RegisterScreenViewState extends State<RegisterScreenView> {
   static const String adminEmail = "admin@email.com"; // Testing Purpose Only
 
   bool _hasNoMedicalConditions = false;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _medicalConditionController =
-  TextEditingController();
+      TextEditingController();
   bool _isEmailValid = false;
 
   // Regex for email validation
@@ -93,10 +94,10 @@ class _RegisterScreenViewState extends State<RegisterScreenView> {
                         prefixIcon: const Icon(Icons.email_outlined),
                         hintText: 'Email address',
                         hintStyle: const TextStyle(fontFamily: 'Gilroy'),
-                        errorText: _emailController.text.isNotEmpty &&
-                            !_isEmailValid
-                            ? 'Please enter a valid email address'
-                            : null,
+                        errorText:
+                            _emailController.text.isNotEmpty && !_isEmailValid
+                                ? 'Please enter a valid email address'
+                                : null,
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: primaryColor),
                           borderRadius: BorderRadius.circular(12.0),
@@ -165,32 +166,30 @@ class _RegisterScreenViewState extends State<RegisterScreenView> {
                     ElevatedButton(
                       onPressed: _isEmailValid
                           ? () {
-                        final email = _emailController.text.trim();
-                        final medicalConditions =
-                        _hasNoMedicalConditions
-                            ? 'None'
-                            : _medicalConditionController
-                            .text
-                            .trim();
+                              final email = _emailController.text.trim();
+                              final medicalConditions = _hasNoMedicalConditions
+                                  ? 'None'
+                                  : _medicalConditionController.text.trim();
 
-                        if (email == adminEmail) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: const Text(
-                                'Check Email for Verification!',
-                                style: TextStyle(fontFamily: 'Gilroy'),
-                              ),
-                              backgroundColor: primaryColor,
-                            ),
-                          );
-                          // Navigate to OTP Screen
-                          Navigator.pushNamed(context, '/verify-otp');
-                        } else {
-                          // Handle other cases
-                          debugPrint('Email: $email');
-                          debugPrint('Medical Conditions: $medicalConditions');
-                        }
-                      }
+                              if (email == adminEmail) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: const Text(
+                                      'Check Email for Verification!',
+                                      style: TextStyle(fontFamily: 'Gilroy'),
+                                    ),
+                                    backgroundColor: primaryColor,
+                                  ),
+                                );
+                                // Navigate to OTP Screen
+                                Navigator.pushNamed(context, '/verify-otp');
+                              } else {
+                                // Handle other cases
+                                debugPrint('Email: $email');
+                                debugPrint(
+                                    'Medical Conditions: $medicalConditions');
+                              }
+                            }
                           : null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: _isEmailValid

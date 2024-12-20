@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import '../../common/logo.dart';
-import '../../common/snackbar.dart';
+
+import '../../core/common/logo.dart';
+import '../../core/common/snackbar.dart';
 
 class RequestPasswordScreenView extends StatefulWidget {
   const RequestPasswordScreenView({super.key});
 
   @override
-  _RequestPasswordScreenViewState createState() =>
-      _RequestPasswordScreenViewState();
+  RequestPasswordScreenViewState createState() =>
+      RequestPasswordScreenViewState();
 }
 
-class _RequestPasswordScreenViewState extends State<RequestPasswordScreenView> {
+class RequestPasswordScreenViewState extends State<RequestPasswordScreenView> {
   final TextEditingController emailController = TextEditingController();
   bool isEmailValid = false; // Track if the email is valid
   String emailErrorMessage = ''; // Track the error message
