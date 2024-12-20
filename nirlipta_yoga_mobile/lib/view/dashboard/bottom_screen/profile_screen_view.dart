@@ -8,13 +8,13 @@ import 'package:nirlipta_yoga_mobile/models/user.dart';
 class ProfileScreenView extends StatefulWidget {
   final User user;
 
-  const ProfileScreenView({super.key, required this.user}); // Constructor
+  const ProfileScreenView({super.key, required this.user});
 
   @override
-  _ProfileScreenViewState createState() => _ProfileScreenViewState();
+  ProfileScreenViewState createState() => ProfileScreenViewState();
 }
 
-class _ProfileScreenViewState extends State<ProfileScreenView> {
+class ProfileScreenViewState extends State<ProfileScreenView> {
   final _formKey = GlobalKey<FormState>();
   final ImagePicker _picker = ImagePicker();
 
@@ -22,7 +22,6 @@ class _ProfileScreenViewState extends State<ProfileScreenView> {
   late TextEditingController _medicalConditionsController;
 
   File? _newProfilePicture;
-
   String? _selectedGender;
 
   @override
@@ -31,9 +30,7 @@ class _ProfileScreenViewState extends State<ProfileScreenView> {
     _ageController = TextEditingController(text: widget.user.age.toString());
     _medicalConditionsController =
         TextEditingController(text: widget.user.medicalConditions.join(', '));
-    _selectedGender = widget.user.gender.isNotEmpty
-        ? widget.user.gender
-        : null; // Set initial gender
+    _selectedGender = widget.user.gender.isNotEmpty ? widget.user.gender : null;
   }
 
   Future<void> _pickProfilePicture() async {
@@ -47,7 +44,6 @@ class _ProfileScreenViewState extends State<ProfileScreenView> {
 
   void _saveProfile() {
     if (_formKey.currentState?.validate() ?? false) {
-      // Update user information
       widget.user.profilePicture =
           _newProfilePicture?.path ?? widget.user.profilePicture;
       widget.user.age = int.parse(_ageController.text);
@@ -58,7 +54,7 @@ class _ProfileScreenViewState extends State<ProfileScreenView> {
           .toList();
 
       ScaffoldMessenger.of(context).showSnackBar(
-        showMySnackbar(context, 'Profile Updated Succesful!'),
+        showMySnackbar(context, 'Profile Updated Successfully!'),
       );
     }
   }
@@ -66,89 +62,192 @@ class _ProfileScreenViewState extends State<ProfileScreenView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Column(
-              children: [
-                // Profile image
-                CircleAvatar(
-                  radius: 50,
-                  backgroundImage: NetworkImage(widget.user.profilePicture),
-                ),
-                const SizedBox(height: 16),
-                // Display the email, which is non-editable
-                Text("Email: ${widget.user.email}"),
-                const SizedBox(height: 8),
-                // Display role, also non-editable
-                Text("Role: ${widget.user.role}"),
-                const SizedBox(height: 16),
-                // Editable fields for age
-                TextFormField(
-                  controller: _ageController,
-                  decoration: const InputDecoration(labelText: 'Age'),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your age';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                DropdownButtonFormField<String>(
-                  value: _selectedGender,
-                  items: const [
-                    DropdownMenuItem(value: 'Male', child: Text('Male')),
-                    DropdownMenuItem(value: 'Female', child: Text('Female')),
-                    DropdownMenuItem(value: 'Other', child: Text('Other')),
-                  ],
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedGender = value;
-                    });
-                  },
-                  decoration: const InputDecoration(labelText: 'Gender'),
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Please select your gender';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                Text("Medical Conditions:"),
-                TextFormField(
-                  controller: _medicalConditionsController,
-                  decoration: const InputDecoration(
-                      labelText: 'Medical Conditions (comma separated)'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your medical conditions';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 32),
-
-                ElevatedButton(
-                  onPressed: _saveProfile,
-                  child: const Text(
-                    "Update Profile",
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Top Bar
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.settings, size: 28),
+                    onPressed: () {},
+                    color: Colors.black,
+                    tooltip: 'Settings',
                   ),
+                  Stack(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.notifications, size: 28),
+                        onPressed: () {},
+                        color: Colors.black,
+                        tooltip: 'Notifications',
+                      ),
+                      Positioned(
+                        right: 8,
+                        top: 8,
+                        child: Container(
+                          padding: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          constraints: const BoxConstraints(
+                            minWidth: 18,
+                            minHeight: 18,
+                          ),
+                          child: const Text(
+                            '3',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+
+              // Profile Picture Part
+              Center(
+                child: Column(
+                  children: [
+                    Stack(
+                      children: [
+                        CircleAvatar(
+                          radius: 50,
+                          backgroundImage: _newProfilePicture != null
+                              ? FileImage(_newProfilePicture!)
+                              : NetworkImage(widget.user.profilePicture)
+                                  as ImageProvider,
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: GestureDetector(
+                            onTap: _pickProfilePicture,
+                            child: CircleAvatar(
+                              radius: 16,
+                              backgroundColor: Colors.blue,
+                              child: const Icon(
+                                Icons.camera_alt,
+                                size: 16,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      widget.user.email,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 24),
+
+              // Profile Form Fields
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    // Age Field
+                    TextFormField(
+                      controller: _ageController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(labelText: 'Age'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your age';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+
+                    DropdownButtonFormField<String>(
+                      value: _selectedGender,
+                      decoration: const InputDecoration(labelText: 'Gender'),
+                      items: ['Male', 'Female', 'Other']
+                          .map((gender) => DropdownMenuItem(
+                                value: gender,
+                                child: Text(gender),
+                              ))
+                          .toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedGender = value;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Medical Conditions Field
+                    TextFormField(
+                      controller: _medicalConditionsController,
+                      decoration: const InputDecoration(
+                          labelText: 'Medical Conditions'),
+                    ),
+                    const SizedBox(height: 24),
+
+                    // Save Button
+                    ElevatedButton(
+                      onPressed: _saveProfile,
+                      child: const Text('Save Profile'),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+            ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _infoCard(String label, String value) {
+    return Container(
+      width: 150,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 2,
+            blurRadius: 6,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Text(
+            label,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            value,
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+        ],
       ),
     );
   }

@@ -1,6 +1,7 @@
 class User {
   final String userId;
   final String email;
+  String name;
   String profilePicture;
   final String role;
   int age;
@@ -10,6 +11,7 @@ class User {
   User({
     required this.userId,
     required this.email,
+    required this.name,
     required this.profilePicture,
     required this.role,
     required this.age,

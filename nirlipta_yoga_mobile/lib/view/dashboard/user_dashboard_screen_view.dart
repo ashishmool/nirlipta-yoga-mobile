@@ -23,6 +23,7 @@ class _StudentDashboardScreenViewState
   final User currentUser = User(
     userId: '001',
     email: 'something@gmail.com',
+    name: 'Ashish Mool',
     profilePicture:
         'https://img.freepik.com/premium-photo/serene-5yearold-nepali-boy-with-composed-look_1308-151628.jpg',
     role: 'Student',
@@ -40,7 +41,6 @@ class _StudentDashboardScreenViewState
       const HomeScreenView(),
       const EnrollmentScreenView(),
       ProfileScreenView(user: currentUser),
-      // Pass the currentUser to the ProfileScreenView
       const AboutScreenView(),
     ];
   }
