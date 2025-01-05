@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
-import 'app.dart';
+import 'package:nirlipta_yoga_mobile/app/app.dart';
+import 'package:nirlipta_yoga_mobile/app/di/di.dart';
 
-//Hot Reload
-void main() {
-  //Run App
-  runApp(const App());
+// Initialize once in the very beginning
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initDependencies(); // Initialize dependencies
+  runApp(
+    App(),
+  );
 }
