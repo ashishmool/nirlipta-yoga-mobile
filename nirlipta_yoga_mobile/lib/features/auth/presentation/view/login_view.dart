@@ -5,6 +5,7 @@ import 'package:nirlipta_yoga_mobile/features/auth/presentation/view_model/login
 import 'package:nirlipta_yoga_mobile/features/home/presentation/view/home_view.dart';
 
 import '../../../../app/di/di.dart';
+import '../../../../core/common/logo.dart';
 import '../../../../core/common/snackbar/snackbar.dart';
 import '../../../home/presentation/view_model/home_cubit.dart';
 import '../view_model/signup/register_bloc.dart';
@@ -22,126 +23,137 @@ class LoginView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Form(
-          key: _formKey,
-          child: Center(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: Column(
-                  children: [
-                    BlocBuilder<LoginBloc, LoginState>(
-                      builder: (context, state) {
-                        return Text(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(height: 72),
+                  const Logo.colour(height: 80.0), // Adding the Logo
+                  const SizedBox(height: 72),
+                  BlocBuilder<LoginBloc, LoginState>(
+                    builder: (context, state) {
+                      return Center(
+                        child: Text(
                           'Login',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 30,
                             fontFamily: 'Brand Bold',
                           ),
-                        );
-                      },
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 40),
+                  TextFormField(
+                    key: const ValueKey('username'),
+                    controller: _usernameController,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Username',
                     ),
-                    _gap,
-                    TextFormField(
-                      key: const ValueKey('username'),
-                      controller: _usernameController,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Username',
-                      ),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Please enter username';
-                        }
-                        return null;
-                      },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter username';
+                      }
+                      return null;
+                    },
+                  ),
+                  _gap,
+                  TextFormField(
+                    key: const ValueKey('password'),
+                    controller: _passwordController,
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                      labelText: 'Password',
                     ),
-                    _gap,
-                    TextFormField(
-                      key: const ValueKey('password'),
-                      controller: _passwordController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        labelText: 'Password',
-                      ),
-                      validator: ((value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter password';
-                        }
-                        return null;
-                      }),
-                    ),
-                    _gap,
-                    ElevatedButton(
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          if (_usernameController.text == 'kiran' &&
-                              _passwordController.text == 'kiran123') {
-                            debugPrint('Navigating to HomeView...');
+                    validator: ((value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter password';
+                      }
+                      return null;
+                    }),
+                  ),
+                  const SizedBox(height: 24),
+                  ElevatedButton(
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        if (_usernameController.text == 'kiran' &&
+                            _passwordController.text == 'kiran123') {
+                          debugPrint('Navigating to HomeView...');
 
-                            // Trigger navigation to HomeView
-                            Navigator.pushReplacement(
+                          // Trigger navigation to HomeView
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => BlocProvider.value(
+                                value: getIt<HomeCubit>(),
+                                child: HomeView(),
+                              ),
+                            ),
+                          );
+                        } else {
+                          showMySnackBar(
+                            context: context,
+                            message: 'Invalid username or password',
+                            color: Colors.red,
+                          );
+                        }
+                      }
+                    },
+                    child: const SizedBox(
+                      height: 50,
+                      child: Center(
+                        child: Text(
+                          'Login',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: 'Brand Bold',
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Center(
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/request-password');
+                      },
+                      child: const Text(
+                        'Forgot your password?',
+                        style: TextStyle(color: Color(0xFF9B6763)),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text('Don’t have an account?'),
+                        TextButton(
+                          key: const ValueKey('registerButton'),
+                          onPressed: () {
+                            Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => BlocProvider.value(
-                                  value: getIt<HomeCubit>(),
-                                  // Directly use getIt to get the HomeCubit instance
-                                  child: HomeView(),
+                                  value: context.read<RegisterBloc>(),
+                                  child: RegisterView(),
                                 ),
                               ),
                             );
-                          } else {
-                            showMySnackBar(
-                              context: context,
-                              message: 'Invalid username or password',
-                              color: Colors.red,
-                            );
-                          }
-                        }
-                      },
-                      child: const SizedBox(
-                        height: 50,
-                        child: Center(
-                          child: Text(
-                            'Login',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontFamily: 'Brand Bold',
-                            ),
-                          ),
+                          },
+                          child: const Text('Register'),
                         ),
-                      ),
+                      ],
                     ),
-                    const SizedBox(height: 8),
-                    ElevatedButton(
-                      key: const ValueKey('registerButton'),
-                      onPressed: () {
-                        // Trigger navigation to RegisterView
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => BlocProvider.value(
-                              value: context.read<RegisterBloc>(),
-                              child: RegisterView(),
-                            ),
-                          ),
-                        );
-                      },
-                      child: const SizedBox(
-                        height: 50,
-                        child: Center(
-                          child: Text(
-                            'Register',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontFamily: 'Brand Bold',
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
