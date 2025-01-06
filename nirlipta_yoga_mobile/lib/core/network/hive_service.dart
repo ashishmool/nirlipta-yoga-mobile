@@ -4,6 +4,7 @@ import 'package:path_provider/path_provider.dart';
 import '../../app/constants/hive_table_constant.dart';
 import '../../features/batch/data/model/batch_hive_model.dart';
 import '../../features/course/data/model/course_hive_model.dart';
+import '../../features/retreat/data/model/retreat_hive_model.dart';
 
 class HiveService {
   Future<void> init() async {
@@ -17,6 +18,7 @@ class HiveService {
     //Register Adapters
     Hive.registerAdapter(CourseHiveModelAdapter());
     Hive.registerAdapter(BatchHiveModelAdapter());
+    Hive.registerAdapter(RetreatHiveModelAdapter());
     // Hive.registerAdapter(AuthHiveModelAdapter()); //Need to Add in Future Integration once .g (Generated) Adapter class is created
   }
 
@@ -52,4 +54,46 @@ class HiveService {
   Future<void> getAllStudents() async {}
 
   Future<void> loginStudent(String username, String password) async {}
+
+  // Retreat Queries
+  Future<void> addRetreat(RetreatHiveModel retreat) async {
+    var box =
+        await Hive.openBox<RetreatHiveModel>(HiveTableConstant.retreatBox);
+    await box.put(retreat.retreatId, retreat);
+  }
+
+  Future<void> deleteRetreat(String retreatId) async {
+    var box =
+        await Hive.openBox<RetreatHiveModel>(HiveTableConstant.retreatBox);
+    await box.delete(retreatId);
+  }
+
+  Future<List<RetreatHiveModel>> getAllRetreats() async {
+    var box =
+        await Hive.openBox<RetreatHiveModel>(HiveTableConstant.retreatBox);
+    return box.values.toList();
+  }
+
+  Future<RetreatHiveModel> getRetreatById(String retreatId) async {
+    var box =
+        await Hive.openBox<RetreatHiveModel>(HiveTableConstant.retreatBox);
+    final retreat = box.get(retreatId);
+    if (retreat == null) {
+      throw Exception('Retreat with ID $retreatId not found');
+    }
+    return retreat;
+  }
+
+  Future<void> updateRetreat(String retreatId, RetreatHiveModel retreat) async {
+    var box =
+        await Hive.openBox<RetreatHiveModel>(HiveTableConstant.retreatBox);
+    await box.put(retreatId, retreat);
+  }
+
+  Future<void> patchRetreat(String retreatId, RetreatHiveModel retreat) async {
+    var box =
+        await Hive.openBox<RetreatHiveModel>(HiveTableConstant.retreatBox);
+    await box.put(
+        retreatId, retreat); // In practice, you'd merge only the changed fields
+  }
 }
