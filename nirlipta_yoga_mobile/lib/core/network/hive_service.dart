@@ -2,8 +2,10 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../app/constants/hive_table_constant.dart';
+import '../../features/auth/data/model/student_hive_model.dart';
 import '../../features/batch/data/model/batch_hive_model.dart';
 import '../../features/course/data/model/course_hive_model.dart';
+import '../../features/workshop/data/model/workshop_hive_model.dart';
 
 class HiveService {
   Future<void> init() async {
@@ -17,7 +19,8 @@ class HiveService {
     //Register Adapters
     Hive.registerAdapter(CourseHiveModelAdapter());
     Hive.registerAdapter(BatchHiveModelAdapter());
-    // Hive.registerAdapter(AuthHiveModelAdapter()); //Need to Add in Future Integration once .g (Generated) Adapter class is created
+    Hive.registerAdapter(StudentHiveModelAdapter());
+    Hive.registerAdapter(WorkshopHiveModelAdapter());
   }
 
   // Batch Queries
@@ -38,18 +41,78 @@ class HiveService {
   }
 
 // Course Queries
-  Future<void> addCourse() async {}
+  Future<void> addCourse(CourseHiveModel course) async {
+    var box = await Hive.openBox<CourseHiveModel>(HiveTableConstant.courseBox);
+    await box.put(course.courseId, course);
+  }
 
-  Future<void> deleteCourse() async {}
+  Future<void> deleteCourse(String courseId) async {
+    var box = await Hive.openBox<CourseHiveModel>(HiveTableConstant.courseBox);
+    await box.delete(courseId);
+  }
 
-  Future<void> getAllCourses() async {}
+  Future<List<CourseHiveModel>> getAllCourses() async {
+    var box = await Hive.openBox<CourseHiveModel>(HiveTableConstant.courseBox);
+    var courses = box.values.toList();
+    return courses;
+  }
 
 // Student Queries
-  Future<void> addStudent() async {}
 
-  Future<void> deleteStudent() async {}
+  Future<void> addStudent(StudentHiveModel student) async {
+    var box = await Hive.openBox<StudentHiveModel>(HiveTableConstant.userBox);
+    await box.put(student.id, student);
+  }
 
-  Future<void> getAllStudents() async {}
+  Future<void> deleteStudent(String id) async {
+    var box = await Hive.openBox<StudentHiveModel>(HiveTableConstant.userBox);
+    await box.delete(id);
+  }
 
-  Future<void> loginStudent(String username, String password) async {}
+  Future<List<StudentHiveModel>> getAllStudents() async {
+    var box = await Hive.openBox<StudentHiveModel>(HiveTableConstant.userBox);
+    var students = box.values.toList();
+    return students;
+  }
+
+  Future<StudentHiveModel?> loginStudent(String email, String password) async {
+    var box = await Hive.openBox<StudentHiveModel>(HiveTableConstant.userBox);
+
+    var auth = box.values.firstWhere(
+        (element) => element.email == email && element.password == password,
+        orElse: () => StudentHiveModel.initial());
+
+    return auth;
+  }
+
+  // Workshop Queries
+  Future<void> addWorkshop(WorkshopHiveModel workshop) async {
+    var box =
+        await Hive.openBox<WorkshopHiveModel>(HiveTableConstant.workshopBox);
+    await box.put(workshop.workshopId, workshop);
+  }
+
+  Future<void> deleteWorkshop(String workshopId) async {
+    var box =
+        await Hive.openBox<WorkshopHiveModel>(HiveTableConstant.workshopBox);
+    await box.delete(workshopId);
+  }
+
+  Future<List<WorkshopHiveModel>> getAllWorkshops() async {
+    var box =
+        await Hive.openBox<WorkshopHiveModel>(HiveTableConstant.workshopBox);
+    return box.values.toList();
+  }
+
+  Future<WorkshopHiveModel?> getWorkshopById(String workshopId) async {
+    var box =
+        await Hive.openBox<WorkshopHiveModel>(HiveTableConstant.workshopBox);
+    return box.get(workshopId);
+  }
+
+  Future<void> updateWorkshop(WorkshopHiveModel workshop) async {
+    var box =
+        await Hive.openBox<WorkshopHiveModel>(HiveTableConstant.workshopBox);
+    await box.put(workshop.workshopId, workshop);
+  }
 }

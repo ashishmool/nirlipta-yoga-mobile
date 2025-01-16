@@ -8,7 +8,7 @@ part of 'course_hive_model.dart';
 
 class CourseHiveModelAdapter extends TypeAdapter<CourseHiveModel> {
   @override
-  final int typeId = 10;
+  final int typeId = 11;
 
   @override
   CourseHiveModel read(BinaryReader reader) {

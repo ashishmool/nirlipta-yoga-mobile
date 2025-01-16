@@ -6,12 +6,9 @@ import '../../../../app/constants/hive_table_constant.dart';
 import '../../domain/entity/course_entity.dart';
 
 part 'course_hive_model.g.dart';
-// Command to Generate Adapter: dart run build_runner build -d
-// Need to run each time changes are made to Model
 
 @HiveType(typeId: HiveTableConstant.courseTableId)
-
-class CourseHiveModel extends Equatable{
+class CourseHiveModel extends Equatable {
   @HiveField(0)
   final String? courseId;
 
@@ -23,37 +20,30 @@ class CourseHiveModel extends Equatable{
     required this.courseName,
   }) : courseId = courseId ?? const Uuid().v4();
 
-
-  //Initial Constructor
-  const CourseHiveModel.initial()
-      : courseId = '',
-        courseName = '';
-
-  //From Entity
-  factory CourseHiveModel.fromEntity(CourseEntity entity){
+  factory CourseHiveModel.fromEntity(CourseEntity entity) {
     return CourseHiveModel(
       courseId: entity.courseId,
       courseName: entity.courseName,
     );
   }
 
-//To Entity
-  CourseEntity toEntity(){
+  CourseEntity toEntity() {
     return CourseEntity(
       courseId: courseId,
       courseName: courseName,
     );
   }
 
-// To Entity List
-  static List<CourseHiveModel> fromEntityList(List<CourseEntity> entityList){
-    return entityList
-        .map((entity) => CourseHiveModel.fromEntity(entity))
-        .toList();
+  // Convert List of CourseEntity to List of CourseHiveModel
+  static List<CourseHiveModel> fromEntityList(List<CourseEntity> courses) {
+    return courses.map((course) => CourseHiveModel.fromEntity(course)).toList();
+  }
+
+  // Convert List of CourseHiveModel to List of CourseEntity
+  static List<CourseEntity> toEntityList(List<CourseHiveModel> courses) {
+    return courses.map((course) => course.toEntity()).toList();
   }
 
   @override
   List<Object?> get props => [courseId, courseName];
-
-
 }

@@ -33,6 +33,7 @@ class BatchLocalDataSource implements IBatchDataSource {
   Future<List<BatchEntity>> getAllBatches() {
     try {
       return _hiveService.getAllBatches().then((value) {
+        //Conversion Logic i.e. fetched is sent to Entity and then listed
         return value.map((e) => e.toEntity()).toList();
       });
     } catch (e) {
