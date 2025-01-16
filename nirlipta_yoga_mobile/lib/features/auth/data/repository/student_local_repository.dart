@@ -33,7 +33,7 @@ class StudentLocalRepository implements IStudentRepository {
   }
 
   @override
-  Future<Either<Failure, List<StudentEntity>>> getAllStudentes() async {
+  Future<Either<Failure, List<StudentEntity>>> getAllStudents() async {
     try {
       final List<StudentEntity> students =
           await _studentLocalDataSource.getAllStudents();

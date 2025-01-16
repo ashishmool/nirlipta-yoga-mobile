@@ -4,8 +4,6 @@ import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
 import 'package:multi_select_flutter/util/multi_select_list_type.dart';
 
-import '../../../batch/data/model/batch_hive_model.dart';
-import '../../../batch/domain/entity/batch_entity.dart';
 import '../../../workshop/data/model/workshop_hive_model.dart';
 import '../../../workshop/domain/entity/workshop_entity.dart';
 import '../../../workshop/presentation/view_model/workshop_bloc.dart';
@@ -27,7 +25,6 @@ class _RegisterViewState extends State<RegisterView> {
   final _passwordController = TextEditingController(text: 'password123');
   String? _genderValue = 'Male';
 
-  BatchEntity? _dropDownValue;
   final List<WorkshopEntity> _lstWorkshopSelected = [];
 
   @override
@@ -43,7 +40,7 @@ class _RegisterViewState extends State<RegisterView> {
             // Show a loading Snackbar
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                content: Text('Registering student...'),
+                content: Text('Registering User...'),
                 duration: Duration(seconds: 2),
               ),
             );
@@ -51,7 +48,7 @@ class _RegisterViewState extends State<RegisterView> {
             // Show success message and clear form
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                content: Text('Student registered successfully!'),
+                content: Text('User Registered Successfully!'),
                 backgroundColor: Colors.green,
               ),
             );
@@ -66,7 +63,7 @@ class _RegisterViewState extends State<RegisterView> {
             // Show error message
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                content: Text('Failed to register student. Try again.'),
+                content: Text('Failed to register User. Try again!'),
                 backgroundColor: Colors.red,
               ),
             );
@@ -284,9 +281,6 @@ class _RegisterViewState extends State<RegisterView> {
                       child: ElevatedButton(
                         onPressed: () {
                           if (_key.currentState!.validate()) {
-                            final batchHiveModel = _dropDownValue != null
-                                ? BatchHiveModel.fromEntity(_dropDownValue!)
-                                : null;
                             final workshopsHiveModels =
                                 WorkshopHiveModel.fromEntityList(
                                     _lstWorkshopSelected);

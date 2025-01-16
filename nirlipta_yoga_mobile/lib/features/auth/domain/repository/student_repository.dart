@@ -6,7 +6,7 @@ import '../entity/user_entity.dart';
 abstract interface class IStudentRepository {
   Future<Either<Failure, void>> createStudent(StudentEntity studentEntity);
 
-  Future<Either<Failure, List<StudentEntity>>> getAllStudentes();
+  Future<Either<Failure, List<StudentEntity>>> getAllStudents();
 
   Future<Either<Failure, void>> deleteStudent(String id);
 

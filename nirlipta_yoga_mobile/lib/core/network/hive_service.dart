@@ -60,27 +60,23 @@ class HiveService {
 // Student Queries
 
   Future<void> addStudent(StudentHiveModel student) async {
-    var box =
-        await Hive.openBox<StudentHiveModel>(HiveTableConstant.studentBox);
+    var box = await Hive.openBox<StudentHiveModel>(HiveTableConstant.userBox);
     await box.put(student.id, student);
   }
 
   Future<void> deleteStudent(String id) async {
-    var box =
-        await Hive.openBox<StudentHiveModel>(HiveTableConstant.studentBox);
+    var box = await Hive.openBox<StudentHiveModel>(HiveTableConstant.userBox);
     await box.delete(id);
   }
 
   Future<List<StudentHiveModel>> getAllStudents() async {
-    var box =
-        await Hive.openBox<StudentHiveModel>(HiveTableConstant.studentBox);
+    var box = await Hive.openBox<StudentHiveModel>(HiveTableConstant.userBox);
     var students = box.values.toList();
     return students;
   }
 
   Future<StudentHiveModel?> loginStudent(String email, String password) async {
-    var box =
-        await Hive.openBox<StudentHiveModel>(HiveTableConstant.studentBox);
+    var box = await Hive.openBox<StudentHiveModel>(HiveTableConstant.userBox);
 
     var auth = box.values.firstWhere(
         (element) => element.email == email && element.password == password,

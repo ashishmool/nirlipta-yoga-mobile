@@ -12,6 +12,6 @@ class GetAllStudentUsecase implements UsecaseWithoutParams {
 
   @override
   Future<Either<Failure, List<StudentEntity>>> call() {
-    return studentRepository.getAllStudentes();
+    return studentRepository.getAllStudents();
   }
 }

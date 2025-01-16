@@ -14,7 +14,7 @@ class RegisterStudent extends RegisterEvent {
   final String phone;
   final String email;
   final String password;
-  final String gender;
+  final String? gender;
 
   final List<WorkshopHiveModel> workshops;
 
@@ -23,10 +23,10 @@ class RegisterStudent extends RegisterEvent {
     required this.phone,
     required this.email,
     required this.password,
-    required this.gender,
+    this.gender,
     required this.workshops,
   });
 
   @override
-  List<Object> get props => [name, phone, email, password, gender, workshops];
+  List<Object> get props => [name, phone, email, password, workshops];
 }

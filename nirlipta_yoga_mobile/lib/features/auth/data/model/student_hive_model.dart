@@ -4,16 +4,15 @@ import 'package:nirlipta_yoga_mobile/features/workshop/data/model/workshop_hive_
 import 'package:uuid/uuid.dart';
 
 import '../../../../app/constants/hive_table_constant.dart';
-import '../../../batch/data/model/batch_hive_model.dart';
 import '../../domain/entity/user_entity.dart';
 
 part 'student_hive_model.g.dart';
-//dart run build_runner build -d
+// dart run build_runner build -d
 
 @HiveType(typeId: HiveTableConstant.studentTableId)
 class StudentHiveModel extends Equatable {
   @HiveField(0)
-  final String? id;
+  final String id;
 
   @HiveField(1)
   final String name;
@@ -25,7 +24,7 @@ class StudentHiveModel extends Equatable {
   final String phone;
 
   @HiveField(4)
-  final String gender;
+  final String? gender;
 
   @HiveField(5)
   final List<WorkshopHiveModel> workshops;
@@ -41,19 +40,19 @@ class StudentHiveModel extends Equatable {
     required this.name,
     this.image,
     required this.phone,
-    required this.gender,
+    this.gender,
     required this.workshops,
     required this.email,
     required this.password,
   }) : id = id ?? const Uuid().v4();
 
-  /// Initial constructor
+  /// Initial constructor with default values
   const StudentHiveModel.initial()
       : id = '',
         name = '',
-        image = '',
+        image = null,
         phone = '',
-        gender = '',
+        gender = null,
         workshops = const [],
         email = '',
         password = '';
@@ -61,9 +60,10 @@ class StudentHiveModel extends Equatable {
   // Convert from entity
   factory StudentHiveModel.fromEntity(StudentEntity entity) {
     return StudentHiveModel(
-      id: entity.id,
+      id: entity.id ?? const Uuid().v4(),
       name: entity.name,
-      image: entity.image,
+      image: entity.image?.isEmpty ?? true ? null : entity.image,
+      // Handle empty image strings
       phone: entity.phone,
       gender: entity.gender,
       workshops: WorkshopHiveModel.fromEntityList(entity.workshops),
@@ -80,7 +80,7 @@ class StudentHiveModel extends Equatable {
       image: image,
       phone: phone,
       gender: gender,
-      workshops: workshops.map((course) => course.toEntity()).toList(),
+      workshops: workshops.map((workshop) => workshop.toEntity()).toList(),
       email: email,
       password: password,
     );

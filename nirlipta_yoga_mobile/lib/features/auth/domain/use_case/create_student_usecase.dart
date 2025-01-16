@@ -13,7 +13,7 @@ class CreateStudentParams extends Equatable {
   final String email;
   final String password;
   final String? image;
-  final String gender;
+  final String? gender;
   final List<WorkshopHiveModel> workshops;
 
   const CreateStudentParams({
@@ -22,7 +22,7 @@ class CreateStudentParams extends Equatable {
     required this.email,
     required this.password,
     this.image,
-    required this.gender,
+    this.gender,
     required this.workshops,
   });
 
