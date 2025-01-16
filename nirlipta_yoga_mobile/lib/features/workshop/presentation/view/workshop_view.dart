@@ -109,7 +109,7 @@ class WorkshopView extends StatelessWidget {
                         return ListTile(
                           title: Text(state.workshops[index].title),
                           subtitle: Text(
-                              'Price: \$${state.workshops[index].price.toStringAsFixed(2)}'),
+                              'Rs. ${state.workshops[index].price.toStringAsFixed(2)}'),
                           trailing: IconButton(
                             icon: const Icon(Icons.delete),
                             onPressed: () {

@@ -1,27 +1,27 @@
 import 'package:equatable/equatable.dart';
 
-import '../../../batch/domain/entity/batch_entity.dart';
-import '../../../course/domain/entity/course_entity.dart';
+import '../../../workshop/domain/entity/workshop_entity.dart';
 
 class StudentEntity extends Equatable {
   final String? id;
-  final String fname;
-  final String lname;
+  final String name;
   final String? image;
   final String phone;
-  final BatchEntity batch;
-  final List<CourseEntity> courses;
+  final String gender;
+
+  // final BatchEntity batch;
+  final List<WorkshopEntity> workshops;
   final String email;
   final String password;
 
   const StudentEntity({
     this.id,
-    required this.fname,
-    required this.lname,
+    required this.name,
     this.image,
     required this.phone,
-    required this.batch,
-    required this.courses,
+    required this.gender,
+    // required this.batch,
+    required this.workshops,
     required this.email,
     required this.password,
   });

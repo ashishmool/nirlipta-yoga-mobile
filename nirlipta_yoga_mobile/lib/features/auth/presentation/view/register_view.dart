@@ -6,10 +6,9 @@ import 'package:multi_select_flutter/util/multi_select_list_type.dart';
 
 import '../../../batch/data/model/batch_hive_model.dart';
 import '../../../batch/domain/entity/batch_entity.dart';
-import '../../../batch/presentation/view_model/batch_bloc.dart';
-import '../../../course/data/model/course_hive_model.dart';
-import '../../../course/domain/entity/course_entity.dart';
-import '../../../course/presentation/view_model/course_bloc.dart';
+import '../../../workshop/data/model/workshop_hive_model.dart';
+import '../../../workshop/domain/entity/workshop_entity.dart';
+import '../../../workshop/presentation/view_model/workshop_bloc.dart';
 import '../view_model/signup/register_bloc.dart';
 
 class RegisterView extends StatefulWidget {
@@ -22,20 +21,20 @@ class RegisterView extends StatefulWidget {
 class _RegisterViewState extends State<RegisterView> {
   final _gap = const SizedBox(height: 8);
   final _key = GlobalKey<FormState>();
-  final _fnameController = TextEditingController(text: 'Ashish');
-  final _lnameController = TextEditingController(text: 'Mool');
+  final _nameController = TextEditingController(text: 'Ashish Mool');
   final _phoneController = TextEditingController(text: '9813943777');
-  final _emailController = TextEditingController(text: 'test@email.com');
+  final _emailController = TextEditingController(text: 'asis.mool@gmail.com');
   final _passwordController = TextEditingController(text: 'password123');
+  String? _genderValue = 'Male';
 
   BatchEntity? _dropDownValue;
-  final List<CourseEntity> _lstCourseSelected = [];
+  final List<WorkshopEntity> _lstWorkshopSelected = [];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Register Student'),
+        title: const Text('User Registration'),
         centerTitle: true,
       ),
       body: BlocListener<RegisterBloc, RegisterState>(
@@ -81,6 +80,7 @@ class _RegisterViewState extends State<RegisterView> {
                 key: _key,
                 child: Column(
                   children: [
+                    SizedBox(height: 28),
                     InkWell(
                       onTap: () {
                         showModalBottomSheet(
@@ -117,36 +117,58 @@ class _RegisterViewState extends State<RegisterView> {
                       child: SizedBox(
                         height: 200,
                         width: 200,
-                        child: CircleAvatar(
-                          radius: 50,
-                          backgroundImage:
-                              const AssetImage('assets/images/profile.png')
-                                  as ImageProvider,
+                        child: Container(
+                          alignment: Alignment.center,
+                          child: Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              // CircleAvatar inside Container to maintain the size
+                              CircleAvatar(
+                                radius: 100,
+                                backgroundColor: Colors.white,
+                                backgroundImage: const AssetImage(
+                                  'assets/images/profile-placeholder.png',
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 5,
+                                right: 15,
+                                child: Container(
+                                  padding: const EdgeInsets.all(4),
+                                  // Small padding for the icon
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    shape: BoxShape.circle,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color:
+                                            Colors.black.withValues(alpha: 0.3),
+                                        blurRadius: 5,
+                                        offset: Offset(0, 2),
+                                      ),
+                                    ],
+                                  ),
+                                  child: const Icon(
+                                    Icons.camera_alt,
+                                    size: 24, // Small icon size
+                                    color: Colors.blue,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                     const SizedBox(height: 25),
                     TextFormField(
-                      controller: _fnameController,
+                      controller: _nameController,
                       decoration: const InputDecoration(
                         labelText: 'First Name',
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter first name';
-                        }
-                        return null;
-                      },
-                    ),
-                    _gap,
-                    TextFormField(
-                      controller: _lnameController,
-                      decoration: const InputDecoration(
-                        labelText: 'Last Name',
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter last name';
                         }
                         return null;
                       },
@@ -165,57 +187,54 @@ class _RegisterViewState extends State<RegisterView> {
                       },
                     ),
                     _gap,
-                    BlocBuilder<BatchBloc, BatchState>(
-                        builder: (context, state) {
-                      return DropdownButtonFormField<BatchEntity>(
-                        items: state.batches
-                            .map((e) => DropdownMenuItem<BatchEntity>(
-                                  value: e,
-                                  child: Text(e.batchName),
-                                ))
-                            .toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            _dropDownValue = value;
-                          });
-                        },
-                        value: _dropDownValue,
-                        decoration: const InputDecoration(
-                          labelText: 'Select Batch',
-                        ),
-                        validator: (value) {
-                          if (value == null) {
-                            return 'Please select batch';
-                          }
-                          return null;
-                        },
-                      );
-                    }),
+                    DropdownButtonFormField<String>(
+                      value: _genderValue,
+                      items: ['Male', 'Female', 'Other']
+                          .map((gender) => DropdownMenuItem<String>(
+                                value: gender,
+                                child: Text(gender),
+                              ))
+                          .toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _genderValue = value;
+                        });
+                      },
+                      decoration: const InputDecoration(
+                        labelText: 'Select Gender',
+                      ),
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Please select gender';
+                        }
+                        return null;
+                      },
+                    ),
                     _gap,
-                    BlocBuilder<CourseBloc, CourseState>(
-                        builder: (context, courseState) {
-                      if (courseState.isLoading) {
+                    BlocBuilder<WorkshopBloc, WorkshopState>(
+                        builder: (context, workshopState) {
+                      if (workshopState.isLoading) {
                         return const CircularProgressIndicator();
                       } else {
                         return MultiSelectDialogField(
-                          title: const Text('Select course'),
-                          items: courseState.courses
+                          title: const Text('Select Workshop'),
+                          items: workshopState.workshops
                               .map(
-                                (course) => MultiSelectItem(
-                                  course,
-                                  course.courseName,
+                                (workshop) => MultiSelectItem(
+                                  workshop,
+                                  workshop.title,
                                 ),
                               )
                               .toList(),
                           listType: MultiSelectListType.CHIP,
                           buttonText: const Text(
-                            'Select course',
+                            'Select Workshop',
                             style: TextStyle(color: Colors.black),
                           ),
                           buttonIcon: const Icon(Icons.search),
                           onConfirm: (values) {
-                            _lstCourseSelected.clear();
-                            _lstCourseSelected.addAll(values);
+                            _lstWorkshopSelected.clear();
+                            _lstWorkshopSelected.addAll(values);
                           },
                           decoration: BoxDecoration(
                             border: Border.all(
@@ -225,7 +244,7 @@ class _RegisterViewState extends State<RegisterView> {
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please select courses';
+                              return 'Please select at least one workshop';
                             }
                             return null;
                           },
@@ -268,17 +287,16 @@ class _RegisterViewState extends State<RegisterView> {
                             final batchHiveModel = _dropDownValue != null
                                 ? BatchHiveModel.fromEntity(_dropDownValue!)
                                 : null;
-                            final coursesHiveModels =
-                                CourseHiveModel.fromEntityList(
-                                    _lstCourseSelected);
+                            final workshopsHiveModels =
+                                WorkshopHiveModel.fromEntityList(
+                                    _lstWorkshopSelected);
                             context.read<RegisterBloc>().add(RegisterStudent(
-                                  fName: _fnameController.text,
-                                  lName: _lnameController.text,
+                                  name: _nameController.text,
                                   phone: _phoneController.text,
                                   email: _emailController.text,
                                   password: _passwordController.text,
-                                  batch: batchHiveModel!,
-                                  courses: coursesHiveModels,
+                                  gender: _genderValue.toString(),
+                                  workshops: workshopsHiveModels,
                                 ));
                           }
                         },

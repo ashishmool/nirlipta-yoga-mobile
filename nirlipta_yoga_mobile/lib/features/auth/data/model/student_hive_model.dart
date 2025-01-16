@@ -1,10 +1,10 @@
 import 'package:equatable/equatable.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:nirlipta_yoga_mobile/features/workshop/data/model/workshop_hive_model.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../app/constants/hive_table_constant.dart';
 import '../../../batch/data/model/batch_hive_model.dart';
-import '../../../course/data/model/course_hive_model.dart';
 import '../../domain/entity/user_entity.dart';
 
 part 'student_hive_model.g.dart';
@@ -16,37 +16,33 @@ class StudentHiveModel extends Equatable {
   final String? id;
 
   @HiveField(1)
-  final String fname;
+  final String name;
 
   @HiveField(2)
-  final String lname;
-
-  @HiveField(3)
   final String? image;
 
-  @HiveField(4)
+  @HiveField(3)
   final String phone;
 
+  @HiveField(4)
+  final String gender;
+
   @HiveField(5)
-  final BatchHiveModel batch;
+  final List<WorkshopHiveModel> workshops;
 
   @HiveField(6)
-  final List<CourseHiveModel> courses;
-
-  @HiveField(7)
   final String email;
 
-  @HiveField(8)
+  @HiveField(7)
   final String password;
 
   StudentHiveModel({
     String? id,
-    required this.fname,
-    required this.lname,
+    required this.name,
     this.image,
     required this.phone,
-    required this.batch,
-    required this.courses,
+    required this.gender,
+    required this.workshops,
     required this.email,
     required this.password,
   }) : id = id ?? const Uuid().v4();
@@ -54,12 +50,11 @@ class StudentHiveModel extends Equatable {
   /// Initial constructor
   const StudentHiveModel.initial()
       : id = '',
-        fname = '',
-        lname = '',
+        name = '',
         image = '',
         phone = '',
-        batch = const BatchHiveModel.initial(),
-        courses = const [],
+        gender = '',
+        workshops = const [],
         email = '',
         password = '';
 
@@ -67,12 +62,11 @@ class StudentHiveModel extends Equatable {
   factory StudentHiveModel.fromEntity(StudentEntity entity) {
     return StudentHiveModel(
       id: entity.id,
-      fname: entity.fname,
-      lname: entity.lname,
+      name: entity.name,
       image: entity.image,
       phone: entity.phone,
-      batch: BatchHiveModel.fromEntity(entity.batch),
-      courses: CourseHiveModel.fromEntityList(entity.courses),
+      gender: entity.gender,
+      workshops: WorkshopHiveModel.fromEntityList(entity.workshops),
       email: entity.email,
       password: entity.password,
     );
@@ -82,12 +76,11 @@ class StudentHiveModel extends Equatable {
   StudentEntity toEntity() {
     return StudentEntity(
       id: id,
-      fname: fname,
-      lname: lname,
+      name: name,
       image: image,
       phone: phone,
-      batch: batch.toEntity(),
-      courses: courses.map((course) => course.toEntity()).toList(),
+      gender: gender,
+      workshops: workshops.map((course) => course.toEntity()).toList(),
       email: email,
       password: password,
     );
@@ -102,12 +95,11 @@ class StudentHiveModel extends Equatable {
   @override
   List<Object?> get props => [
         id,
-        fname,
-        lname,
+        name,
         image,
         phone,
-        batch,
-        courses,
+        gender,
+        workshops,
         email,
         password,
       ];

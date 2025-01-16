@@ -190,7 +190,7 @@ _initRegisterDependencies() async {
   getIt.registerFactory<RegisterBloc>(
     () => RegisterBloc(
       batchBloc: getIt<BatchBloc>(),
-      courseBloc: getIt<CourseBloc>(),
+      workshopBloc: getIt<WorkshopBloc>(),
       createStudentUsecase: getIt<CreateStudentUsecase>(),
     ),
   );
@@ -205,7 +205,7 @@ _initLoginDependencies() async {
       registerBloc: getIt<RegisterBloc>(),
       homeCubit: getIt<HomeCubit>(),
       batchBloc: getIt<BatchBloc>(),
-      courseBloc: getIt<CourseBloc>(),
+      workshopBloc: getIt<WorkshopBloc>(),
       loginStudentUsecase: getIt<LoginStudentUsecase>(),
     ),
   );

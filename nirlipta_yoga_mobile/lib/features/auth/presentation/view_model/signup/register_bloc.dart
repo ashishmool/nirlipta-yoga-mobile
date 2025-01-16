@@ -1,10 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../../batch/data/model/batch_hive_model.dart';
 import '../../../../batch/presentation/view_model/batch_bloc.dart';
-import '../../../../course/data/model/course_hive_model.dart';
-import '../../../../course/presentation/view_model/course_bloc.dart';
+import '../../../../workshop/data/model/workshop_hive_model.dart';
+import '../../../../workshop/presentation/view_model/workshop_bloc.dart';
 import '../../../domain/use_case/create_student_usecase.dart';
 
 part 'register_event.dart';
@@ -12,15 +11,15 @@ part 'register_state.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   final BatchBloc _batchBloc;
-  final CourseBloc _courseBloc;
+  final WorkshopBloc _workshopBloc;
   final CreateStudentUsecase _createStudentUsecase;
 
   RegisterBloc({
     required BatchBloc batchBloc,
-    required CourseBloc courseBloc,
+    required WorkshopBloc workshopBloc,
     required CreateStudentUsecase createStudentUsecase,
   })  : _batchBloc = batchBloc,
-        _courseBloc = courseBloc,
+        _workshopBloc = workshopBloc,
         _createStudentUsecase = createStudentUsecase,
         super(RegisterState.initial()) {
     on<LoadCoursesAndBatches>(_onRegisterEvent);
@@ -35,7 +34,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   ) {
     emit(state.copyWith(isLoading: true));
     _batchBloc.add(LoadBatches());
-    _courseBloc.add(LoadCourses());
+    _workshopBloc.add(LoadWorkshops());
     emit(state.copyWith(isLoading: false, isSuccess: true));
   }
 
@@ -44,13 +43,12 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     emit(state.copyWith(isLoading: true));
 
     final params = CreateStudentParams(
-      fName: event.fName,
-      lName: event.lName,
+      name: event.name,
       phone: event.phone,
       email: event.email,
       password: event.password,
-      batch: event.batch,
-      courses: event.courses,
+      gender: event.gender,
+      workshops: event.workshops,
     );
 
     final result = await _createStudentUsecase.call(params);

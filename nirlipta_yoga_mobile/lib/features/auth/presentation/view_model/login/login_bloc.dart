@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../batch/presentation/view_model/batch_bloc.dart';
-import '../../../../course/presentation/view_model/course_bloc.dart';
 import '../../../../home/presentation/view_model/home_cubit.dart';
+import '../../../../workshop/presentation/view_model/workshop_bloc.dart';
 import '../../../domain/use_case/login_student_usecase.dart';
 import '../signup/register_bloc.dart';
 
@@ -15,19 +15,19 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final RegisterBloc _registerBloc;
   final HomeCubit _homeCubit;
   final BatchBloc _batchBloc;
-  final CourseBloc _courseBloc;
+  final WorkshopBloc _workshopBloc;
   final LoginStudentUsecase _loginStudentUsecase;
 
   LoginBloc({
     required RegisterBloc registerBloc,
     required HomeCubit homeCubit,
     required BatchBloc batchBloc,
-    required CourseBloc courseBloc,
+    required WorkshopBloc workshopBloc,
     required LoginStudentUsecase loginStudentUsecase,
   })  : _registerBloc = registerBloc,
         _homeCubit = homeCubit,
         _batchBloc = batchBloc,
-        _courseBloc = courseBloc,
+        _workshopBloc = workshopBloc,
         _loginStudentUsecase = loginStudentUsecase,
         super(LoginState.initial()) {
     on<NavigateRegisterScreenEvent>((event, emit) {
@@ -38,7 +38,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             providers: [
               BlocProvider.value(value: _registerBloc),
               BlocProvider.value(value: _batchBloc),
-              BlocProvider.value(value: _courseBloc),
+              BlocProvider.value(value: _workshopBloc),
             ],
             child: event.destination,
           ),

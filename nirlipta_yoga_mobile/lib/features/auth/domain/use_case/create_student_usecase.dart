@@ -1,44 +1,40 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
+import 'package:nirlipta_yoga_mobile/features/workshop/data/model/workshop_hive_model.dart';
 
 import '../../../../app/usecase/usecase.dart';
 import '../../../../core/error/failure.dart';
-import '../../../batch/data/model/batch_hive_model.dart';
-import '../../../course/data/model/course_hive_model.dart';
 import '../entity/user_entity.dart';
 import '../repository/student_repository.dart';
 
 class CreateStudentParams extends Equatable {
-  final String fName;
-  final String lName;
+  final String name;
   final String phone;
   final String email;
   final String password;
   final String? image;
-  final BatchHiveModel batch;
-  final List<CourseHiveModel> courses;
+  final String gender;
+  final List<WorkshopHiveModel> workshops;
 
   const CreateStudentParams({
-    required this.fName,
-    required this.lName,
+    required this.name,
     required this.phone,
     required this.email,
     required this.password,
     this.image,
-    required this.batch,
-    required this.courses,
+    required this.gender,
+    required this.workshops,
   });
 
   @override
   List<Object?> get props => [
-        fName,
-        lName,
+        name,
         phone,
         email,
         password,
         image,
-        batch,
-        courses,
+        gender,
+        workshops,
       ];
 }
 
@@ -54,14 +50,14 @@ class CreateStudentUsecase
     final studentEntity = StudentEntity(
       id: null,
       // The ID will be generated automatically
-      fname: params.fName,
-      lname: params.lName,
+      name: params.name,
       phone: params.phone,
       email: params.email,
       password: params.password,
       image: params.image,
-      batch: params.batch.toEntity(),
-      courses: params.courses.map((course) => course.toEntity()).toList(),
+      gender: params.gender,
+      workshops:
+          params.workshops.map((workshop) => workshop.toEntity()).toList(),
     );
 
     // Call the repository method to create the student
