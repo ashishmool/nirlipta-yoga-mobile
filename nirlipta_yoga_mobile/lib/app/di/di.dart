@@ -21,6 +21,7 @@ import '../../features/course/domain/use_case/delete_course_usecase.dart';
 import '../../features/course/domain/use_case/get_all_course_usecase.dart';
 import '../../features/course/presentation/view_model/course_bloc.dart';
 import '../../features/home/presentation/view_model/home_cubit.dart';
+import '../../features/onboarding/presentation/view_model/onboarding_cubit.dart';
 import '../../features/splash/presentation/view_model/splash_cubit.dart';
 import '../../features/workshop/data/repository/workshop_local_repository.dart';
 import '../../features/workshop/domain/use_case/create_workshop_usecase.dart';
@@ -49,6 +50,7 @@ Future<void> initDependencies() async {
 
   // Initialize other dependencies
   await _initSplashScreenDependencies();
+  await _initOnboardingScreenDependencies();
 }
 
 _initHiveService() {
@@ -211,6 +213,12 @@ _initLoginDependencies() async {
 
 _initSplashScreenDependencies() async {
   getIt.registerFactory<SplashCubit>(
-    () => SplashCubit(getIt<LoginBloc>()),
+    () => SplashCubit(),
+  );
+}
+
+_initOnboardingScreenDependencies() async {
+  getIt.registerFactory<OnboardingCubit>(
+    () => OnboardingCubit(getIt<LoginBloc>()),
   );
 }
