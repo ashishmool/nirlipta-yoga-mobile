@@ -1,10 +1,12 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nirlipta_yoga_mobile/features/workshop/presentation/view/workshop_view.dart';
+import 'package:nirlipta_yoga_mobile/features/workshop/presentation/view_model/workshop_bloc.dart';
 
 import '../../../../app/di/di.dart';
-import '../../../batch/presentation/view/batch_view.dart';
-import '../../../batch/presentation/view_model/batch_bloc.dart';
+import '../../../course/presentation/view/course_view.dart';
+import '../../../course/presentation/view_model/course_bloc.dart';
 
 class HomeState extends Equatable {
   final int selectedIndex;
@@ -20,19 +22,18 @@ class HomeState extends Equatable {
     return HomeState(
       selectedIndex: 0,
       views: [
-        const Center(
-          child: Text('Dashboard'),
-        ),
-        const Center(
-          child: Text('Course'),
-        ),
+        const Center(child: Text('Dashboard')),
+        // Adding Course view with CourseBloc
         BlocProvider(
-          create: (context) => getIt<BatchBloc>(),
-          child: BatchView(),
+          create: (context) => getIt<CourseBloc>(),
+          child: CourseView(),
         ),
-        const Center(
-          child: Text('Account'),
+        // Adding Batch view with BatchBloc
+        BlocProvider(
+          create: (context) => getIt<WorkshopBloc>(),
+          child: WorkshopView(),
         ),
+        const Center(child: Text('Account')),
       ],
     );
   }

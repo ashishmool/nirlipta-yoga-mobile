@@ -1,5 +1,6 @@
 part of 'batch_bloc.dart';
 
+//What to show in UI
 
 class BatchState extends Equatable {
   final List<BatchEntity> batches;

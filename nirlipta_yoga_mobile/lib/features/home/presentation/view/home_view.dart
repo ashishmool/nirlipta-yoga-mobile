@@ -27,7 +27,7 @@ class HomeView extends StatelessWidget {
                 color: Colors.red,
               );
 
-              // context.read<HomeCubit>().logout();
+              context.read<HomeCubit>().logout();
             },
           ),
           Switch(
@@ -41,6 +41,7 @@ class HomeView extends StatelessWidget {
           ),
         ],
       ),
+      // body: _views.elementAt(_selectedIndex),
       body: BlocBuilder<HomeCubit, HomeState>(builder: (context, state) {
         return state.views.elementAt(state.selectedIndex);
       }),
@@ -54,11 +55,11 @@ class HomeView extends StatelessWidget {
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.book),
-                label: 'Workshop',
+                label: 'Course',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.hotel),
-                label: 'Retreats',
+                icon: Icon(Icons.group),
+                label: 'Workshop',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.account_circle),
@@ -67,11 +68,8 @@ class HomeView extends StatelessWidget {
             ],
             currentIndex: state.selectedIndex,
             selectedItemColor: Color(0xFF9B6763),
-            // Color for the selected item
             unselectedItemColor: Color(0xFFB8978C),
-            // Color for unselected items
             backgroundColor: Colors.black,
-            // Background color for BottomNavigationBar
             onTap: (index) {
               context.read<HomeCubit>().onTabTapped(index);
             },
