@@ -88,6 +88,20 @@ class AppTheme {
           ),
         ),
       ),
+
+      // Checkbox Theme
+      checkboxTheme: CheckboxThemeData(
+        checkColor: WidgetStateProperty.all(primaryColor),
+        // Color of the checkmark
+        fillColor: WidgetStateProperty.all(Colors.white),
+        // Color of the checkbox
+        side: WidgetStateBorderSide.resolveWith((states) {
+          return BorderSide(
+            color: primaryColor, // Border color of the checkbox
+            width: 2,
+          );
+        }),
+      ),
     );
   }
 }
