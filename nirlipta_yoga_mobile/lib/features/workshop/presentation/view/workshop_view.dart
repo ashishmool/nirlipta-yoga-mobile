@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../view_model/workshop_bloc.dart';
 
 class WorkshopView extends StatelessWidget {
-  WorkshopView({Key? key}) : super(key: key);
+  WorkshopView({super.key});
 
   final workshopTitleController = TextEditingController();
   final workshopPriceController = TextEditingController();

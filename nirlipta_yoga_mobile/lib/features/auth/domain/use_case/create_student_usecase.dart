@@ -13,6 +13,9 @@ class CreateStudentParams extends Equatable {
   final String email;
   final String password;
   final String? image;
+  final String? medicalCondition;
+
+  // final DateTime? dob;
   final String? gender;
   final List<WorkshopHiveModel> workshops;
 
@@ -22,6 +25,8 @@ class CreateStudentParams extends Equatable {
     required this.email,
     required this.password,
     this.image,
+    this.medicalCondition,
+    // this.dob,
     this.gender,
     required this.workshops,
   });
@@ -33,6 +38,8 @@ class CreateStudentParams extends Equatable {
         email,
         password,
         image,
+        medicalCondition,
+        // dob,
         gender,
         workshops,
       ];
@@ -55,6 +62,8 @@ class CreateStudentUsecase
       email: params.email,
       password: params.password,
       image: params.image,
+      medicalCondition: params.medicalCondition,
+      // dob: params.dob,
       gender: params.gender,
       workshops:
           params.workshops.map((workshop) => workshop.toEntity()).toList(),

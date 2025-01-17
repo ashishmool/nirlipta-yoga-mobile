@@ -6,6 +6,9 @@ class StudentEntity extends Equatable {
   final String? id;
   final String name;
   final String? image;
+  final String? medicalCondition;
+
+  // final DateTime? dob;
   final String phone;
   final String? gender;
 
@@ -18,9 +21,10 @@ class StudentEntity extends Equatable {
     this.id,
     required this.name,
     this.image,
+    this.medicalCondition,
+    // this.dob,
     required this.phone,
     this.gender,
-    // required this.batch,
     required this.workshops,
     required this.email,
     required this.password,

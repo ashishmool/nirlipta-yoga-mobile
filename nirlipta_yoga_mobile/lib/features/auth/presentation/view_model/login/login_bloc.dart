@@ -58,6 +58,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       );
     });
 
+    // Toggle password visibitlity
+    on<TogglePasswordVisibilityEvent>((event, emit) {
+      emit(state.copyWith(isPasswordVisible: !state.isPasswordVisible));
+    });
+
     // Handle login event
     on<LoginStudentEvent>((event, emit) async {
       emit(state.copyWith(isLoading: true));

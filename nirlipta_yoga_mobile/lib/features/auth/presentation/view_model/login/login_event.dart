@@ -38,3 +38,5 @@ class LoginStudentEvent extends LoginEvent {
     required this.password,
   });
 }
+
+class TogglePasswordVisibilityEvent extends LoginEvent {}

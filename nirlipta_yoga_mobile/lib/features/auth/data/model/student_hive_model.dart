@@ -35,22 +35,29 @@ class StudentHiveModel extends Equatable {
   @HiveField(7)
   final String password;
 
+  @HiveField(8)
+  final String medicalCondition;
+
   StudentHiveModel({
     String? id,
     required this.name,
     this.image,
     required this.phone,
     this.gender,
+    String? medicalCondition,
+    // DateTime? dob,
     required this.workshops,
     required this.email,
     required this.password,
-  }) : id = id ?? const Uuid().v4();
+  })  : id = id ?? const Uuid().v4(),
+        medicalCondition = medicalCondition ?? "None";
 
   /// Initial constructor with default values
   const StudentHiveModel.initial()
       : id = '',
         name = '',
         image = null,
+        medicalCondition = '',
         phone = '',
         gender = null,
         workshops = const [],
@@ -66,6 +73,8 @@ class StudentHiveModel extends Equatable {
       // Handle empty image strings
       phone: entity.phone,
       gender: entity.gender,
+      medicalCondition: entity.medicalCondition,
+      // dob: entity.dob,
       workshops: WorkshopHiveModel.fromEntityList(entity.workshops),
       email: entity.email,
       password: entity.password,
@@ -78,6 +87,8 @@ class StudentHiveModel extends Equatable {
       id: id,
       name: name,
       image: image,
+      medicalCondition: medicalCondition,
+      // dob: dob,
       phone: phone,
       gender: gender,
       workshops: workshops.map((workshop) => workshop.toEntity()).toList(),
@@ -97,6 +108,8 @@ class StudentHiveModel extends Equatable {
         id,
         name,
         image,
+        medicalCondition,
+        // dob,
         phone,
         gender,
         workshops,
