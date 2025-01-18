@@ -6,11 +6,11 @@ import 'package:uuid/uuid.dart';
 import '../../../../app/constants/hive_table_constant.dart';
 import '../../domain/entity/user_entity.dart';
 
-part 'student_hive_model.g.dart';
+part 'user_hive_model.g.dart';
 // dart run build_runner build -d
 
-@HiveType(typeId: HiveTableConstant.studentTableId)
-class StudentHiveModel extends Equatable {
+@HiveType(typeId: HiveTableConstant.userTableId)
+class UserHiveModel extends Equatable {
   @HiveField(0)
   final String id;
 
@@ -38,7 +38,7 @@ class StudentHiveModel extends Equatable {
   @HiveField(8)
   final String medicalCondition;
 
-  StudentHiveModel({
+  UserHiveModel({
     String? id,
     required this.name,
     this.image,
@@ -53,7 +53,7 @@ class StudentHiveModel extends Equatable {
         medicalCondition = medicalCondition ?? "None";
 
   /// Initial constructor with default values
-  const StudentHiveModel.initial()
+  const UserHiveModel.initial()
       : id = '',
         name = '',
         image = null,
@@ -65,8 +65,8 @@ class StudentHiveModel extends Equatable {
         password = '';
 
   // Convert from entity
-  factory StudentHiveModel.fromEntity(StudentEntity entity) {
-    return StudentHiveModel(
+  factory UserHiveModel.fromEntity(UserEntity entity) {
+    return UserHiveModel(
       id: entity.id ?? const Uuid().v4(),
       name: entity.name,
       image: entity.image?.isEmpty ?? true ? null : entity.image,
@@ -82,8 +82,8 @@ class StudentHiveModel extends Equatable {
   }
 
   // Convert to entity
-  StudentEntity toEntity() {
-    return StudentEntity(
+  UserEntity toEntity() {
+    return UserEntity(
       id: id,
       name: name,
       image: image,
@@ -97,9 +97,9 @@ class StudentHiveModel extends Equatable {
     );
   }
 
-  static List<StudentHiveModel> fromEntityList(List<StudentEntity> entityList) {
+  static List<UserHiveModel> fromEntityList(List<UserEntity> entityList) {
     return entityList
-        .map((entity) => StudentHiveModel.fromEntity(entity))
+        .map((entity) => UserHiveModel.fromEntity(entity))
         .toList();
   }
 

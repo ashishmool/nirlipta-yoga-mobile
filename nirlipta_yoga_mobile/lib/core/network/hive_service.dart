@@ -2,7 +2,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../app/constants/hive_table_constant.dart';
-import '../../features/auth/data/model/student_hive_model.dart';
+import '../../features/auth/data/model/user_hive_model.dart';
 import '../../features/batch/data/model/batch_hive_model.dart';
 import '../../features/course/data/model/course_hive_model.dart';
 import '../../features/workshop/data/model/workshop_hive_model.dart';
@@ -19,7 +19,7 @@ class HiveService {
     //Register Adapters
     Hive.registerAdapter(CourseHiveModelAdapter());
     Hive.registerAdapter(BatchHiveModelAdapter());
-    Hive.registerAdapter(StudentHiveModelAdapter());
+    Hive.registerAdapter(UserHiveModelAdapter());
     Hive.registerAdapter(WorkshopHiveModelAdapter());
   }
 
@@ -57,30 +57,30 @@ class HiveService {
     return courses;
   }
 
-// Student Queries
+// User Queries
 
-  Future<void> addStudent(StudentHiveModel student) async {
-    var box = await Hive.openBox<StudentHiveModel>(HiveTableConstant.userBox);
-    await box.put(student.id, student);
+  Future<void> addUser(UserHiveModel user) async {
+    var box = await Hive.openBox<UserHiveModel>(HiveTableConstant.userBox);
+    await box.put(user.id, user);
   }
 
-  Future<void> deleteStudent(String id) async {
-    var box = await Hive.openBox<StudentHiveModel>(HiveTableConstant.userBox);
+  Future<void> deleteUser(String id) async {
+    var box = await Hive.openBox<UserHiveModel>(HiveTableConstant.userBox);
     await box.delete(id);
   }
 
-  Future<List<StudentHiveModel>> getAllStudents() async {
-    var box = await Hive.openBox<StudentHiveModel>(HiveTableConstant.userBox);
-    var students = box.values.toList();
-    return students;
+  Future<List<UserHiveModel>> getAllUsers() async {
+    var box = await Hive.openBox<UserHiveModel>(HiveTableConstant.userBox);
+    var users = box.values.toList();
+    return users;
   }
 
-  Future<StudentHiveModel?> loginStudent(String email, String password) async {
-    var box = await Hive.openBox<StudentHiveModel>(HiveTableConstant.userBox);
+  Future<UserHiveModel?> loginUser(String email, String password) async {
+    var box = await Hive.openBox<UserHiveModel>(HiveTableConstant.userBox);
 
     var auth = box.values.firstWhere(
         (element) => element.email == email && element.password == password,
-        orElse: () => StudentHiveModel.initial());
+        orElse: () => UserHiveModel.initial());
 
     return auth;
   }

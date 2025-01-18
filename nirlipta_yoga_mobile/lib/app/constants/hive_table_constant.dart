@@ -41,9 +41,6 @@ class HiveTableConstant {
   static const int courseTableId = 11;
   static const String courseBox = 'courseBox';
 
-  static const int studentTableId = 12;
-  static const String studentBox = 'studentBox';
-
 // static const int generalTableId = 13;
 // static const String generalBox = 'generalBox';
 }

@@ -26,7 +26,7 @@ class _RegisterViewState extends State<RegisterView> {
   final _passwordController = TextEditingController(text: '');
   final _confirmPasswordController = TextEditingController(text: '');
 
-  String? _genderValue = 'Male';
+  String? _genderValue = 'Other';
   bool _isPasswordVisible = false;
   bool _isNoneSelected =
       false; // Track whether "None" is selected for medical conditions
@@ -301,25 +301,7 @@ class _RegisterViewState extends State<RegisterView> {
                     Row(
                       children: [
                         Expanded(
-                          flex: 8,
-                          // Adjusts the TextField width to take more space
-                          child: TextFormField(
-                            controller: _medicalConditionsController,
-                            decoration: const InputDecoration(
-                              labelText: 'Medical Conditions',
-                            ),
-                            enabled: !_isNoneSelected,
-                            validator: (value) {
-                              if (!_isNoneSelected &&
-                                  (value == null || value.isEmpty)) {
-                                return 'Please enter medical conditions';
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                        Expanded(
-                          flex: 2,
+                          flex: 3,
                           // Adjusts the Checkbox width to take less space
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -340,6 +322,24 @@ class _RegisterViewState extends State<RegisterView> {
                               ),
                               const Text('None'),
                             ],
+                          ),
+                        ),
+                        Expanded(
+                          flex: 7,
+                          // Adjusts the TextField width to take more space
+                          child: TextFormField(
+                            controller: _medicalConditionsController,
+                            decoration: const InputDecoration(
+                              labelText: 'Medical Conditions',
+                            ),
+                            enabled: !_isNoneSelected,
+                            validator: (value) {
+                              if (!_isNoneSelected &&
+                                  (value == null || value.isEmpty)) {
+                                return 'Please enter medical conditions';
+                              }
+                              return null;
+                            },
                           ),
                         ),
                       ],
@@ -398,7 +398,7 @@ class _RegisterViewState extends State<RegisterView> {
                             final workshopsHiveModels =
                                 WorkshopHiveModel.fromEntityList(
                                     _lstWorkshopSelected);
-                            context.read<RegisterBloc>().add(RegisterStudent(
+                            context.read<RegisterBloc>().add(RegisterUser(
                                   name: _nameController.text,
                                   phone: _phoneController.text,
                                   email: _emailController.text,

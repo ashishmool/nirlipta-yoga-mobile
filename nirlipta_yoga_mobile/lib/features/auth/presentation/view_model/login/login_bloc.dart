@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../batch/presentation/view_model/batch_bloc.dart';
 import '../../../../home/presentation/view_model/home_cubit.dart';
 import '../../../../workshop/presentation/view_model/workshop_bloc.dart';
-import '../../../domain/use_case/login_student_usecase.dart';
+import '../../../domain/use_case/login_user_usecase.dart';
 import '../signup/register_bloc.dart';
 
 part 'login_event.dart';
@@ -16,19 +16,19 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final HomeCubit _homeCubit;
   final BatchBloc _batchBloc;
   final WorkshopBloc _workshopBloc;
-  final LoginStudentUsecase _loginStudentUsecase;
+  final LoginUserUsecase _loginUserUsecase;
 
   LoginBloc({
     required RegisterBloc registerBloc,
     required HomeCubit homeCubit,
     required BatchBloc batchBloc,
     required WorkshopBloc workshopBloc,
-    required LoginStudentUsecase loginStudentUsecase,
+    required LoginUserUsecase loginUserUsecase,
   })  : _registerBloc = registerBloc,
         _homeCubit = homeCubit,
         _batchBloc = batchBloc,
         _workshopBloc = workshopBloc,
-        _loginStudentUsecase = loginStudentUsecase,
+        _loginUserUsecase = loginUserUsecase,
         super(LoginState.initial()) {
     on<NavigateRegisterScreenEvent>((event, emit) {
       Navigator.push(
@@ -64,22 +64,22 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     });
 
     // Handle login event
-    on<LoginStudentEvent>((event, emit) async {
+    on<LoginUserEvent>((event, emit) async {
       emit(state.copyWith(isLoading: true));
 
-      final params = LoginStudentParams(
+      final params = LoginUserParams(
         email: event.email,
         password: event.password,
       );
 
-      final result = await _loginStudentUsecase.call(params);
+      final result = await _loginUserUsecase.call(params);
 
       result.fold(
         (failure) {
           // Handle failure (update the state with error message or show a failure alert)
           emit(state.copyWith(isLoading: false, isSuccess: false));
         },
-        (student) {
+        (user) {
           // On success, update state and navigate to the home screen
           emit(state.copyWith(isLoading: false, isSuccess: true));
         },

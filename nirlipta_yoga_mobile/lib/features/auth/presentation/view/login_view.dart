@@ -100,13 +100,13 @@ class LoginView extends StatelessWidget {
 
                           // Login using Hive service
                           try {
-                            final student = await HiveService()
-                                .loginStudent(email, password);
+                            final user =
+                                await HiveService().loginUser(email, password);
 
                             // Check if the user exists and is authenticated
-                            if (student != null &&
-                                student.email == email &&
-                                student.password == password) {
+                            if (user != null &&
+                                user.email == email &&
+                                user.password == password) {
                               context.read<LoginBloc>().add(
                                     NavigateHomeScreenEvent(
                                       destination: HomeView(),

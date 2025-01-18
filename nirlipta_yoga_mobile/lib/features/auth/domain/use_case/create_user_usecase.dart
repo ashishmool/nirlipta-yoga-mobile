@@ -5,9 +5,9 @@ import 'package:nirlipta_yoga_mobile/features/workshop/data/model/workshop_hive_
 import '../../../../app/usecase/usecase.dart';
 import '../../../../core/error/failure.dart';
 import '../entity/user_entity.dart';
-import '../repository/student_repository.dart';
+import '../repository/user_repository.dart';
 
-class CreateStudentParams extends Equatable {
+class CreateUserParams extends Equatable {
   final String name;
   final String phone;
   final String email;
@@ -19,7 +19,7 @@ class CreateStudentParams extends Equatable {
   final String? gender;
   final List<WorkshopHiveModel> workshops;
 
-  const CreateStudentParams({
+  const CreateUserParams({
     required this.name,
     required this.phone,
     required this.email,
@@ -45,16 +45,15 @@ class CreateStudentParams extends Equatable {
       ];
 }
 
-class CreateStudentUsecase
-    implements UsecaseWithParams<void, CreateStudentParams> {
-  final IStudentRepository studentRepository;
+class CreateUserUsecase implements UsecaseWithParams<void, CreateUserParams> {
+  final IUserRepository userRepository;
 
-  const CreateStudentUsecase({required this.studentRepository});
+  const CreateUserUsecase({required this.userRepository});
 
   @override
-  Future<Either<Failure, void>> call(CreateStudentParams params) async {
-    // Create the student entity from the params
-    final studentEntity = StudentEntity(
+  Future<Either<Failure, void>> call(CreateUserParams params) async {
+    // Create the user entity from the params
+    final userEntity = UserEntity(
       id: null,
       // The ID will be generated automatically
       name: params.name,
@@ -69,7 +68,7 @@ class CreateStudentUsecase
           params.workshops.map((workshop) => workshop.toEntity()).toList(),
     );
 
-    // Call the repository method to create the student
-    return await studentRepository.createStudent(studentEntity);
+    // Call the repository method to create the user
+    return await userRepository.createUser(userEntity);
   }
 }

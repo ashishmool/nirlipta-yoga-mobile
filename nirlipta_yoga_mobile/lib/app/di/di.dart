@@ -4,10 +4,10 @@ import 'package:nirlipta_yoga_mobile/features/auth/presentation/view_model/signu
 import 'package:nirlipta_yoga_mobile/features/workshop/data/data_source/local_datasource/workshop_local_data_source.dart';
 
 import '../../core/network/hive_service.dart';
-import '../../features/auth/data/data_source/local_datasource/student_local_datasource.dart';
-import '../../features/auth/data/repository/student_local_repository.dart';
-import '../../features/auth/domain/use_case/create_student_usecase.dart';
-import '../../features/auth/domain/use_case/login_student_usecase.dart';
+import '../../features/auth/data/data_source/local_datasource/user_local_datasource.dart';
+import '../../features/auth/data/repository/user_local_repository.dart';
+import '../../features/auth/domain/use_case/create_user_usecase.dart';
+import '../../features/auth/domain/use_case/login_user_usecase.dart';
 import '../../features/batch/data/data_source/local_datasource/batch_local_data_source.dart';
 import '../../features/batch/data/repository/batch_local_repository.dart';
 import '../../features/batch/domain/use_case/create_batch_usecase.dart';
@@ -170,43 +170,42 @@ _initHomeDependencies() async {
 
 _initCommonDependencies() {
   // Register common dependencies used across multiple features
-  if (!getIt.isRegistered<StudentLocalDatasource>()) {
-    getIt.registerFactory<StudentLocalDatasource>(
-      () => StudentLocalDatasource(getIt<HiveService>()),
+  if (!getIt.isRegistered<UserLocalDatasource>()) {
+    getIt.registerFactory<UserLocalDatasource>(
+      () => UserLocalDatasource(getIt<HiveService>()),
     );
   }
 
-  if (!getIt.isRegistered<StudentLocalRepository>()) {
-    getIt.registerLazySingleton<StudentLocalRepository>(() =>
-        StudentLocalRepository(
-            studentLocalDataSource: getIt<StudentLocalDatasource>()));
+  if (!getIt.isRegistered<UserLocalRepository>()) {
+    getIt.registerLazySingleton<UserLocalRepository>(() =>
+        UserLocalRepository(userLocalDataSource: getIt<UserLocalDatasource>()));
   }
 }
 
 _initRegisterDependencies() async {
-  // Use common StudentLocalDatasource and StudentLocalRepository
-  getIt.registerLazySingleton<CreateStudentUsecase>(() =>
-      CreateStudentUsecase(studentRepository: getIt<StudentLocalRepository>()));
+  // Use common UserLocalDatasource and UserLocalRepository
+  getIt.registerLazySingleton<CreateUserUsecase>(
+      () => CreateUserUsecase(userRepository: getIt<UserLocalRepository>()));
   getIt.registerFactory<RegisterBloc>(
     () => RegisterBloc(
       batchBloc: getIt<BatchBloc>(),
       workshopBloc: getIt<WorkshopBloc>(),
-      createStudentUsecase: getIt<CreateStudentUsecase>(),
+      createUserUsecase: getIt<CreateUserUsecase>(),
     ),
   );
 }
 
 _initLoginDependencies() async {
-  // Use common StudentLocalDatasource and StudentLocalRepository
-  getIt.registerLazySingleton<LoginStudentUsecase>(() =>
-      LoginStudentUsecase(studentRepository: getIt<StudentLocalRepository>()));
+  // Use common UserLocalDatasource and UserLocalRepository
+  getIt.registerLazySingleton<LoginUserUsecase>(
+      () => LoginUserUsecase(userRepository: getIt<UserLocalRepository>()));
   getIt.registerFactory<LoginBloc>(
     () => LoginBloc(
       registerBloc: getIt<RegisterBloc>(),
       homeCubit: getIt<HomeCubit>(),
       batchBloc: getIt<BatchBloc>(),
       workshopBloc: getIt<WorkshopBloc>(),
-      loginStudentUsecase: getIt<LoginStudentUsecase>(),
+      loginUserUsecase: getIt<LoginUserUsecase>(),
     ),
   );
 }

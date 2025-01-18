@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 import '../../../../batch/presentation/view_model/batch_bloc.dart';
 import '../../../../workshop/data/model/workshop_hive_model.dart';
 import '../../../../workshop/presentation/view_model/workshop_bloc.dart';
-import '../../../domain/use_case/create_student_usecase.dart';
+import '../../../domain/use_case/create_user_usecase.dart';
 
 part 'register_event.dart';
 part 'register_state.dart';
@@ -12,18 +12,18 @@ part 'register_state.dart';
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   final BatchBloc _batchBloc;
   final WorkshopBloc _workshopBloc;
-  final CreateStudentUsecase _createStudentUsecase;
+  final CreateUserUsecase _createUserUsecase;
 
   RegisterBloc({
     required BatchBloc batchBloc,
     required WorkshopBloc workshopBloc,
-    required CreateStudentUsecase createStudentUsecase,
+    required CreateUserUsecase createUserUsecase,
   })  : _batchBloc = batchBloc,
         _workshopBloc = workshopBloc,
-        _createStudentUsecase = createStudentUsecase,
+        _createUserUsecase = createUserUsecase,
         super(RegisterState.initial()) {
     on<LoadCoursesAndBatches>(_onRegisterEvent);
-    on<RegisterStudent>(_onRegisterStudent);
+    on<RegisterUser>(_onRegisterUser);
 
     add(LoadCoursesAndBatches());
   }
@@ -38,11 +38,11 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     emit(state.copyWith(isLoading: false, isSuccess: true));
   }
 
-  Future<void> _onRegisterStudent(
-      RegisterStudent event, Emitter<RegisterState> emit) async {
+  Future<void> _onRegisterUser(
+      RegisterUser event, Emitter<RegisterState> emit) async {
     emit(state.copyWith(isLoading: true));
 
-    final params = CreateStudentParams(
+    final params = CreateUserParams(
       name: event.name,
       phone: event.phone,
       email: event.email,
@@ -51,10 +51,10 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       workshops: event.workshops,
     );
 
-    final result = await _createStudentUsecase.call(params);
+    final result = await _createUserUsecase.call(params);
 
     result.fold(
         (failure) => emit(state.copyWith(isLoading: false, isSuccess: false)),
-        (student) => emit(state.copyWith(isLoading: false, isSuccess: true)));
+        (user) => emit(state.copyWith(isLoading: false, isSuccess: true)));
   }
 }

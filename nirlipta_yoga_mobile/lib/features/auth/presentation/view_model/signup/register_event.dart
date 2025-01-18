@@ -9,7 +9,7 @@ sealed class RegisterEvent extends Equatable {
 
 class LoadCoursesAndBatches extends RegisterEvent {}
 
-class RegisterStudent extends RegisterEvent {
+class RegisterUser extends RegisterEvent {
   final String name;
   final String phone;
   final String email;
@@ -18,7 +18,7 @@ class RegisterStudent extends RegisterEvent {
 
   final List<WorkshopHiveModel> workshops;
 
-  const RegisterStudent({
+  const RegisterUser({
     required this.name,
     required this.phone,
     required this.email,

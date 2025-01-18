@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 
 import '../../../workshop/domain/entity/workshop_entity.dart';
 
-class StudentEntity extends Equatable {
+class UserEntity extends Equatable {
   final String? id;
   final String name;
   final String? image;
@@ -17,7 +17,7 @@ class StudentEntity extends Equatable {
   final String email;
   final String password;
 
-  const StudentEntity({
+  const UserEntity({
     this.id,
     required this.name,
     this.image,
