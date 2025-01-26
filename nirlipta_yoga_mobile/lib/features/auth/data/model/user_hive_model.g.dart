@@ -19,38 +19,41 @@ class UserHiveModelAdapter extends TypeAdapter<UserHiveModel> {
     return UserHiveModel(
       id: fields[0] as String?,
       name: fields[1] as String,
-      image: fields[2] as String?,
+      username: fields[2] as String,
       phone: fields[3] as String,
-      gender: fields[4] as String?,
-      medicalCondition: fields[8] as String?,
-      workshops: (fields[5] as List).cast<WorkshopHiveModel>(),
-      email: fields[6] as String,
-      password: fields[7] as String,
+      email: fields[4] as String,
+      password: fields[5] as String,
+      photo: fields[6] as String?,
+      role: fields[7] as String,
+      gender: fields[8] as String,
+      medicalConditions: fields[9] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, UserHiveModel obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(10)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
       ..write(obj.name)
       ..writeByte(2)
-      ..write(obj.image)
+      ..write(obj.username)
       ..writeByte(3)
       ..write(obj.phone)
       ..writeByte(4)
-      ..write(obj.gender)
-      ..writeByte(5)
-      ..write(obj.workshops)
-      ..writeByte(6)
       ..write(obj.email)
-      ..writeByte(7)
+      ..writeByte(5)
       ..write(obj.password)
+      ..writeByte(6)
+      ..write(obj.photo)
+      ..writeByte(7)
+      ..write(obj.role)
       ..writeByte(8)
-      ..write(obj.medicalCondition);
+      ..write(obj.gender)
+      ..writeByte(9)
+      ..write(obj.medicalConditions);
   }
 
   @override

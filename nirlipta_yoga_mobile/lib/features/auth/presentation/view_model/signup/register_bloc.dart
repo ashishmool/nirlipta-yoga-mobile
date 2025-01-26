@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../../../batch/presentation/view_model/batch_bloc.dart';
-import '../../../../workshop/data/model/workshop_hive_model.dart';
 import '../../../../workshop/presentation/view_model/workshop_bloc.dart';
 import '../../../domain/use_case/create_user_usecase.dart';
 
@@ -44,11 +43,15 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
     final params = CreateUserParams(
       name: event.name,
+      username: event.username,
       phone: event.phone,
       email: event.email,
       password: event.password,
+      photo: event.photo,
+      role: event.role,
+      status: event.status,
       gender: event.gender,
-      workshops: event.workshops,
+      medical_conditions: event.medical_conditions,
     );
 
     final result = await _createUserUsecase.call(params);

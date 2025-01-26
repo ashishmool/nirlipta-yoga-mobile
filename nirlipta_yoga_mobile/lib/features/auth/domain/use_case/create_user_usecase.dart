@@ -8,40 +8,47 @@ import '../entity/user_entity.dart';
 import '../repository/user_repository.dart';
 
 class CreateUserParams extends Equatable {
+  final String? id;
   final String name;
+  final String username;
   final String phone;
   final String email;
   final String password;
-  final String? image;
-  final String? medicalCondition;
+  final String? photo;
+  final String role;
+  final String? status;
 
   // final DateTime? dob;
-  final String? gender;
-  final List<WorkshopHiveModel> workshops;
+  final String gender;
+  final String medical_conditions;
 
   const CreateUserParams({
+    this.id,
     required this.name,
+    required this.username,
     required this.phone,
     required this.email,
     required this.password,
-    this.image,
-    this.medicalCondition,
+    this.photo,
+    this.status,
+    required this.role,
+    required this.medical_conditions,
     // this.dob,
-    this.gender,
-    required this.workshops,
+    required this.gender,
   });
 
   @override
   List<Object?> get props => [
         name,
+        username,
         phone,
         email,
         password,
-        image,
-        medicalCondition,
-        // dob,
+        photo,
+        role,
+        status,
+        medical_conditions,
         gender,
-        workshops,
       ];
 }
 
@@ -57,15 +64,16 @@ class CreateUserUsecase implements UsecaseWithParams<void, CreateUserParams> {
       id: null,
       // The ID will be generated automatically
       name: params.name,
+      username: params.username,
       phone: params.phone,
       email: params.email,
       password: params.password,
-      image: params.image,
-      medicalCondition: params.medicalCondition,
-      // dob: params.dob,
+      photo: params.photo,
+      role: params.role,
+      status: params.status,
       gender: params.gender,
-      workshops:
-          params.workshops.map((workshop) => workshop.toEntity()).toList(),
+      medical_conditions: params.medical_conditions,
+      // dob: params.dob,
     );
 
     // Call the repository method to create the user
