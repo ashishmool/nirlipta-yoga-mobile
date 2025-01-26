@@ -16,8 +16,6 @@ class RegisterUser extends RegisterEvent {
   final String email;
   final String password;
   final String? photo;
-  final String role;
-  final String? status;
 
   // final DateTime? dob;
   final String gender;
@@ -30,8 +28,6 @@ class RegisterUser extends RegisterEvent {
     required this.email,
     required this.password,
     this.photo,
-    required this.role,
-    this.status,
     required this.medical_conditions,
     // this.dob,
     required this.gender,
@@ -44,7 +40,6 @@ class RegisterUser extends RegisterEvent {
         phone,
         email,
         password,
-        role,
         medical_conditions,
         gender,
       ];

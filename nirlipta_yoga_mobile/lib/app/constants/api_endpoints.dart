@@ -5,7 +5,7 @@ class ApiEndpoints {
   static const Duration receiveTimeout = Duration(seconds: 1000);
 
   // For Android Emulator
-  static const String baseUrl = "http://10.0.2.2:3000/api/v1/";
+  static const String baseUrl = "http://10.0.2.2:5000/api/";
 
   // ============= Auth Routes =============
   static const String login = "auth/login";

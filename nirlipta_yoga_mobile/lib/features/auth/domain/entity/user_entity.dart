@@ -8,8 +8,6 @@ class UserEntity extends Equatable {
   final String email;
   final String password;
   final String? photo;
-  final String role;
-  final String? status;
 
   // final DateTime? dob;
   final String gender;
@@ -23,8 +21,6 @@ class UserEntity extends Equatable {
     required this.email,
     required this.password,
     this.photo,
-    required this.role,
-    this.status,
     required this.medical_conditions,
     // this.dob,
     required this.gender,

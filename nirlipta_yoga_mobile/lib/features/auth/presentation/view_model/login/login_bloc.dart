@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../../core/common/snackbar/snackbar.dart';
 import '../../../../batch/presentation/view_model/batch_bloc.dart';
 import '../../../../home/presentation/view_model/home_cubit.dart';
 import '../../../../workshop/presentation/view_model/workshop_bloc.dart';
@@ -78,10 +79,23 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         (failure) {
           // Handle failure (update the state with error message or show a failure alert)
           emit(state.copyWith(isLoading: false, isSuccess: false));
+          showMySnackBar(
+            context: event.context,
+            message: 'Invalid email or password',
+            color: Color(0xFF9B6763),
+          );
         },
         (user) {
           // On success, update state and navigate to the home screen
           emit(state.copyWith(isLoading: false, isSuccess: true));
+
+          // Trigger navigation
+          add(
+            NavigateHomeScreenEvent(
+              context: event.context,
+              destination: event.destination,
+            ),
+          );
         },
       );
     });

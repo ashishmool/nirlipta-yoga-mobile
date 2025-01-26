@@ -14,15 +14,15 @@ class RegisterView extends StatefulWidget {
 class _RegisterViewState extends State<RegisterView> {
   final _gap = const SizedBox(height: 8);
   final _key = GlobalKey<FormState>();
-  final _nameController = TextEditingController(text: '');
-  final _usernameController = TextEditingController(text: '');
-  final _medicalConditionsController = TextEditingController(text: '');
-  final _phoneController = TextEditingController(text: '');
-  final _emailController = TextEditingController(text: '');
-  final _passwordController = TextEditingController(text: '');
-  final _confirmPasswordController = TextEditingController(text: '');
+  final _nameController = TextEditingController(text: 'Ashish Mool');
+  final _usernameController = TextEditingController(text: 'ashishmool');
+  final _medicalConditionsController = TextEditingController(text: 'None');
+  final _phoneController = TextEditingController(text: '9813949495');
+  final _emailController = TextEditingController(text: 'a3.asis@gmail.com');
+  final _passwordController = TextEditingController(text: 'test12345');
+  final _confirmPasswordController = TextEditingController(text: 'test12345');
 
-  String? _genderValue = 'Other';
+  String? _genderValue = 'Male';
   bool _isPasswordVisible = false;
   bool _isNoneSelected =
       false; // Track whether "None" is selected for medical conditions
@@ -293,6 +293,19 @@ class _RegisterViewState extends State<RegisterView> {
                       },
                     ),
                     _gap,
+                    TextFormField(
+                      controller: _usernameController,
+                      decoration: const InputDecoration(
+                        labelText: 'Username',
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter username';
+                        }
+                        return null;
+                      },
+                    ),
+                    _gap,
                     // Medical Conditions and "None" Checkbox
                     Row(
                       children: [
@@ -354,8 +367,6 @@ class _RegisterViewState extends State<RegisterView> {
                                   phone: _phoneController.text,
                                   email: _emailController.text,
                                   password: _passwordController.text,
-                                  role: "student",
-                                  status: "pending",
                                   gender: _genderValue.toString(),
                                   medical_conditions: '',
                                 ));

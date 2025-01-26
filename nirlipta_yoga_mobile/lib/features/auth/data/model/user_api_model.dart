@@ -13,10 +13,8 @@ class UserApiModel extends Equatable {
   final String email;
   final String password;
   final String? photo;
-  final String role;
   final String gender;
   final String medical_conditions;
-  final String status;
 
   const UserApiModel({
     this.id,
@@ -26,24 +24,20 @@ class UserApiModel extends Equatable {
     required this.email,
     required this.password,
     this.photo,
-    this.role = 'student',
     required this.gender,
     this.medical_conditions = 'None',
-    this.status = 'active',
   });
 
   const UserApiModel.empty()
-      : id = null,
+      : id = '',
         name = '',
         username = '',
         phone = '',
         email = '',
         password = '',
-        photo = null,
-        role = 'student',
+        photo = '',
         gender = '',
-        medical_conditions = 'None',
-        status = 'active';
+        medical_conditions = 'None';
 
   /// Factory constructor for creating a `UserApiModel` from JSON
   factory UserApiModel.fromJson(Map<String, dynamic> json) {
@@ -55,10 +49,8 @@ class UserApiModel extends Equatable {
       email: json['email'] as String,
       password: json['password'] as String,
       photo: json['photo'] as String?,
-      role: json['role'] as String? ?? 'student',
       gender: json['gender'] as String,
       medical_conditions: json['medical_conditions'] as String? ?? 'None',
-      status: json['status'] as String? ?? 'active',
     );
   }
 
@@ -72,10 +64,8 @@ class UserApiModel extends Equatable {
       'email': email,
       'password': password,
       'photo': photo,
-      'role': role,
       'gender': gender,
       'medical_conditions': medical_conditions,
-      'status': status,
     };
   }
 
@@ -88,10 +78,8 @@ class UserApiModel extends Equatable {
         email: email,
         password: password,
         photo: photo,
-        role: role,
         gender: gender,
         medical_conditions: medical_conditions,
-        status: status,
       );
 
   /// Converts a domain entity to an API model
@@ -104,7 +92,6 @@ class UserApiModel extends Equatable {
       email: entity.email,
       password: entity.password,
       photo: entity.photo,
-      role: entity.role,
       gender: entity.gender,
       medical_conditions: entity.medical_conditions,
     );
@@ -124,9 +111,7 @@ class UserApiModel extends Equatable {
         email,
         password,
         photo,
-        role,
         gender,
         medical_conditions,
-        status,
       ];
 }

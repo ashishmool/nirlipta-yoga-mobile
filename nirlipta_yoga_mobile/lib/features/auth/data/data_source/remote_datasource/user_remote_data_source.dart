@@ -68,12 +68,12 @@ class UserRemoteDataSource {
   }
 
   /// Logs in a user
-  Future<UserEntity> login(String username, String password) async {
+  Future<UserEntity> login(String email, String password) async {
     try {
       var response = await _dio.post(
         ApiEndpoints.login,
         data: {
-          'username': username,
+          'email': email,
           'password': password,
         },
       );

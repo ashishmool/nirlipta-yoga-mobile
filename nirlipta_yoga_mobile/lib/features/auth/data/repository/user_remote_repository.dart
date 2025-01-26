@@ -60,7 +60,7 @@ class UserRemoteRepository implements IUserRepository {
       return Right(user);
     } catch (e) {
       return Left(
-        LocalDatabaseFailure(
+        ApiFailure(
           message: 'Login failed: $e',
         ),
       );

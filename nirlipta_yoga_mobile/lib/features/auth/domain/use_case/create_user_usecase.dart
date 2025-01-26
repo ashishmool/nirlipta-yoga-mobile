@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:nirlipta_yoga_mobile/features/workshop/data/model/workshop_hive_model.dart';
 
 import '../../../../app/usecase/usecase.dart';
 import '../../../../core/error/failure.dart';
@@ -15,8 +14,6 @@ class CreateUserParams extends Equatable {
   final String email;
   final String password;
   final String? photo;
-  final String role;
-  final String? status;
 
   // final DateTime? dob;
   final String gender;
@@ -30,8 +27,6 @@ class CreateUserParams extends Equatable {
     required this.email,
     required this.password,
     this.photo,
-    this.status,
-    required this.role,
     required this.medical_conditions,
     // this.dob,
     required this.gender,
@@ -45,8 +40,6 @@ class CreateUserParams extends Equatable {
         email,
         password,
         photo,
-        role,
-        status,
         medical_conditions,
         gender,
       ];
@@ -69,8 +62,6 @@ class CreateUserUsecase implements UsecaseWithParams<void, CreateUserParams> {
       email: params.email,
       password: params.password,
       photo: params.photo,
-      role: params.role,
-      status: params.status,
       gender: params.gender,
       medical_conditions: params.medical_conditions,
       // dob: params.dob,

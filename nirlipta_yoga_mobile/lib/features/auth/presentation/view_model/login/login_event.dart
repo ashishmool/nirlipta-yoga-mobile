@@ -29,6 +29,7 @@ class NavigateHomeScreenEvent extends LoginEvent {
 
 class LoginUserEvent extends LoginEvent {
   final BuildContext context;
+  final Widget destination;
   final String email;
   final String password;
 
@@ -36,6 +37,7 @@ class LoginUserEvent extends LoginEvent {
     required this.context,
     required this.email,
     required this.password,
+    required this.destination,
   });
 }
 

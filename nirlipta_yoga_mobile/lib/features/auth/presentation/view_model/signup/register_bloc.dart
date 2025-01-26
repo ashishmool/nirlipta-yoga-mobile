@@ -1,24 +1,23 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../../batch/presentation/view_model/batch_bloc.dart';
-import '../../../../workshop/presentation/view_model/workshop_bloc.dart';
 import '../../../domain/use_case/create_user_usecase.dart';
 
 part 'register_event.dart';
 part 'register_state.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
-  final BatchBloc _batchBloc;
-  final WorkshopBloc _workshopBloc;
+  // final BatchBloc _batchBloc;
+  // final WorkshopBloc _workshopBloc;
   final CreateUserUsecase _createUserUsecase;
 
   RegisterBloc({
-    required BatchBloc batchBloc,
-    required WorkshopBloc workshopBloc,
+    // required BatchBloc batchBloc,
+    // required WorkshopBloc workshopBloc,
     required CreateUserUsecase createUserUsecase,
-  })  : _batchBloc = batchBloc,
-        _workshopBloc = workshopBloc,
+  })  :
+        // _batchBloc = batchBloc,
+        // _workshopBloc = workshopBloc,
         _createUserUsecase = createUserUsecase,
         super(RegisterState.initial()) {
     on<LoadCoursesAndBatches>(_onRegisterEvent);
@@ -32,8 +31,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     Emitter<RegisterState> emit,
   ) {
     emit(state.copyWith(isLoading: true));
-    _batchBloc.add(LoadBatches());
-    _workshopBloc.add(LoadWorkshops());
+    // _batchBloc.add(LoadBatches());
+    // _workshopBloc.add(LoadWorkshops());
     emit(state.copyWith(isLoading: false, isSuccess: true));
   }
 
@@ -48,8 +47,6 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       email: event.email,
       password: event.password,
       photo: event.photo,
-      role: event.role,
-      status: event.status,
       gender: event.gender,
       medical_conditions: event.medical_conditions,
     );

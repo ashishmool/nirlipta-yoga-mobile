@@ -3,7 +3,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../app/constants/hive_table_constant.dart';
-import '../../../workshop/data/model/workshop_hive_model.dart';
 import '../../domain/entity/user_entity.dart';
 
 part 'user_hive_model.g.dart';
@@ -33,12 +32,9 @@ class UserHiveModel extends Equatable {
   final String? photo;
 
   @HiveField(7)
-  final String role;
-
-  @HiveField(8)
   final String gender;
 
-  @HiveField(9)
+  @HiveField(8)
   final String medicalConditions;
 
   UserHiveModel({
@@ -49,7 +45,6 @@ class UserHiveModel extends Equatable {
     required this.email,
     required this.password,
     this.photo,
-    required this.role,
     required this.gender,
     String? medicalConditions,
   })  : id = id ?? const Uuid().v4(),
@@ -64,7 +59,6 @@ class UserHiveModel extends Equatable {
         email = '',
         password = '',
         photo = null,
-        role = 'student',
         gender = '',
         medicalConditions = 'None';
 
@@ -79,7 +73,6 @@ class UserHiveModel extends Equatable {
       password: entity.password,
       photo: entity.photo?.isEmpty ?? true ? null : entity.photo,
       // Handle empty photo
-      role: entity.role,
       gender: entity.gender,
       medicalConditions: entity.medical_conditions,
     );
@@ -95,7 +88,6 @@ class UserHiveModel extends Equatable {
       email: email,
       password: password,
       photo: photo,
-      role: role,
       gender: gender,
       medical_conditions: medicalConditions,
     );
@@ -117,7 +109,6 @@ class UserHiveModel extends Equatable {
         email,
         password,
         photo,
-        role,
         gender,
         medicalConditions,
       ];

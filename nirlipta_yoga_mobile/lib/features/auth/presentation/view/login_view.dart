@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nirlipta_yoga_mobile/features/auth/presentation/view/register_view.dart';
 
 import '../../../../core/common/logo.dart';
-import '../../../../core/common/snackbar/snackbar.dart';
-import '../../../../core/network/hive_service.dart';
 import '../../../home/presentation/view/home_view.dart';
 import '../view_model/login/login_bloc.dart';
 
@@ -92,41 +90,70 @@ class LoginView extends StatelessWidget {
                     ),
                     _gap,
                     _gap,
+                    // ElevatedButton(
+                    //   onPressed: () async {
+                    //     if (_formKey.currentState!.validate()) {
+                    //       final email = _emailController.text.trim();
+                    //       final password = _passwordController.text.trim();
+                    //
+                    //       // Login using Hive service
+                    //       try {
+                    //         final user =
+                    //             await HiveService().loginUser(email, password);
+                    //
+                    //         // Check if the user exists and is authenticated
+                    //         if (user != null &&
+                    //             user.email == email &&
+                    //             user.password == password) {
+                    //           context.read<LoginBloc>().add(
+                    //                 NavigateHomeScreenEvent(
+                    //                   destination: HomeView(),
+                    //                   context: context,
+                    //                 ),
+                    //               );
+                    //         } else {
+                    //           showMySnackBar(
+                    //             context: context,
+                    //             message: 'Invalid email or password',
+                    //             color: Color(0xFF9B6763),
+                    //           );
+                    //         }
+                    //       } catch (e) {
+                    //         showMySnackBar(
+                    //           context: context,
+                    //           message: 'An error occurred. Please try again.',
+                    //           color: Color(0xFF9B6763),
+                    //         );
+                    //       }
+                    //     }
+                    //   },
+                    //   child: const SizedBox(
+                    //     height: 50,
+                    //     child: Center(
+                    //       child: Text(
+                    //         'Login',
+                    //         style: TextStyle(
+                    //           fontSize: 18,
+                    //           fontFamily: 'Brand Bold',
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                     ElevatedButton(
-                      onPressed: () async {
+                      onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           final email = _emailController.text.trim();
                           final password = _passwordController.text.trim();
 
-                          // Login using Hive service
-                          try {
-                            final user =
-                                await HiveService().loginUser(email, password);
-
-                            // Check if the user exists and is authenticated
-                            if (user != null &&
-                                user.email == email &&
-                                user.password == password) {
-                              context.read<LoginBloc>().add(
-                                    NavigateHomeScreenEvent(
-                                      destination: HomeView(),
-                                      context: context,
-                                    ),
-                                  );
-                            } else {
-                              showMySnackBar(
-                                context: context,
-                                message: 'Invalid email or password',
-                                color: Color(0xFF9B6763),
+                          context.read<LoginBloc>().add(
+                                LoginUserEvent(
+                                  email: email,
+                                  password: password,
+                                  context: context,
+                                  destination: HomeView(),
+                                ),
                               );
-                            }
-                          } catch (e) {
-                            showMySnackBar(
-                              context: context,
-                              message: 'An error occurred. Please try again.',
-                              color: Color(0xFF9B6763),
-                            );
-                          }
                         }
                       },
                       child: const SizedBox(
@@ -142,6 +169,7 @@ class LoginView extends StatelessWidget {
                         ),
                       ),
                     ),
+
                     const SizedBox(height: 8),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,

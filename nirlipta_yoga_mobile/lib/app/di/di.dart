@@ -196,8 +196,8 @@ _initRegisterDependencies() async {
   // Register RegisterBloc
   getIt.registerFactory<RegisterBloc>(
     () => RegisterBloc(
-      batchBloc: getIt<BatchBloc>(),
-      workshopBloc: getIt<WorkshopBloc>(),
+      // batchBloc: getIt<BatchBloc>(),
+      // workshopBloc: getIt<WorkshopBloc>(),
       createUserUsecase: getIt<CreateUserUsecase>(),
     ),
   );
