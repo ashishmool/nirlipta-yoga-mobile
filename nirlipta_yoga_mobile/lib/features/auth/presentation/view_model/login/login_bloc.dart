@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/common/snackbar/snackbar.dart';
-import '../../../../batch/presentation/view_model/batch_bloc.dart';
 import '../../../../home/presentation/view_model/home_cubit.dart';
-import '../../../../workshop/presentation/view_model/workshop_bloc.dart';
 import '../../../domain/use_case/login_user_usecase.dart';
 import '../signup/register_bloc.dart';
 
@@ -15,20 +13,21 @@ part 'login_state.dart';
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final RegisterBloc _registerBloc;
   final HomeCubit _homeCubit;
-  final BatchBloc _batchBloc;
-  final WorkshopBloc _workshopBloc;
+
+  // final BatchBloc _batchBloc;
+  // final WorkshopBloc _workshopBloc;
   final LoginUserUsecase _loginUserUsecase;
 
   LoginBloc({
     required RegisterBloc registerBloc,
     required HomeCubit homeCubit,
-    required BatchBloc batchBloc,
-    required WorkshopBloc workshopBloc,
+    // required BatchBloc batchBloc,
+    // required WorkshopBloc workshopBloc,
     required LoginUserUsecase loginUserUsecase,
   })  : _registerBloc = registerBloc,
         _homeCubit = homeCubit,
-        _batchBloc = batchBloc,
-        _workshopBloc = workshopBloc,
+        // _batchBloc = batchBloc,
+        // _workshopBloc = workshopBloc,
         _loginUserUsecase = loginUserUsecase,
         super(LoginState.initial()) {
     on<NavigateRegisterScreenEvent>((event, emit) {
@@ -38,8 +37,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           builder: (context) => MultiBlocProvider(
             providers: [
               BlocProvider.value(value: _registerBloc),
-              BlocProvider.value(value: _batchBloc),
-              BlocProvider.value(value: _workshopBloc),
+              // BlocProvider.value(value: _batchBloc),
+              // BlocProvider.value(value: _workshopBloc),
             ],
             child: event.destination,
           ),
@@ -75,13 +74,20 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
       final result = await _loginUserUsecase.call(params);
 
+      print('Login response: $result');
+
       result.fold(
         (failure) {
+          // If the failure has a message, use it; otherwise, use a fallback
+          String errorMessage = failure.message;
+
           // Handle failure (update the state with error message or show a failure alert)
           emit(state.copyWith(isLoading: false, isSuccess: false));
+
           showMySnackBar(
             context: event.context,
-            message: 'Invalid email or password',
+            // message: errorMessage,
+            message: "Invalid Credentials",
             color: Color(0xFF9B6763),
           );
         },

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../workshop/domain/entity/workshop_entity.dart';
 import '../view_model/signup/register_bloc.dart';
 
 class RegisterView extends StatefulWidget {
@@ -26,8 +25,6 @@ class _RegisterViewState extends State<RegisterView> {
   bool _isPasswordVisible = false;
   bool _isNoneSelected =
       false; // Track whether "None" is selected for medical conditions
-
-  final List<WorkshopEntity> _lstWorkshopSelected = [];
 
   @override
   Widget build(BuildContext context) {

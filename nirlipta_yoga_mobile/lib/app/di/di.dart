@@ -214,8 +214,8 @@ _initLoginDependencies() async {
     () => LoginBloc(
       registerBloc: getIt<RegisterBloc>(),
       homeCubit: getIt<HomeCubit>(),
-      batchBloc: getIt<BatchBloc>(),
-      workshopBloc: getIt<WorkshopBloc>(),
+      // batchBloc: getIt<BatchBloc>(),
+      // workshopBloc: getIt<WorkshopBloc>(),
       loginUserUsecase: getIt<LoginUserUsecase>(),
     ),
   );

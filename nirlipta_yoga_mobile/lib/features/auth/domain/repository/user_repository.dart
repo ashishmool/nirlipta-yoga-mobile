@@ -3,7 +3,6 @@ import 'package:dartz/dartz.dart';
 import '../../../../core/error/failure.dart';
 import '../entity/user_entity.dart';
 
-
 abstract interface class IUserRepository {
   Future<Either<Failure, void>> createUser(UserEntity userEntity);
 
@@ -11,5 +10,5 @@ abstract interface class IUserRepository {
 
   Future<Either<Failure, void>> deleteUser(String id);
 
-  Future<Either<Failure, UserEntity>> login(String email, String password);
+  Future<Either<Failure, void>> login(String email, String password);
 }
