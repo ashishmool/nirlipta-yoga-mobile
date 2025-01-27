@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
-import 'package:multi_select_flutter/util/multi_select_item.dart';
-import 'package:multi_select_flutter/util/multi_select_list_type.dart';
 
-import '../../../workshop/data/model/workshop_hive_model.dart';
-import '../../../workshop/domain/entity/workshop_entity.dart';
-import '../../../workshop/presentation/view_model/workshop_bloc.dart';
 import '../view_model/signup/register_bloc.dart';
 
 class RegisterView extends StatefulWidget {
@@ -19,19 +13,18 @@ class RegisterView extends StatefulWidget {
 class _RegisterViewState extends State<RegisterView> {
   final _gap = const SizedBox(height: 8);
   final _key = GlobalKey<FormState>();
-  final _nameController = TextEditingController(text: '');
-  final _medicalConditionsController = TextEditingController(text: '');
-  final _phoneController = TextEditingController(text: '');
-  final _emailController = TextEditingController(text: '');
-  final _passwordController = TextEditingController(text: '');
-  final _confirmPasswordController = TextEditingController(text: '');
+  final _nameController = TextEditingController(text: 'Ashish Mool');
+  final _usernameController = TextEditingController(text: 'ashishmool');
+  final _medicalConditionsController = TextEditingController(text: 'None');
+  final _phoneController = TextEditingController(text: '9813949495');
+  final _emailController = TextEditingController(text: 'a3.asis@gmail.com');
+  final _passwordController = TextEditingController(text: 'test12345');
+  final _confirmPasswordController = TextEditingController(text: 'test12345');
 
-  String? _genderValue = 'Other';
+  String? _genderValue = 'Male';
   bool _isPasswordVisible = false;
   bool _isNoneSelected =
       false; // Track whether "None" is selected for medical conditions
-
-  final List<WorkshopEntity> _lstWorkshopSelected = [];
 
   @override
   Widget build(BuildContext context) {
@@ -297,6 +290,19 @@ class _RegisterViewState extends State<RegisterView> {
                       },
                     ),
                     _gap,
+                    TextFormField(
+                      controller: _usernameController,
+                      decoration: const InputDecoration(
+                        labelText: 'Username',
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter username';
+                        }
+                        return null;
+                      },
+                    ),
+                    _gap,
                     // Medical Conditions and "None" Checkbox
                     Row(
                       children: [
@@ -345,49 +351,6 @@ class _RegisterViewState extends State<RegisterView> {
                       ],
                     ),
                     _gap,
-                    // BlocBuilder for Workshop selection
-                    BlocBuilder<WorkshopBloc, WorkshopState>(
-                      builder: (context, workshopState) {
-                        if (workshopState.isLoading) {
-                          return const CircularProgressIndicator();
-                        } else {
-                          return MultiSelectDialogField(
-                            title: const Text('Select Workshop'),
-                            items: workshopState.workshops
-                                .map(
-                                  (workshop) => MultiSelectItem(
-                                    workshop,
-                                    workshop.title,
-                                  ),
-                                )
-                                .toList(),
-                            listType: MultiSelectListType.CHIP,
-                            buttonText: const Text(
-                              'Select Workshop',
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            buttonIcon: const Icon(Icons.search),
-                            onConfirm: (values) {
-                              _lstWorkshopSelected.clear();
-                              _lstWorkshopSelected.addAll(values);
-                            },
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.black87,
-                              ),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please select at least one workshop';
-                              }
-                              return null;
-                            },
-                          );
-                        }
-                      },
-                    ),
-                    SizedBox(height: 16),
 
                     SizedBox(
                       height: 50,
@@ -395,16 +358,14 @@ class _RegisterViewState extends State<RegisterView> {
                       child: ElevatedButton(
                         onPressed: () {
                           if (_key.currentState!.validate()) {
-                            final workshopsHiveModels =
-                                WorkshopHiveModel.fromEntityList(
-                                    _lstWorkshopSelected);
                             context.read<RegisterBloc>().add(RegisterUser(
                                   name: _nameController.text,
+                                  username: _usernameController.text,
                                   phone: _phoneController.text,
                                   email: _emailController.text,
                                   password: _passwordController.text,
                                   gender: _genderValue.toString(),
-                                  workshops: workshopsHiveModels,
+                                  medical_conditions: '',
                                 ));
                           }
                         },

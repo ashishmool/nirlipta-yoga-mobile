@@ -1,11 +1,13 @@
+import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nirlipta_yoga_mobile/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:nirlipta_yoga_mobile/features/auth/presentation/view_model/signup/register_bloc.dart';
 import 'package:nirlipta_yoga_mobile/features/workshop/data/data_source/local_datasource/workshop_local_data_source.dart';
 
+import '../../core/network/api_service.dart';
 import '../../core/network/hive_service.dart';
-import '../../features/auth/data/data_source/local_datasource/user_local_datasource.dart';
-import '../../features/auth/data/repository/user_local_repository.dart';
+import '../../features/auth/data/data_source/remote_datasource/user_remote_data_source.dart';
+import '../../features/auth/data/repository/user_remote_repository.dart';
 import '../../features/auth/domain/use_case/create_user_usecase.dart';
 import '../../features/auth/domain/use_case/login_user_usecase.dart';
 import '../../features/batch/data/data_source/local_datasource/batch_local_data_source.dart';
@@ -37,7 +39,7 @@ Future<void> initDependencies() async {
   // Sequence of Dependencies Matter!!
 
   await _initHiveService();
-  await _initCommonDependencies();
+  await _initApiService();
 
   await _initBatchDependencies();
   await _initWorkshopDependencies();
@@ -55,6 +57,13 @@ Future<void> initDependencies() async {
 
 _initHiveService() {
   getIt.registerLazySingleton<HiveService>(() => HiveService());
+}
+
+_initApiService() {
+  // Remote Data Source
+  getIt.registerLazySingleton<Dio>(
+    () => ApiService(Dio()).dio,
+  );
 }
 
 _initBatchDependencies() async {
@@ -168,43 +177,45 @@ _initHomeDependencies() async {
   );
 }
 
-_initCommonDependencies() {
-  // Register common dependencies used across multiple features
-  if (!getIt.isRegistered<UserLocalDatasource>()) {
-    getIt.registerFactory<UserLocalDatasource>(
-      () => UserLocalDatasource(getIt<HiveService>()),
+_initRegisterDependencies() async {
+  if (!getIt.isRegistered<UserRemoteDataSource>()) {
+    getIt.registerFactory<UserRemoteDataSource>(
+      () => UserRemoteDataSource(getIt<Dio>()),
     );
   }
 
-  if (!getIt.isRegistered<UserLocalRepository>()) {
-    getIt.registerLazySingleton<UserLocalRepository>(() =>
-        UserLocalRepository(userLocalDataSource: getIt<UserLocalDatasource>()));
+  if (!getIt.isRegistered<UserRemoteRepository>()) {
+    getIt.registerLazySingleton<UserRemoteRepository>(
+        () => UserRemoteRepository(getIt<UserRemoteDataSource>()));
   }
-}
 
-_initRegisterDependencies() async {
-  // Use common UserLocalDatasource and UserLocalRepository
+  // Register CreateStudentUsecase
   getIt.registerLazySingleton<CreateUserUsecase>(
-      () => CreateUserUsecase(userRepository: getIt<UserLocalRepository>()));
+      () => CreateUserUsecase(userRepository: getIt<UserRemoteRepository>()));
+
+  // Register RegisterBloc
   getIt.registerFactory<RegisterBloc>(
     () => RegisterBloc(
-      batchBloc: getIt<BatchBloc>(),
-      workshopBloc: getIt<WorkshopBloc>(),
+      // batchBloc: getIt<BatchBloc>(),
+      // workshopBloc: getIt<WorkshopBloc>(),
       createUserUsecase: getIt<CreateUserUsecase>(),
     ),
   );
 }
 
 _initLoginDependencies() async {
-  // Use common UserLocalDatasource and UserLocalRepository
-  getIt.registerLazySingleton<LoginUserUsecase>(
-      () => LoginUserUsecase(userRepository: getIt<UserLocalRepository>()));
+  // Use common StudentRemoteDataSource and StudentLocalRepository
+  if (!getIt.isRegistered<LoginUserUsecase>()) {
+    getIt.registerLazySingleton<LoginUserUsecase>(
+        () => LoginUserUsecase(userRepository: getIt<UserRemoteRepository>()));
+  }
+
   getIt.registerFactory<LoginBloc>(
     () => LoginBloc(
       registerBloc: getIt<RegisterBloc>(),
       homeCubit: getIt<HomeCubit>(),
-      batchBloc: getIt<BatchBloc>(),
-      workshopBloc: getIt<WorkshopBloc>(),
+      // batchBloc: getIt<BatchBloc>(),
+      // workshopBloc: getIt<WorkshopBloc>(),
       loginUserUsecase: getIt<LoginUserUsecase>(),
     ),
   );
