@@ -43,6 +43,19 @@ class CreateUserParams extends Equatable {
         medical_conditions,
         gender,
       ];
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'email': email,
+      'phone': phone,
+      'username': username,
+      'password': password,
+      'photo': photo,
+      'gender': gender,
+      'medical_conditions': medical_conditions,
+    };
+  }
 }
 
 class CreateUserUsecase implements UsecaseWithParams<void, CreateUserParams> {

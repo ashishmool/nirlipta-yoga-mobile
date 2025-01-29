@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 
 import '../../../../core/error/failure.dart';
@@ -71,6 +73,15 @@ class UserRemoteRepository implements IUserRepository {
           message: 'Login failed: $e',
         ),
       );
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> uploadImage(File file) async {
+    try {
+      return Right(await _userRemoteDataSource.uploadImage(file));
+    } catch (e) {
+      return Left(ApiFailure(message: e.toString()));
     }
   }
 }

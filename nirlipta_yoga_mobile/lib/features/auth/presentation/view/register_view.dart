@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../view_model/signup/register_bloc.dart';
 
@@ -26,6 +30,34 @@ class _RegisterViewState extends State<RegisterView> {
   bool _isNoneSelected =
       false; // Track whether "None" is selected for medical conditions
 
+  // Checking for Runtime Camera Permissions
+  checkCameraPermission() async {
+    if (await Permission.camera.request().isRestricted ||
+        await Permission.camera.request().isDenied) {
+      await Permission.camera.request();
+    }
+  }
+
+  File? _img;
+
+  Future _browseImage(ImageSource imageSource) async {
+    try {
+      final photo = await ImagePicker().pickImage(source: imageSource);
+      if (photo != null) {
+        setState(() {
+          _img = File(photo.path);
+
+          //Send File to server
+          context.read<RegisterBloc>().add(LoadImage(file: _img!));
+        });
+      } else {
+        return;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,36 +65,76 @@ class _RegisterViewState extends State<RegisterView> {
         title: const Text('User Registration'),
         centerTitle: true,
       ),
-      body: BlocListener<RegisterBloc, RegisterState>(
-        listener: (context, state) {
-          if (state.isLoading) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Registering User...'),
-                duration: Duration(seconds: 2),
-              ),
-            );
-          } else if (state.isSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('User Registered Successfully!'),
-                backgroundColor: Colors.green,
-              ),
-            );
-            _key.currentState!.reset();
+      body: MultiBlocListener(
+        listeners: [
+          // Listener for Image Upload
+          BlocListener<RegisterBloc, RegisterState>(
+            listenWhen: (previous, current) =>
+                previous.isImageLoading != current.isImageLoading ||
+                previous.isImageSuccess != current.isImageSuccess,
+            listener: (context, state) {
+              if (state.isImageLoading) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Uploading image...'),
+                    duration: Duration(seconds: 2),
+                  ),
+                );
+              } else if (state.isImageSuccess) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Image uploaded successfully!'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              } else if (!state.isImageLoading &&
+                  !state.isImageSuccess &&
+                  state.imageName == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Failed to upload image. Please try again.'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+            },
+          ),
+          // Listener for Student Registration
+          BlocListener<RegisterBloc, RegisterState>(
+            listenWhen: (previous, current) =>
+                previous.isLoading != current.isLoading ||
+                previous.isSuccess != current.isSuccess,
+            listener: (context, state) {
+              if (state.isLoading) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Registering user...'),
+                    duration: Duration(seconds: 2),
+                  ),
+                );
+              } else if (state.isSuccess) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('User registered successfully!'),
+                    backgroundColor: Colors.green,
+                  ),
+                );
 
-            Future.delayed(const Duration(seconds: 4), () {
-              Navigator.pop(context); // Navigate back to the login page
-            });
-          } else if (!state.isLoading && !state.isSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Failed to register User. Try again!'),
-                backgroundColor: Color(0xFF9B6763),
-              ),
-            );
-          }
-        },
+                // Navigate back to the login page after registration success
+                Future.delayed(const Duration(seconds: 2), () {
+                  Navigator.pop(context);
+                });
+              } else if (!state.isLoading && !state.isSuccess) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Failed to register user. Try again.'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+            },
+          ),
+        ],
         child: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
@@ -90,13 +162,19 @@ class _RegisterViewState extends State<RegisterView> {
                               children: [
                                 ElevatedButton.icon(
                                   onPressed: () {
+                                    checkCameraPermission();
+                                    _browseImage(ImageSource.camera);
                                     Navigator.pop(context);
                                   },
                                   icon: const Icon(Icons.camera),
                                   label: const Text('Camera'),
                                 ),
                                 ElevatedButton.icon(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    checkCameraPermission();
+                                    _browseImage(ImageSource.gallery);
+                                    Navigator.pop(context);
+                                  },
                                   icon: const Icon(Icons.image),
                                   label: const Text('Gallery'),
                                 ),
@@ -116,9 +194,11 @@ class _RegisterViewState extends State<RegisterView> {
                               CircleAvatar(
                                 radius: 100,
                                 backgroundColor: Colors.white,
-                                backgroundImage: const AssetImage(
-                                  'assets/images/profile-placeholder.png',
-                                ),
+                                backgroundImage: _img != null
+                                    ? FileImage(_img!)
+                                    : AssetImage(
+                                        'assets/images/profile-placeholder.png',
+                                      ) as ImageProvider,
                               ),
                               Positioned(
                                 bottom: 5,
@@ -358,6 +438,9 @@ class _RegisterViewState extends State<RegisterView> {
                       child: ElevatedButton(
                         onPressed: () {
                           if (_key.currentState!.validate()) {
+                            final registerState =
+                                context.read<RegisterBloc>().state;
+                            final imageName = registerState.imageName;
                             context.read<RegisterBloc>().add(RegisterUser(
                                   name: _nameController.text,
                                   username: _usernameController.text,
@@ -366,6 +449,7 @@ class _RegisterViewState extends State<RegisterView> {
                                   password: _passwordController.text,
                                   gender: _genderValue.toString(),
                                   medical_conditions: '',
+                                  photo: imageName,
                                 ));
                           }
                         },

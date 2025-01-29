@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 
 import '../../../../core/error/failure.dart';
@@ -11,4 +13,6 @@ abstract interface class IUserRepository {
   Future<Either<Failure, void>> deleteUser(String id);
 
   Future<Either<Failure, void>> login(String email, String password);
+
+  Future<Either<Failure, String>> uploadImage(File file);
 }

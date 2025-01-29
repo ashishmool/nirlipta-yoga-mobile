@@ -11,7 +11,7 @@ class LoginDTO {
   // final String user_id;
   // final String email;
   // final String role;
-  // final String? photo;
+  // final String? image;
   // final String message;
 
   LoginDTO({
@@ -22,7 +22,7 @@ class LoginDTO {
     // required this.user_id,
     // required this.email,
     // required this.role,
-    // this.photo,
+    // this.image,
     // required this.message,
   });
 

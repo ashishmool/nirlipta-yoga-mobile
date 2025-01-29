@@ -72,7 +72,7 @@ class UserHiveModel extends Equatable {
       email: entity.email,
       password: entity.password,
       photo: entity.photo?.isEmpty ?? true ? null : entity.photo,
-      // Handle empty photo
+      // Handle empty image
       gender: entity.gender,
       medicalConditions: entity.medical_conditions,
     );

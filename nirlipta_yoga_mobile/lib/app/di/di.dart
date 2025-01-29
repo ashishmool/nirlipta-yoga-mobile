@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:nirlipta_yoga_mobile/features/auth/domain/use_case/upload_image_usecase.dart';
 import 'package:nirlipta_yoga_mobile/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:nirlipta_yoga_mobile/features/auth/presentation/view_model/signup/register_bloc.dart';
 import 'package:nirlipta_yoga_mobile/features/workshop/data/data_source/local_datasource/workshop_local_data_source.dart';
@@ -193,12 +194,17 @@ _initRegisterDependencies() async {
   getIt.registerLazySingleton<CreateUserUsecase>(
       () => CreateUserUsecase(userRepository: getIt<UserRemoteRepository>()));
 
+  // Register Upload Image Use Case
+  getIt.registerLazySingleton<UploadImageUseCase>(
+      () => UploadImageUseCase(getIt<UserRemoteRepository>()));
+
   // Register RegisterBloc
   getIt.registerFactory<RegisterBloc>(
     () => RegisterBloc(
       // batchBloc: getIt<BatchBloc>(),
       // workshopBloc: getIt<WorkshopBloc>(),
       createUserUsecase: getIt<CreateUserUsecase>(),
+      uploadImageUseCase: getIt<UploadImageUseCase>(),
     ),
   );
 }

@@ -12,6 +12,8 @@ class UserApiModel extends Equatable {
   final String phone;
   final String email;
   final String password;
+
+  // @JsonKey(name: 'photo') // Maps the server field "photo" to the "image" field
   final String? photo;
   final String gender;
   final String medical_conditions;
