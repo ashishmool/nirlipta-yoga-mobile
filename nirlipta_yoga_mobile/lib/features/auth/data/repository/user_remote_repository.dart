@@ -55,21 +55,17 @@ class UserRemoteRepository implements IUserRepository {
   }
 
   @override
-  Future<Either<Failure, UserEntity>> login(
-      String email, String password) async {
+  Future<Either<Failure, String>> login(String email, String password) async {
     try {
       // Call the login function and get the LoginResponseEntity
-      final loginResponse = await _userRemoteDataSource.login(email, password);
-
-      // Extract the UserEntity from the LoginResponseEntity
-      final user = loginResponse.user;
+      final token = await _userRemoteDataSource.login(email, password);
 
       // Return the UserEntity as a Right value
-      return Right(user);
+      return Right(token);
     } catch (e) {
       // Handle any errors and return the failure message
       return Left(
-        LocalDatabaseFailure(
+        ApiFailure(
           message: 'Login failed: $e',
         ),
       );

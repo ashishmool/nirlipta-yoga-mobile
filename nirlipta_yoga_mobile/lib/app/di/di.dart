@@ -4,6 +4,7 @@ import 'package:nirlipta_yoga_mobile/features/auth/domain/use_case/upload_image_
 import 'package:nirlipta_yoga_mobile/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:nirlipta_yoga_mobile/features/auth/presentation/view_model/signup/register_bloc.dart';
 import 'package:nirlipta_yoga_mobile/features/workshop/data/data_source/local_datasource/workshop_local_data_source.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/network/api_service.dart';
 import '../../core/network/hive_service.dart';
@@ -33,6 +34,7 @@ import '../../features/workshop/domain/use_case/get_all_workshops_usecase.dart';
 import '../../features/workshop/domain/use_case/get_workshop_by_id_usecase.dart';
 import '../../features/workshop/domain/use_case/update_workshop_usecase.dart';
 import '../../features/workshop/presentation/view_model/workshop_bloc.dart';
+import '../shared_prefs/token_shared_prefs.dart';
 
 final getIt = GetIt.instance;
 
@@ -41,6 +43,7 @@ Future<void> initDependencies() async {
 
   await _initHiveService();
   await _initApiService();
+  await _initSharedPreferences();
 
   await _initBatchDependencies();
   await _initWorkshopDependencies();
@@ -65,6 +68,11 @@ _initApiService() {
   getIt.registerLazySingleton<Dio>(
     () => ApiService(Dio()).dio,
   );
+}
+
+Future<void> _initSharedPreferences() async {
+  final sharedPreferences = await SharedPreferences.getInstance();
+  getIt.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
 }
 
 _initBatchDependencies() async {
@@ -210,10 +218,15 @@ _initRegisterDependencies() async {
 }
 
 _initLoginDependencies() async {
+  getIt.registerLazySingleton<TokenSharedPrefs>(
+    () => TokenSharedPrefs(getIt<SharedPreferences>()),
+  );
+
   // Use common StudentRemoteDataSource and StudentLocalRepository
   if (!getIt.isRegistered<LoginUserUsecase>()) {
-    getIt.registerLazySingleton<LoginUserUsecase>(
-        () => LoginUserUsecase(userRepository: getIt<UserRemoteRepository>()));
+    getIt.registerLazySingleton<LoginUserUsecase>(() => LoginUserUsecase(
+        tokenSharedPrefs: getIt<TokenSharedPrefs>(),
+        userRepository: getIt<UserRemoteRepository>()));
   }
 
   getIt.registerFactory<LoginBloc>(

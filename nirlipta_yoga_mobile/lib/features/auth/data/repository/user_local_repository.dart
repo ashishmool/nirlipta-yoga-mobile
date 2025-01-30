@@ -43,20 +43,26 @@ class UserLocalRepository implements IUserRepository {
     }
   }
 
-  @override
-  Future<Either<Failure, UserEntity>> login(
-      String email, String password) async {
-    try {
-      final user = await _userLocalDataSource.login(email, password);
-      return (Right(user));
-    } catch (e) {
-      return Left(LocalDatabaseFailure(message: e.toString()));
-    }
-  }
+  // @override
+  // Future<Either<Failure, String>> login(
+  //     String email, String password) async {
+  //   try {
+  //     final user = await _userLocalDataSource.login(email, password);
+  //     return (Right(user));
+  //   } catch (e) {
+  //     return Left(LocalDatabaseFailure(message: e.toString()));
+  //   }
+  // }
 
   @override
   Future<Either<Failure, String>> uploadImage(File file) {
     // TODO: implement uploadImage
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, String>> login(String email, String password) {
+    // TODO: implement login
     throw UnimplementedError();
   }
 }
