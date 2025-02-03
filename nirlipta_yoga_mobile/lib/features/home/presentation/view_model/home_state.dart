@@ -1,10 +1,12 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nirlipta_yoga_mobile/features/workshop_category/presentation/view/category_view.dart';
 
 import '../../../../app/di/di.dart';
 import '../../../workshop/presentation/view/workshop_view.dart';
 import '../../../workshop/presentation/view_model/workshop_bloc.dart';
+import '../../../workshop_category/presentation/view_model/category_bloc.dart';
 
 class HomeState extends Equatable {
   final int selectedIndex;
@@ -21,7 +23,11 @@ class HomeState extends Equatable {
       selectedIndex: 0,
       views: [
         const Center(child: Text('Dashboard')),
-        const Center(child: Text('Course')),
+        // Adding Category view with CategoryBloc
+        BlocProvider(
+          create: (context) => getIt<CategoryBloc>(),
+          child: CategoryView(),
+        ),
         // Adding Workshop view with WorkshopBloc
         BlocProvider(
           create: (context) => getIt<WorkshopBloc>(),

@@ -24,6 +24,16 @@ import '../../features/workshop/domain/use_case/get_all_workshops_usecase.dart';
 import '../../features/workshop/domain/use_case/get_workshop_by_id_usecase.dart';
 import '../../features/workshop/domain/use_case/update_workshop_usecase.dart';
 import '../../features/workshop/presentation/view_model/workshop_bloc.dart';
+import '../../features/workshop_category/data/data_source/local_datasource/category_local_data_source.dart';
+import '../../features/workshop_category/data/data_source/remote_datasource/category_remote_data_source.dart';
+import '../../features/workshop_category/data/repository/category_local_repository.dart';
+import '../../features/workshop_category/data/repository/category_remote_repository.dart';
+import '../../features/workshop_category/domain/use_case/create_category_usecase.dart';
+import '../../features/workshop_category/domain/use_case/delete_category_usecase.dart';
+import '../../features/workshop_category/domain/use_case/get_all_categories_usecase.dart';
+import '../../features/workshop_category/domain/use_case/get_category_by_id_usecase.dart';
+import '../../features/workshop_category/domain/use_case/update_category_usecase.dart';
+import '../../features/workshop_category/presentation/view_model/category_bloc.dart';
 import '../shared_prefs/token_shared_prefs.dart';
 
 final getIt = GetIt.instance;
@@ -36,6 +46,7 @@ Future<void> initDependencies() async {
   await _initSharedPreferences();
 
   await _initWorkshopDependencies();
+  await _initCategoryDependencies();
 
   // Before Home and Register
   await _initLoginDependencies();
@@ -142,6 +153,62 @@ _initWorkshopDependencies() async {
       deleteWorkshopUseCase: getIt<DeleteWorkshopUseCase>(),
       // updateWorkshopUseCase: getIt<UpdateWorkshopUseCase>(),
       // getWorkshopByIdUseCase: getIt<GetWorkshopByIdUseCase>(),
+    ),
+  );
+}
+
+_initCategoryDependencies() async {
+  // Local Data Source
+  getIt.registerFactory<CategoryLocalDataSource>(
+      () => CategoryLocalDataSource(getIt<HiveService>()));
+
+  // Remote Data Source
+  getIt.registerFactory<CategoryRemoteDataSource>(
+      () => CategoryRemoteDataSource(getIt<Dio>()));
+
+  // Local Repository
+  getIt.registerLazySingleton<CategoryLocalRepository>(() =>
+      CategoryLocalRepository(
+          categoryLocalDataSource: getIt<CategoryLocalDataSource>()));
+
+  // Remote Repository
+  getIt.registerLazySingleton<CategoryRemoteRepository>(() =>
+      CategoryRemoteRepository(
+          categoryRemoteDataSource: getIt<CategoryRemoteDataSource>()));
+
+  // Remote Usecases
+  getIt.registerLazySingleton<CreateCategoryUseCase>(() =>
+      CreateCategoryUseCase(
+          categoryRepository: getIt<CategoryRemoteRepository>()));
+
+  getIt.registerLazySingleton<GetAllCategoriesUseCase>(() =>
+      GetAllCategoriesUseCase(
+          categoryRepository: getIt<CategoryRemoteRepository>()));
+
+  getIt.registerLazySingleton<DeleteCategoryUseCase>(
+    () => DeleteCategoryUseCase(
+        categoryRepository: getIt<CategoryRemoteRepository>(),
+        tokenSharedPrefs: getIt<TokenSharedPrefs>()),
+  );
+
+  getIt.registerLazySingleton<UpdateCategoryUseCase>(
+    () => UpdateCategoryUseCase(
+        categoryRepository: getIt<CategoryRemoteRepository>()),
+  );
+
+  getIt.registerLazySingleton<GetCategoryByIdUseCase>(
+    () => GetCategoryByIdUseCase(
+        categoryRepository: getIt<CategoryRemoteRepository>()),
+  );
+
+  // Bloc
+  getIt.registerFactory<CategoryBloc>(
+    () => CategoryBloc(
+      createCategoryUseCase: getIt<CreateCategoryUseCase>(),
+      getAllCategoriesUseCase: getIt<GetAllCategoriesUseCase>(),
+      deleteCategoryUseCase: getIt<DeleteCategoryUseCase>(),
+      updateCategoryUseCase: getIt<UpdateCategoryUseCase>(),
+      // getCategoryByIdUseCase: getIt<GetCategoryByIdUseCase>(),
     ),
   );
 }

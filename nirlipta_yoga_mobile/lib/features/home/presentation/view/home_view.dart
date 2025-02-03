@@ -58,7 +58,7 @@ class HomeView extends StatelessWidget {
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.book),
-                label: 'Course',
+                label: 'Category',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.group),
