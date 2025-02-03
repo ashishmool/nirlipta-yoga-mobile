@@ -4,6 +4,7 @@ import 'package:nirlipta_yoga_mobile/features/auth/domain/use_case/upload_image_
 import 'package:nirlipta_yoga_mobile/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:nirlipta_yoga_mobile/features/auth/presentation/view_model/signup/register_bloc.dart';
 import 'package:nirlipta_yoga_mobile/features/workshop/data/data_source/local_datasource/workshop_local_data_source.dart';
+import 'package:nirlipta_yoga_mobile/features/workshop/data/data_source/remote_datasource/workshop_remote_data_source.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/network/api_service.dart';
@@ -16,6 +17,7 @@ import '../../features/home/presentation/view_model/home_cubit.dart';
 import '../../features/onboarding/presentation/view_model/onboarding_cubit.dart';
 import '../../features/splash/presentation/view_model/splash_cubit.dart';
 import '../../features/workshop/data/repository/workshop_local_repository.dart';
+import '../../features/workshop/data/repository/workshop_remote_repository.dart';
 import '../../features/workshop/domain/use_case/create_workshop_usecase.dart';
 import '../../features/workshop/domain/use_case/delete_workshop_usecase.dart';
 import '../../features/workshop/domain/use_case/get_all_workshops_usecase.dart';
@@ -64,38 +66,72 @@ Future<void> _initSharedPreferences() async {
 }
 
 _initWorkshopDependencies() async {
-  //Data Source
+  // Local Data Source
   getIt.registerFactory<WorkshopLocalDataSource>(
       () => WorkshopLocalDataSource(getIt<HiveService>()));
 
-  //Repository
+  // Remote Data Source
+  getIt.registerFactory<WorkshopRemoteDataSource>(
+      () => WorkshopRemoteDataSource(getIt<Dio>()));
+
+  // Local Repository
   getIt.registerLazySingleton<WorkshopLocalRepository>(() =>
       WorkshopLocalRepository(
           workshopLocalDataSource: getIt<WorkshopLocalDataSource>()));
-  //Usecases
-  // Usecases
+
+  // Remote Repository
+  getIt.registerLazySingleton<WorkshopRemoteRepository>(() =>
+      WorkshopRemoteRepository(
+          workshopRemoteDataSource: getIt<WorkshopRemoteDataSource>()));
+
+  // // Local Usecases
+  // getIt.registerLazySingleton<CreateWorkshopUseCase>(() =>
+  //     CreateWorkshopUseCase(
+  //         workshopRepository: getIt<WorkshopLocalRepository>()));
+  //
+  // getIt.registerLazySingleton<GetAllWorkshopsUseCase>(() =>
+  //     GetAllWorkshopsUseCase(
+  //         workshopRepository: getIt<WorkshopLocalRepository>()));
+  //
+  // getIt.registerLazySingleton<DeleteWorkshopUseCase>(
+  //   () => DeleteWorkshopUseCase(
+  //       workshopRepository: getIt<WorkshopLocalRepository>(),
+  //       tokenSharedPrefs: getIt<TokenSharedPrefs>()),
+  // );
+  //
+  // getIt.registerLazySingleton<UpdateWorkshopUseCase>(
+  //   () => UpdateWorkshopUseCase(
+  //       workshopRepository: getIt<WorkshopLocalRepository>()),
+  // );
+  //
+  // getIt.registerLazySingleton<GetWorkshopByIdUseCase>(
+  //   () => GetWorkshopByIdUseCase(
+  //       workshopRepository: getIt<WorkshopLocalRepository>()),
+  // );
+
+  // Remote Usecases
   getIt.registerLazySingleton<CreateWorkshopUseCase>(() =>
       CreateWorkshopUseCase(
-          workshopRepository: getIt<WorkshopLocalRepository>()));
+          workshopRepository: getIt<WorkshopRemoteRepository>()));
 
   getIt.registerLazySingleton<GetAllWorkshopsUseCase>(() =>
       GetAllWorkshopsUseCase(
-          workshopRepository: getIt<WorkshopLocalRepository>()));
+          workshopRepository: getIt<WorkshopRemoteRepository>()));
 
   getIt.registerLazySingleton<DeleteWorkshopUseCase>(
     () => DeleteWorkshopUseCase(
-        workshopRepository: getIt<WorkshopLocalRepository>(),
+        workshopRepository: getIt<WorkshopRemoteRepository>(),
         tokenSharedPrefs: getIt<TokenSharedPrefs>()),
   );
 
   getIt.registerLazySingleton<UpdateWorkshopUseCase>(
     () => UpdateWorkshopUseCase(
-        workshopRepository: getIt<WorkshopLocalRepository>()),
+        workshopRepository: getIt<WorkshopRemoteRepository>()),
   );
 
   getIt.registerLazySingleton<GetWorkshopByIdUseCase>(
     () => GetWorkshopByIdUseCase(
-        workshopRepository: getIt<WorkshopLocalRepository>()),
+        workshopRepository: getIt<WorkshopRemoteRepository>()),
   );
 
   // Bloc
