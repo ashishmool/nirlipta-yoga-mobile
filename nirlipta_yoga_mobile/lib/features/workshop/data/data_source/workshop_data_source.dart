@@ -9,5 +9,5 @@ abstract interface class IWorkshopDataSource {
 
   Future<void> updateWorkshop(WorkshopEntity workshopEntity);
 
-  Future<void> deleteWorkshop(String workshopId);
+  Future<void> deleteWorkshop(String workshopId, String? token);
 }

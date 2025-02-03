@@ -82,7 +82,7 @@ class WorkshopRemoteDataSource {
     }
   }
 
-  Future<void> deleteWorkshop(String workshopId) async {
+  Future<void> deleteWorkshop(String workshopId, String? token) async {
     try {
       var response =
           await _dio.delete('${ApiEndpoints.deleteWorkshop}/$workshopId');

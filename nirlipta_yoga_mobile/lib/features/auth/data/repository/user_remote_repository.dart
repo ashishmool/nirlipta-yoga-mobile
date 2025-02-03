@@ -66,7 +66,7 @@ class UserRemoteRepository implements IUserRepository {
       // Handle any errors and return the failure message
       return Left(
         ApiFailure(
-          message: 'Login failed: $e',
+          message: 'Login Failed: $e',
         ),
       );
     }

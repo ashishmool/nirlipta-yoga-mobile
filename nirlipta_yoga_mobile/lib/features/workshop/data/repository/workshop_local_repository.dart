@@ -23,9 +23,10 @@ class WorkshopLocalRepository implements IWorkshopRepository {
   }
 
   @override
-  Future<Either<Failure, void>> deleteWorkshop(String workshopId) async {
+  Future<Either<Failure, void>> deleteWorkshop(
+      String workshopId, String? token) async {
     try {
-      await _workshopLocalDataSource.deleteWorkshop(workshopId);
+      await _workshopLocalDataSource.deleteWorkshop(workshopId, token);
       return Right(null);
     } catch (e) {
       return Left(LocalDatabaseFailure(message: 'Error deleting workshop: $e'));

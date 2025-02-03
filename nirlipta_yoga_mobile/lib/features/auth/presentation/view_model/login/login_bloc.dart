@@ -74,8 +74,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
       final result = await _loginUserUsecase.call(params);
 
-      print('Login response: $result');
-
       result.fold(
         (failure) {
           // If the failure has a message, use it; otherwise, use a fallback
@@ -87,7 +85,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           showMySnackBar(
             context: event.context,
             // message: errorMessage,
-            message: "Invalid Credentials",
+            message: 'Invalid Credentials: $errorMessage',
             color: Color(0xFF9B6763),
           );
         },

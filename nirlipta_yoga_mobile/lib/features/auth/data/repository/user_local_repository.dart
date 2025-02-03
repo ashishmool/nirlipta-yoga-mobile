@@ -14,12 +14,12 @@ class UserLocalRepository implements IUserRepository {
       : _userLocalDataSource = userLocalDataSource;
 
   @override
-  Future<Either<Failure, void>> createUser(UserEntity userEntity) {
+  Future<Either<Failure, void>> createUser(UserEntity userEntity) async {
     try {
-      _userLocalDataSource.createUser(userEntity);
-      return Future.value(Right(null));
+      await _userLocalDataSource.createUser(userEntity);
+      return const Right(null);
     } catch (e) {
-      return Future.value(Left(LocalDatabaseFailure(message: e.toString())));
+      return Left(LocalDatabaseFailure(message: e.toString()));
     }
   }
 
@@ -27,9 +27,9 @@ class UserLocalRepository implements IUserRepository {
   Future<Either<Failure, void>> deleteUser(String id) async {
     try {
       await _userLocalDataSource.deleteUser(id);
-      return Right(null);
+      return const Right(null);
     } catch (e) {
-      return Future.value(Left(LocalDatabaseFailure(message: e.toString())));
+      return Left(LocalDatabaseFailure(message: e.toString()));
     }
   }
 
@@ -43,26 +43,23 @@ class UserLocalRepository implements IUserRepository {
     }
   }
 
-  // @override
-  // Future<Either<Failure, String>> login(
-  //     String email, String password) async {
-  //   try {
-  //     final user = await _userLocalDataSource.login(email, password);
-  //     return (Right(user));
-  //   } catch (e) {
-  //     return Left(LocalDatabaseFailure(message: e.toString()));
-  //   }
-  // }
-
   @override
-  Future<Either<Failure, String>> uploadImage(File file) {
-    // TODO: implement uploadImage
-    throw UnimplementedError();
+  Future<Either<Failure, String>> uploadImage(File file) async {
+    try {
+      // Placeholder for actual implementation
+      return Right('Image Upload Success!!');
+    } catch (e) {
+      return Left(LocalDatabaseFailure(message: e.toString()));
+    }
   }
 
   @override
-  Future<Either<Failure, String>> login(String email, String password) {
-    // TODO: implement login
-    throw UnimplementedError();
+  Future<Either<Failure, String>> login(String email, String password) async {
+    try {
+      // Placeholder for actual login implementation
+      return Right('Login successful');
+    } catch (e) {
+      return Left(LocalDatabaseFailure(message: e.toString()));
+    }
   }
 }

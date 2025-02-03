@@ -96,7 +96,6 @@ class UserRemoteDataSource {
   }
 
   //Upload Image
-  @override
   Future<String> uploadImage(File file) async {
     try {
       String fileName = file.path.split('/').last;
@@ -109,8 +108,7 @@ class UserRemoteDataSource {
           await _dio.post(ApiEndpoints.uploadImage, data: formData);
 
       if (response.statusCode == 200) {
-        // Checking if server is sending the right image path
-        print('Returned Image Path ::::: ${response.data['data']}');
+        // Return Image Path from Server
         return response.data['data'];
       } else {
         throw Exception(response.statusMessage);

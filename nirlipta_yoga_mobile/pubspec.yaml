@@ -73,6 +73,8 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   build_runner: ^2.4.14
   hive_generator: ^2.0.1
+  test_cov_console: ^0.2.2
+  mocktail: ^1.0.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

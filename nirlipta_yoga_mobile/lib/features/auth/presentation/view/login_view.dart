@@ -24,7 +24,7 @@ class LoginView extends StatelessWidget {
           child: Center(
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(24),
                 child: Column(
                   children: [
                     BlocBuilder<LoginBloc, LoginState>(
@@ -33,7 +33,7 @@ class LoginView extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             const Logo.colour(height: 80.0),
-                            const SizedBox(height: 24),
+                            const SizedBox(height: 72),
                             const Text(
                               'Welcome!',
                               style: TextStyle(
@@ -51,8 +51,14 @@ class LoginView extends StatelessWidget {
                                 labelText: 'Email',
                               ),
                               validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Please enter email';
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter a valid email address';
+                                }
+                                // Regex for validating email format
+                                final emailRegex = RegExp(
+                                    r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
+                                if (!emailRegex.hasMatch(value)) {
+                                  return 'Enter a valid email address';
                                 }
                                 return null;
                               },
@@ -78,8 +84,11 @@ class LoginView extends StatelessWidget {
                                 ),
                               ),
                               validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter password';
+                                if (value == null || value.trim().isEmpty) {
+                                  return 'Password is required';
+                                }
+                                if (value.length < 8) {
+                                  return 'Password must be at least 8 characters';
                                 }
                                 return null;
                               },
@@ -90,56 +99,6 @@ class LoginView extends StatelessWidget {
                     ),
                     _gap,
                     _gap,
-                    // ElevatedButton(
-                    //   onPressed: () async {
-                    //     if (_formKey.currentState!.validate()) {
-                    //       final email = _emailController.text.trim();
-                    //       final password = _passwordController.text.trim();
-                    //
-                    //       // Login using Hive service
-                    //       try {
-                    //         final user =
-                    //             await HiveService().loginUser(email, password);
-                    //
-                    //         // Check if the user exists and is authenticated
-                    //         if (user != null &&
-                    //             user.email == email &&
-                    //             user.password == password) {
-                    //           context.read<LoginBloc>().add(
-                    //                 NavigateHomeScreenEvent(
-                    //                   destination: HomeView(),
-                    //                   context: context,
-                    //                 ),
-                    //               );
-                    //         } else {
-                    //           showMySnackBar(
-                    //             context: context,
-                    //             message: 'Invalid email or password',
-                    //             color: Color(0xFF9B6763),
-                    //           );
-                    //         }
-                    //       } catch (e) {
-                    //         showMySnackBar(
-                    //           context: context,
-                    //           message: 'An error occurred. Please try again.',
-                    //           color: Color(0xFF9B6763),
-                    //         );
-                    //       }
-                    //     }
-                    //   },
-                    //   child: const SizedBox(
-                    //     height: 50,
-                    //     child: Center(
-                    //       child: Text(
-                    //         'Login',
-                    //         style: TextStyle(
-                    //           fontSize: 18,
-                    //           fontFamily: 'Brand Bold',
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
                     ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
@@ -160,6 +119,7 @@ class LoginView extends StatelessWidget {
                         height: 50,
                         child: Center(
                           child: Text(
+                            key: ValueKey('loginButton'),
                             'Login',
                             style: TextStyle(
                               fontSize: 18,
@@ -169,7 +129,6 @@ class LoginView extends StatelessWidget {
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 8),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,

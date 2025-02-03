@@ -19,7 +19,7 @@ class WorkshopLocalDataSource implements IWorkshopDataSource {
   }
 
   @override
-  Future<void> deleteWorkshop(String workshopId) async {
+  Future<void> deleteWorkshop(String workshopId, String? token) async {
     try {
       await _hiveService.deleteWorkshop(workshopId);
     } catch (e) {

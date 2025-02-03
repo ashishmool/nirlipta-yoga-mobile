@@ -6,6 +6,7 @@ class RegisterState {
   final bool isImageLoading;
   final bool isImageSuccess;
   final String? imageName;
+  final String? errorMessage;
 
   RegisterState({
     required this.isLoading,
@@ -13,6 +14,7 @@ class RegisterState {
     required this.isImageLoading,
     required this.isImageSuccess,
     this.imageName,
+    this.errorMessage,
   });
 
   RegisterState.initial()
@@ -20,7 +22,8 @@ class RegisterState {
         isSuccess = false,
         isImageLoading = false,
         isImageSuccess = false,
-        imageName = null;
+        imageName = null,
+        errorMessage = null;
 
   RegisterState copyWith({
     bool? isLoading,
@@ -28,6 +31,7 @@ class RegisterState {
     bool? isImageLoading,
     bool? isImageSuccess,
     String? imageName,
+    String? errorMessage,
   }) {
     return RegisterState(
       isLoading: isLoading ?? this.isLoading,
@@ -35,6 +39,7 @@ class RegisterState {
       isImageLoading: isImageLoading ?? this.isImageLoading,
       isImageSuccess: isImageSuccess ?? this.isImageSuccess,
       imageName: imageName ?? this.imageName,
+      errorMessage: errorMessage,
     );
   }
 }

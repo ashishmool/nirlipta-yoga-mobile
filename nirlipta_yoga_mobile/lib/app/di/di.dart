@@ -12,18 +12,6 @@ import '../../features/auth/data/data_source/remote_datasource/user_remote_data_
 import '../../features/auth/data/repository/user_remote_repository.dart';
 import '../../features/auth/domain/use_case/create_user_usecase.dart';
 import '../../features/auth/domain/use_case/login_user_usecase.dart';
-import '../../features/batch/data/data_source/local_datasource/batch_local_data_source.dart';
-import '../../features/batch/data/repository/batch_local_repository.dart';
-import '../../features/batch/domain/use_case/create_batch_usecase.dart';
-import '../../features/batch/domain/use_case/delete_batch_usecase.dart';
-import '../../features/batch/domain/use_case/get_all_batch_usecase.dart';
-import '../../features/batch/presentation/view_model/batch_bloc.dart';
-import '../../features/course/data/data_source/local_datasource/course_local_data_source.dart';
-import '../../features/course/data/repository/course_local_repository.dart';
-import '../../features/course/domain/use_case/create_course_usecase.dart';
-import '../../features/course/domain/use_case/delete_course_usecase.dart';
-import '../../features/course/domain/use_case/get_all_course_usecase.dart';
-import '../../features/course/presentation/view_model/course_bloc.dart';
 import '../../features/home/presentation/view_model/home_cubit.dart';
 import '../../features/onboarding/presentation/view_model/onboarding_cubit.dart';
 import '../../features/splash/presentation/view_model/splash_cubit.dart';
@@ -45,14 +33,14 @@ Future<void> initDependencies() async {
   await _initApiService();
   await _initSharedPreferences();
 
-  await _initBatchDependencies();
   await _initWorkshopDependencies();
-  await _initCourseDependencies();
+
+  // Before Home and Register
+  await _initLoginDependencies();
 
   // Initialize Home and Register dependencies before LoginBloc
   await _initHomeDependencies();
   await _initRegisterDependencies();
-  await _initLoginDependencies();
 
   // Initialize other dependencies
   await _initSplashScreenDependencies();
@@ -73,35 +61,6 @@ _initApiService() {
 Future<void> _initSharedPreferences() async {
   final sharedPreferences = await SharedPreferences.getInstance();
   getIt.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
-}
-
-_initBatchDependencies() async {
-  //Data Source
-  getIt.registerFactory<BatchLocalDataSource>(
-      () => BatchLocalDataSource(getIt<HiveService>()));
-
-  //Repository
-  getIt.registerLazySingleton<BatchLocalRepository>(() => BatchLocalRepository(
-      batchLocalDataSource: getIt<BatchLocalDataSource>()));
-  //Usecases
-  getIt.registerLazySingleton<CreateBatchUseCase>(
-      () => CreateBatchUseCase(batchRepository: getIt<BatchLocalRepository>()));
-
-  getIt.registerLazySingleton<GetAllBatchUseCase>(
-      () => GetAllBatchUseCase(batchRepository: getIt<BatchLocalRepository>()));
-
-  getIt.registerLazySingleton<DeleteBatchUseCase>(
-    () => DeleteBatchUseCase(batchRepository: getIt<BatchLocalRepository>()),
-  );
-
-  // Bloc
-  getIt.registerFactory<BatchBloc>(
-    () => BatchBloc(
-      createBatchUseCase: getIt<CreateBatchUseCase>(),
-      getAllBatchUseCase: getIt<GetAllBatchUseCase>(),
-      deleteBatchUseCase: getIt<DeleteBatchUseCase>(),
-    ),
-  );
 }
 
 _initWorkshopDependencies() async {
@@ -125,7 +84,8 @@ _initWorkshopDependencies() async {
 
   getIt.registerLazySingleton<DeleteWorkshopUseCase>(
     () => DeleteWorkshopUseCase(
-        workshopRepository: getIt<WorkshopLocalRepository>()),
+        workshopRepository: getIt<WorkshopLocalRepository>(),
+        tokenSharedPrefs: getIt<TokenSharedPrefs>()),
   );
 
   getIt.registerLazySingleton<UpdateWorkshopUseCase>(
@@ -150,39 +110,13 @@ _initWorkshopDependencies() async {
   );
 }
 
-_initCourseDependencies() async {
-  //Data Source
-  getIt.registerFactory<CourseLocalDataSource>(
-      () => CourseLocalDataSource(getIt<HiveService>()));
-
-  //Repository
-  getIt.registerLazySingleton<CourseLocalRepository>(() =>
-      CourseLocalRepository(
-          courseLocalDataSource: getIt<CourseLocalDataSource>()));
-  //Usecases
-  getIt.registerLazySingleton<CreateCourseUseCase>(() =>
-      CreateCourseUseCase(courseRepository: getIt<CourseLocalRepository>()));
-
-  getIt.registerLazySingleton<GetAllCourseUseCase>(() =>
-      GetAllCourseUseCase(courseRepository: getIt<CourseLocalRepository>()));
-
-  getIt.registerLazySingleton<DeleteCourseUseCase>(
-    () => DeleteCourseUseCase(courseRepository: getIt<CourseLocalRepository>()),
-  );
-
-  // Bloc
-  getIt.registerFactory<CourseBloc>(
-    () => CourseBloc(
-      createCourseUseCase: getIt<CreateCourseUseCase>(),
-      getAllCourseUseCase: getIt<GetAllCourseUseCase>(),
-      deleteCourseUseCase: getIt<DeleteCourseUseCase>(),
-    ),
-  );
-}
-
 _initHomeDependencies() async {
+  // getIt.registerLazySingleton<TokenSharedPrefs>(
+  //   () => TokenSharedPrefs(getIt<SharedPreferences>()),
+  // );
+
   getIt.registerSingleton<HomeCubit>(
-    HomeCubit(),
+    HomeCubit(tokenSharedPrefs: getIt<TokenSharedPrefs>()),
   );
 }
 
