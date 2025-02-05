@@ -1,14 +1,14 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../domain/entity/category_entity.dart';
 import '../../domain/use_case/create_category_usecase.dart';
 import '../../domain/use_case/delete_category_usecase.dart';
 import '../../domain/use_case/get_all_categories_usecase.dart';
 import '../../domain/use_case/update_category_usecase.dart';
+import 'category_state.dart';
 
 part 'category_event.dart';
-part 'category_state.dart';
+// part 'category_state.dart';
 
 class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
   final CreateCategoryUseCase _createCategoryUseCase;
@@ -31,8 +31,9 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     on<DeleteCategory>(_onDeleteCategory);
     on<UpdateCategory>(_onUpdateCategory);
 
-    // Trigger initial loading
-    add(LoadCategories());
+    // // Need to comment before running the Bloc Test
+    // // Trigger initial loading
+    // add(LoadCategories());
   }
 
   Future<void> _onLoadCategories(

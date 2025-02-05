@@ -1,6 +1,8 @@
-part of 'category_bloc.dart';
+import 'package:equatable/equatable.dart';
 
-class CategoryState {
+import '../../domain/entity/category_entity.dart';
+
+class CategoryState extends Equatable {
   final List<CategoryEntity> categories;
   final bool isLoading;
   final String? error;
@@ -8,7 +10,7 @@ class CategoryState {
   final bool isImageSuccess;
   final String? imageName;
 
-  CategoryState({
+  const CategoryState({
     required this.categories,
     required this.isLoading,
     this.error,
@@ -18,7 +20,7 @@ class CategoryState {
   });
 
   factory CategoryState.initial() {
-    return CategoryState(
+    return const CategoryState(
       categories: [],
       isLoading: false,
       isImageLoading: false,
@@ -38,7 +40,7 @@ class CategoryState {
     return CategoryState(
       categories: categories ?? this.categories,
       isLoading: isLoading ?? this.isLoading,
-      error: error,
+      error: error ?? this.error,
       isImageLoading: isImageLoading ?? this.isImageLoading,
       isImageSuccess: isImageSuccess ?? this.isImageSuccess,
       imageName: imageName ?? this.imageName,
@@ -46,6 +48,12 @@ class CategoryState {
   }
 
   @override
-  List<Object?> get props =>
-      [categories, isLoading, error, isImageLoading, isImageSuccess, imageName];
+  List<Object?> get props => [
+        categories,
+        isLoading,
+        error,
+        isImageLoading,
+        isImageSuccess,
+        imageName,
+      ];
 }

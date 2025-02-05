@@ -9,6 +9,8 @@ sealed class CategoryEvent extends Equatable {
 
 final class LoadCategories extends CategoryEvent {}
 
+final class LoadCategory extends CategoryEvent {}
+
 final class AddCategory extends CategoryEvent {
   final String name;
   final String? description;

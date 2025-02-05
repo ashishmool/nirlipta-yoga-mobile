@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../view_model/category_bloc.dart';
+import '../view_model/category_state.dart';
 
 class CategoryView extends StatelessWidget {
   CategoryView({super.key});
