@@ -19,9 +19,9 @@ class CategoryLocalDataSource implements ICategoryDataSource {
   }
 
   @override
-  Future<void> deleteCategory(String categoryId, String? token) async {
+  Future<void> deleteCategory(String id, String? token) async {
     try {
-      await _hiveService.deleteCategory(categoryId);
+      await _hiveService.deleteCategory(id);
     } catch (e) {
       throw Exception('Error deleting category: $e');
     }
@@ -38,9 +38,9 @@ class CategoryLocalDataSource implements ICategoryDataSource {
   }
 
   @override
-  Future<CategoryEntity> getCategoryById(String categoryId) async {
+  Future<CategoryEntity> getCategoryById(String id) async {
     try {
-      final categoryHiveModel = await _hiveService.getCategoryById(categoryId);
+      final categoryHiveModel = await _hiveService.getCategoryById(id);
       if (categoryHiveModel != null) {
         return categoryHiveModel.toEntity();
       } else {

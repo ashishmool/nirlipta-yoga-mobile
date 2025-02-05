@@ -8,20 +8,20 @@ part 'category_api_model.g.dart'; // Include the generated part file.
 @JsonSerializable()
 class CategoryApiModel extends Equatable {
   @JsonKey(name: '_id')
-  final String? categoryId;
+  final String? id;
   final String name;
   final String? photo;
   final String? description;
 
   const CategoryApiModel({
-    this.categoryId,
+    this.id,
     required this.name,
     this.description,
     this.photo,
   });
 
   const CategoryApiModel.empty()
-      : categoryId = '',
+      : id = '',
         name = '',
         description = '',
         photo = null;
@@ -35,7 +35,7 @@ class CategoryApiModel extends Equatable {
 
   // Convert API Object to Entity
   CategoryEntity toEntity() => CategoryEntity(
-        id: categoryId,
+        id: id,
         name: name,
         description: description,
         photo: photo,
@@ -44,7 +44,7 @@ class CategoryApiModel extends Equatable {
   // Convert Entity to API Object
   factory CategoryApiModel.fromEntity(CategoryEntity category) {
     return CategoryApiModel(
-      categoryId: category.id,
+      id: category.id,
       name: category.name,
       description: category.description,
       photo: category.photo,
@@ -58,7 +58,7 @@ class CategoryApiModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        categoryId,
+        id,
         name,
         description,
         photo,

@@ -22,27 +22,27 @@ final class AddCategory extends CategoryEvent {
 }
 
 final class DeleteCategory extends CategoryEvent {
-  final String categoryId;
+  final String id;
 
-  const DeleteCategory({required this.categoryId});
+  const DeleteCategory({required this.id});
 
   @override
-  List<Object?> get props => [categoryId];
+  List<Object?> get props => [id];
 }
 
 final class UpdateCategory extends CategoryEvent {
-  final String categoryId;
+  final String id;
   final String name;
   final String? description;
   final String? photo;
 
   const UpdateCategory({
-    required this.categoryId,
+    required this.id,
     required this.name,
     this.description,
     this.photo,
   });
 
   @override
-  List<Object?> get props => [categoryId, name, description, photo];
+  List<Object?> get props => [id, name, description, photo];
 }

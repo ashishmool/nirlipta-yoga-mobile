@@ -17,6 +17,12 @@ class CreateCategoryParams extends Equatable {
     this.photo,
   });
 
+  // Initialize Empty Constructor
+  const CreateCategoryParams.empty()
+      : name = '_empty.name',
+        description = '_empty.description',
+        photo = '_empty.photo';
+
   @override
   List<Object?> get props => [
         name,

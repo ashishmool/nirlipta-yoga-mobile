@@ -17,7 +17,7 @@ class CategoryHiveModelAdapter extends TypeAdapter<CategoryHiveModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return CategoryHiveModel(
-      categoryId: fields[0] as String?,
+      id: fields[0] as String?,
       name: fields[1] as String,
       description: fields[2] as String?,
       photo: fields[3] as String?,
@@ -29,7 +29,7 @@ class CategoryHiveModelAdapter extends TypeAdapter<CategoryHiveModel> {
     writer
       ..writeByte(4)
       ..writeByte(0)
-      ..write(obj.categoryId)
+      ..write(obj.id)
       ..writeByte(1)
       ..write(obj.name)
       ..writeByte(2)

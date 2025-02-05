@@ -5,9 +5,9 @@ abstract interface class ICategoryDataSource {
 
   Future<List<CategoryEntity>> getAllCategories();
 
-  Future<CategoryEntity> getCategoryById(String categoryId);
+  Future<CategoryEntity> getCategoryById(String id);
 
   Future<void> updateCategory(CategoryEntity categoryEntity);
 
-  Future<void> deleteCategory(String categoryId, String? token);
+  Future<void> deleteCategory(String id, String? token);
 }

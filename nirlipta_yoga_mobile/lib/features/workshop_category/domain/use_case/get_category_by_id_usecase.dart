@@ -7,12 +7,12 @@ import '../entity/category_entity.dart';
 import '../repository/category_repository.dart';
 
 class GetCategoryByIdParams extends Equatable {
-  final String categoryId;
+  final String id;
 
-  const GetCategoryByIdParams({required this.categoryId});
+  const GetCategoryByIdParams({required this.id});
 
   @override
-  List<Object?> get props => [categoryId];
+  List<Object?> get props => [id];
 }
 
 class GetCategoryByIdUseCase
@@ -24,6 +24,6 @@ class GetCategoryByIdUseCase
   @override
   Future<Either<Failure, CategoryEntity>> call(
       GetCategoryByIdParams params) async {
-    return categoryRepository.getCategoryById(params.categoryId);
+    return categoryRepository.getCategoryById(params.id);
   }
 }

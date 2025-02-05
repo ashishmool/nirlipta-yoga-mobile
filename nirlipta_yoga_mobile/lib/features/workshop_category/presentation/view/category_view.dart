@@ -35,7 +35,7 @@ class CategoryView extends StatelessWidget {
                 controller: categoryDescriptionController,
                 keyboardType: TextInputType.number,
                 decoration:
-                const InputDecoration(labelText: 'Category Description'),
+                    const InputDecoration(labelText: 'Category Description'),
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Please enter a category price';
@@ -48,12 +48,12 @@ class CategoryView extends StatelessWidget {
                 onPressed: () {
                   if (_categoryFormKey.currentState!.validate()) {
                     context.read<CategoryBloc>().add(
-                      AddCategory(
-                        name: categoryNameController.text,
-                        description: categoryNameController.text,
-                        photo: 'Need to Send Image',
-                      ),
-                    );
+                          AddCategory(
+                            name: categoryNameController.text,
+                            description: categoryNameController.text,
+                            photo: 'Need to Send Image',
+                          ),
+                        );
                     categoryNameController.clear();
                     categoryDescriptionController.clear();
                   }
@@ -86,7 +86,7 @@ class CategoryView extends StatelessWidget {
                             children: [
                               IconButton(
                                 icon:
-                                const Icon(Icons.edit, color: Colors.blue),
+                                    const Icon(Icons.edit, color: Colors.blue),
                                 onPressed: () {
                                   categoryNameController.text = category.name;
                                   categoryDescriptionController.text =
@@ -102,17 +102,17 @@ class CategoryView extends StatelessWidget {
                                           children: [
                                             TextFormField(
                                               controller:
-                                              categoryNameController,
+                                                  categoryNameController,
                                               decoration: const InputDecoration(
                                                   labelText: "Category Name"),
                                             ),
                                             const SizedBox(height: 10),
                                             TextFormField(
                                               controller:
-                                              categoryDescriptionController,
+                                                  categoryDescriptionController,
                                               decoration: const InputDecoration(
                                                   labelText:
-                                                  "Category Description"),
+                                                      "Category Description"),
                                             ),
                                           ],
                                         ),
@@ -125,17 +125,17 @@ class CategoryView extends StatelessWidget {
                                           ElevatedButton(
                                             onPressed: () {
                                               context.read<CategoryBloc>().add(
-                                                UpdateCategory(
-                                                  categoryId: category.id!,
-                                                  name:
-                                                  categoryNameController
-                                                      .text,
-                                                  description:
-                                                  categoryDescriptionController
-                                                      .text,
-                                                  photo: category.photo,
-                                                ),
-                                              );
+                                                    UpdateCategory(
+                                                      id: category.id!,
+                                                      name:
+                                                          categoryNameController
+                                                              .text,
+                                                      description:
+                                                          categoryDescriptionController
+                                                              .text,
+                                                      photo: category.photo,
+                                                    ),
+                                                  );
                                               Navigator.pop(context);
                                             },
                                             child: const Text("Save"),
@@ -148,12 +148,11 @@ class CategoryView extends StatelessWidget {
                               ),
                               IconButton(
                                 icon:
-                                const Icon(Icons.delete, color: Colors.red),
+                                    const Icon(Icons.delete, color: Colors.red),
                                 onPressed: () {
                                   context.read<CategoryBloc>().add(
-                                    DeleteCategory(
-                                        categoryId: category.id ?? ''),
-                                  );
+                                        DeleteCategory(id: category.id ?? ''),
+                                      );
                                 },
                               ),
                             ],

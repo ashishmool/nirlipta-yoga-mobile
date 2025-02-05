@@ -70,7 +70,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       DeleteCategory event, Emitter<CategoryState> emit) async {
     emit(state.copyWith(isLoading: true));
     final result = await _deleteCategoryUseCase.call(
-      DeleteCategoryParams(categoryId: event.categoryId),
+      DeleteCategoryParams(id: event.id),
     );
     result.fold(
       (failure) =>
@@ -84,10 +84,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     emit(state.copyWith(isLoading: true));
     final result = await _updateCategoryUseCase.call(
       UpdateCategoryParams(
-          name: event.name,
-          description: event.description,
-          photo: event.photo,
-          workshops: []),
+          name: event.name, description: event.description, photo: event.photo),
     );
     result.fold(
       (failure) =>

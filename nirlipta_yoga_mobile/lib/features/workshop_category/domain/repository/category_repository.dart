@@ -8,10 +8,10 @@ abstract interface class ICategoryRepository {
 
   Future<Either<Failure, List<CategoryEntity>>> getAllCategories();
 
-  Future<Either<Failure, CategoryEntity>> getCategoryById(String categoryId);
+  Future<Either<Failure, CategoryEntity>> getCategoryById(String id);
 
-  Future<Either<Failure, void>> updateCategory(CategoryEntity categoryEntity);
+  Future<Either<Failure, void>> updateCategory(
+      CategoryEntity categoryEntity, String? token);
 
-  Future<Either<Failure, void>> deleteCategory(
-      String categoryId, String? token);
+  Future<Either<Failure, void>> deleteCategory(String id, String? token);
 }

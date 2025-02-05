@@ -84,13 +84,13 @@ class HiveService {
   Future<void> addCategory(CategoryHiveModel category) async {
     var box =
         await Hive.openBox<CategoryHiveModel>(HiveTableConstant.categoryBox);
-    await box.put(category.categoryId, category);
+    await box.put(category.id, category);
   }
 
-  Future<void> deleteCategory(String categoryId) async {
+  Future<void> deleteCategory(String id) async {
     var box =
         await Hive.openBox<CategoryHiveModel>(HiveTableConstant.categoryBox);
-    await box.delete(categoryId);
+    await box.delete(id);
   }
 
   Future<List<CategoryHiveModel>> getAllCategories() async {
@@ -99,15 +99,15 @@ class HiveService {
     return box.values.toList();
   }
 
-  Future<CategoryHiveModel?> getCategoryById(String categoryId) async {
+  Future<CategoryHiveModel?> getCategoryById(String id) async {
     var box =
         await Hive.openBox<CategoryHiveModel>(HiveTableConstant.categoryBox);
-    return box.get(categoryId);
+    return box.get(id);
   }
 
   Future<void> updateCategory(CategoryHiveModel category) async {
     var box =
         await Hive.openBox<CategoryHiveModel>(HiveTableConstant.categoryBox);
-    await box.put(category.categoryId, category);
+    await box.put(category.id, category);
   }
 }

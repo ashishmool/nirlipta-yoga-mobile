@@ -7,12 +7,16 @@ import '../../../../core/error/failure.dart';
 import '../repository/category_repository.dart';
 
 class DeleteCategoryParams extends Equatable {
-  final String categoryId;
+  final String id;
 
-  const DeleteCategoryParams({required this.categoryId});
+  const DeleteCategoryParams({required this.id});
+
+  // Initialize Empty Constructor
+  const DeleteCategoryParams.empty()
+      : id = '_empty.id';
 
   @override
-  List<Object?> get props => [categoryId];
+  List<Object?> get props => [id];
 }
 
 class DeleteCategoryUseCase
@@ -30,7 +34,7 @@ class DeleteCategoryUseCase
     return token.fold((l) {
       return Left(l);
     }, (r) async {
-      return await categoryRepository.deleteCategory(params.categoryId, r);
+      return await categoryRepository.deleteCategory(params.id, r);
     });
   }
 }

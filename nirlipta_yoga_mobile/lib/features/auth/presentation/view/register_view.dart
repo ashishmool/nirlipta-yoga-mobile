@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
 
+import '../../../../core/common/permission_checker/permission_checker.dart';
 import '../view_model/signup/register_bloc.dart';
 
 class RegisterView extends StatefulWidget {
@@ -28,19 +28,7 @@ class _RegisterViewState extends State<RegisterView> {
   String? _genderValue = 'male';
   bool _isPasswordVisible = false;
   bool _isNoneSelected =
-  true; // Track whether "None" is selected for medical conditions
-
-  // Checking for Runtime Camera Permissions
-  checkCameraPermission() async {
-    if (await Permission.camera
-        .request()
-        .isRestricted ||
-        await Permission.camera
-            .request()
-            .isDenied) {
-      await Permission.camera.request();
-    }
-  }
+      true; // Track whether "None" is selected for medical conditions
 
   File? _img;
 
@@ -77,7 +65,7 @@ class _RegisterViewState extends State<RegisterView> {
           // Listener for Image Upload
           BlocListener<RegisterBloc, RegisterState>(
             listenWhen: (previous, current) =>
-            previous.isImageLoading != current.isImageLoading ||
+                previous.isImageLoading != current.isImageLoading ||
                 previous.isImageSuccess != current.isImageSuccess,
             listener: (context, state) {
               if (state.isImageLoading) {
@@ -109,7 +97,7 @@ class _RegisterViewState extends State<RegisterView> {
           // Listener for Student Registration
           BlocListener<RegisterBloc, RegisterState>(
             listenWhen: (previous, current) =>
-            previous.isLoading != current.isLoading ||
+                previous.isLoading != current.isLoading ||
                 previous.isSuccess != current.isSuccess,
             listener: (context, state) {
               if (state.isLoading) {
@@ -162,34 +150,40 @@ class _RegisterViewState extends State<RegisterView> {
                               top: Radius.circular(20),
                             ),
                           ),
-                          builder: (context) =>
-                              Padding(
-                                padding: const EdgeInsets.all(20),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment
-                                      .spaceAround,
-                                  children: [
-                                    ElevatedButton.icon(
-                                      onPressed: () {
-                                        checkCameraPermission();
-                                        _browseImage(ImageSource.camera);
-                                        Navigator.pop(context);
-                                      },
-                                      icon: const Icon(Icons.camera),
-                                      label: const Text('Camera'),
-                                    ),
-                                    ElevatedButton.icon(
-                                      onPressed: () {
-                                        checkCameraPermission();
-                                        _browseImage(ImageSource.gallery);
-                                        Navigator.pop(context);
-                                      },
-                                      icon: const Icon(Icons.image),
-                                      label: const Text('Gallery'),
-                                    ),
-                                  ],
+                          builder: (context) => Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                ElevatedButton.icon(
+                                  onPressed: () async {
+                                    await PermissionChecker
+                                        .checkCameraPermission();
+                                    _browseImage(ImageSource.camera);
+                                    Navigator.pop(context);
+                                  },
+                                  icon: const Icon(
+                                    Icons.camera,
+                                    color: Colors.white,
+                                  ),
+                                  label: const Text('Camera'),
                                 ),
-                              ),
+                                ElevatedButton.icon(
+                                  onPressed: () async {
+                                    await PermissionChecker
+                                        .checkCameraPermission();
+                                    _browseImage(ImageSource.gallery);
+                                    Navigator.pop(context);
+                                  },
+                                  icon: const Icon(
+                                    Icons.image,
+                                    color: Colors.white,
+                                  ),
+                                  label: const Text('Gallery'),
+                                ),
+                              ],
+                            ),
+                          ),
                         );
                       },
                       child: SizedBox(
@@ -206,8 +200,8 @@ class _RegisterViewState extends State<RegisterView> {
                                 backgroundImage: _img != null
                                     ? FileImage(_img!)
                                     : AssetImage(
-                                  'assets/images/profile-placeholder.png',
-                                ) as ImageProvider,
+                                        'assets/images/profile-placeholder.png',
+                                      ) as ImageProvider,
                               ),
                               Positioned(
                                 bottom: 5,
@@ -220,7 +214,7 @@ class _RegisterViewState extends State<RegisterView> {
                                     boxShadow: [
                                       BoxShadow(
                                         color:
-                                        Colors.black.withValues(alpha: 0.3),
+                                            Colors.black.withValues(alpha: 0.3),
                                         blurRadius: 5,
                                         offset: const Offset(0, 2),
                                       ),
@@ -262,11 +256,10 @@ class _RegisterViewState extends State<RegisterView> {
                           child: DropdownButtonFormField<String>(
                             value: _genderValue,
                             items: ['male', 'female', 'other']
-                                .map((gender) =>
-                                DropdownMenuItem<String>(
-                                  value: gender,
-                                  child: Text(gender),
-                                ))
+                                .map((gender) => DropdownMenuItem<String>(
+                                      value: gender,
+                                      child: Text(gender),
+                                    ))
                                 .toList(),
                             onChanged: (value) {
                               setState(() {
@@ -419,7 +412,7 @@ class _RegisterViewState extends State<RegisterView> {
                                     _isNoneSelected = value ?? false;
                                     if (_isNoneSelected) {
                                       _medicalConditionsController.text =
-                                      'None';
+                                          'None';
                                     } else {
                                       _medicalConditionsController.clear();
                                     }
@@ -462,20 +455,18 @@ class _RegisterViewState extends State<RegisterView> {
                         onPressed: () {
                           if (_key.currentState!.validate()) {
                             final registerState =
-                                context
-                                    .read<RegisterBloc>()
-                                    .state;
+                                context.read<RegisterBloc>().state;
                             final imageName = registerState.imageName;
                             context.read<RegisterBloc>().add(RegisterUser(
-                              name: _nameController.text,
-                              username: _usernameController.text,
-                              phone: _phoneController.text,
-                              email: _emailController.text,
-                              password: _passwordController.text,
-                              gender: _genderValue.toString(),
-                              medical_conditions: '',
-                              photo: imageName,
-                            ));
+                                  name: _nameController.text,
+                                  username: _usernameController.text,
+                                  phone: _phoneController.text,
+                                  email: _emailController.text,
+                                  password: _passwordController.text,
+                                  gender: _genderValue.toString(),
+                                  medical_conditions: '',
+                                  photo: imageName,
+                                ));
                           }
                         },
                         child: const Text('Register'),

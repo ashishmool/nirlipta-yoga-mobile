@@ -13,7 +13,7 @@ part 'category_hive_model.g.dart';
 @HiveType(typeId: HiveTableConstant.categoryTableId)
 class CategoryHiveModel extends Equatable {
   @HiveField(0)
-  final String? categoryId;
+  final String? id;
 
   @HiveField(1)
   final String name;
@@ -25,15 +25,15 @@ class CategoryHiveModel extends Equatable {
   final String? photo;
 
   CategoryHiveModel({
-    String? categoryId,
+    String? id,
     required this.name,
     this.description,
     this.photo,
-  }) : categoryId = categoryId ?? const Uuid().v4();
+  }) : id = id ?? const Uuid().v4();
 
   // Initial Constructor
   const CategoryHiveModel.initial()
-      : categoryId = '',
+      : id = '',
         name = '',
         description = null,
         photo = null;
@@ -41,7 +41,7 @@ class CategoryHiveModel extends Equatable {
   // From Entity
   factory CategoryHiveModel.fromEntity(CategoryEntity entity) {
     return CategoryHiveModel(
-      categoryId: entity.id,
+      id: entity.id,
       name: entity.name,
       description: entity.description,
       photo: entity.photo,
@@ -51,7 +51,7 @@ class CategoryHiveModel extends Equatable {
   // To Entity
   CategoryEntity toEntity() {
     return CategoryEntity(
-      id: categoryId,
+      id: id,
       name: name,
       description: description,
       photo: photo,
@@ -68,7 +68,7 @@ class CategoryHiveModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        categoryId,
+        id,
         name,
         description,
         photo,

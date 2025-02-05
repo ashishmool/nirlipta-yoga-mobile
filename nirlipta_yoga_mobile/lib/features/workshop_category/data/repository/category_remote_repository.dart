@@ -23,10 +23,9 @@ class CategoryRemoteRepository implements ICategoryRepository {
   }
 
   @override
-  Future<Either<Failure, void>> deleteCategory(
-      String categoryId, String? token) async {
+  Future<Either<Failure, void>> deleteCategory(String id, String? token) async {
     try {
-      await _categoryRemoteDataSource.deleteCategory(categoryId, token);
+      await _categoryRemoteDataSource.deleteCategory(id, token);
       return Right(null);
     } catch (e) {
       return Left(ApiFailure(message: 'Error deleting category: $e'));
@@ -44,11 +43,9 @@ class CategoryRemoteRepository implements ICategoryRepository {
   }
 
   @override
-  Future<Either<Failure, CategoryEntity>> getCategoryById(
-      String categoryId) async {
+  Future<Either<Failure, CategoryEntity>> getCategoryById(String id) async {
     try {
-      final category =
-          await _categoryRemoteDataSource.getCategoryById(categoryId);
+      final category = await _categoryRemoteDataSource.getCategoryById(id);
       return Right(category);
     } catch (e) {
       return Left(ApiFailure(message: 'Error fetching category by ID: $e'));
@@ -56,7 +53,8 @@ class CategoryRemoteRepository implements ICategoryRepository {
   }
 
   @override
-  Future<Either<Failure, void>> updateCategory(CategoryEntity category) async {
+  Future<Either<Failure, void>> updateCategory(
+      CategoryEntity category, String? token) async {
     try {
       await _categoryRemoteDataSource.updateCategory(category);
       return Right(null);

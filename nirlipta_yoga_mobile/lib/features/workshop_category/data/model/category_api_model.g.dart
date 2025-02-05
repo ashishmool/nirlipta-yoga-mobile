@@ -8,7 +8,7 @@ part of 'category_api_model.dart';
 
 CategoryApiModel _$CategoryApiModelFromJson(Map<String, dynamic> json) =>
     CategoryApiModel(
-      categoryId: json['_id'] as String?,
+      id: json['_id'] as String?,
       name: json['name'] as String,
       description: json['description'] as String?,
       photo: json['photo'] as String?,
@@ -16,7 +16,7 @@ CategoryApiModel _$CategoryApiModelFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$CategoryApiModelToJson(CategoryApiModel instance) =>
     <String, dynamic>{
-      '_id': instance.categoryId,
+      '_id': instance.id,
       'name': instance.name,
       'photo': instance.photo,
       'description': instance.description,

@@ -13,6 +13,13 @@ class CategoryEntity extends Equatable {
     this.photo,
   });
 
+  // Initialize Empty Constructor
+  const CategoryEntity.empty()
+      : id = '_empty.id',
+        name = '_empty.name',
+        description = '_empty.description',
+        photo = '_empty.photo';
+
   @override
   List<Object?> get props => [
         id,

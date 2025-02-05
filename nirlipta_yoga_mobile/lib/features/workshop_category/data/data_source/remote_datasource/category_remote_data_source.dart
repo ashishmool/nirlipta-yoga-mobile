@@ -47,10 +47,9 @@ class CategoryRemoteDataSource {
     }
   }
 
-  Future<CategoryEntity> getCategoryById(String categoryId) async {
+  Future<CategoryEntity> getCategoryById(String id) async {
     try {
-      var response =
-          await _dio.get('${ApiEndpoints.getCategoryById}/$categoryId');
+      var response = await _dio.get('${ApiEndpoints.getCategoryById}/$id');
       if (response.statusCode == 200) {
         return CategoryApiModel.fromJson(response.data).toEntity();
       } else {
@@ -82,10 +81,9 @@ class CategoryRemoteDataSource {
     }
   }
 
-  Future<void> deleteCategory(String categoryId, String? token) async {
+  Future<void> deleteCategory(String id, String? token) async {
     try {
-      var response =
-          await _dio.delete('${ApiEndpoints.deleteCategory}/$categoryId');
+      var response = await _dio.delete('${ApiEndpoints.deleteCategory}/$id');
       if (response.statusCode == 200) {
         return;
       } else {

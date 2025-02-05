@@ -13,6 +13,7 @@ import '../../features/auth/data/data_source/remote_datasource/user_remote_data_
 import '../../features/auth/data/repository/user_remote_repository.dart';
 import '../../features/auth/domain/use_case/create_user_usecase.dart';
 import '../../features/auth/domain/use_case/login_user_usecase.dart';
+import '../../features/home/presentation/view/bottom_view_model/dashboard_bloc.dart';
 import '../../features/home/presentation/view_model/home_cubit.dart';
 import '../../features/onboarding/presentation/view_model/onboarding_cubit.dart';
 import '../../features/splash/presentation/view_model/splash_cubit.dart';
@@ -45,19 +46,24 @@ Future<void> initDependencies() async {
   await _initApiService();
   await _initSharedPreferences();
 
-  await _initWorkshopDependencies();
-  await _initCategoryDependencies();
+  // Start with Splash
+  await _initSplashScreenDependencies();
 
-  // Before Home and Register
+  // Onboarding
+  await _initOnboardingScreenDependencies();
+
+  // Initialize Authentication Dependencies
   await _initLoginDependencies();
-
-  // Initialize Home and Register dependencies before LoginBloc
-  await _initHomeDependencies();
   await _initRegisterDependencies();
 
-  // Initialize other dependencies
-  await _initSplashScreenDependencies();
-  await _initOnboardingScreenDependencies();
+  // Initialize Home
+  await _initHomeDependencies();
+
+  // Initialize Dashboard and Others
+  await _initDashboardDependencies();
+
+  await _initWorkshopDependencies();
+  await _initCategoryDependencies();
 }
 
 _initHiveService() {
@@ -193,7 +199,8 @@ _initCategoryDependencies() async {
 
   getIt.registerLazySingleton<UpdateCategoryUseCase>(
     () => UpdateCategoryUseCase(
-        categoryRepository: getIt<CategoryRemoteRepository>()),
+        categoryRepository: getIt<CategoryRemoteRepository>(),
+        tokenSharedPrefs: getIt<TokenSharedPrefs>()),
   );
 
   getIt.registerLazySingleton<GetCategoryByIdUseCase>(
@@ -287,4 +294,8 @@ _initOnboardingScreenDependencies() async {
   getIt.registerFactory<OnboardingCubit>(
     () => OnboardingCubit(getIt<LoginBloc>()),
   );
+}
+
+_initDashboardDependencies() {
+  getIt.registerFactory<DashboardBloc>(() => DashboardBloc());
 }

@@ -149,7 +149,7 @@ class WorkshopModuleHiveModel extends Equatable {
   @HiveField(1)
   final int duration;
 
-  WorkshopModuleHiveModel({
+  const WorkshopModuleHiveModel({
     required this.name,
     required this.duration,
   });

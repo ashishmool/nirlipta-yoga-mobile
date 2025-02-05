@@ -23,10 +23,9 @@ class CategoryLocalRepository implements ICategoryRepository {
   }
 
   @override
-  Future<Either<Failure, void>> deleteCategory(
-      String categoryId, String? token) async {
+  Future<Either<Failure, void>> deleteCategory(String id, String? token) async {
     try {
-      await _categoryLocalDataSource.deleteCategory(categoryId, token);
+      await _categoryLocalDataSource.deleteCategory(id, token);
       return Right(null);
     } catch (e) {
       return Left(LocalDatabaseFailure(message: 'Error deleting category: $e'));
@@ -34,11 +33,9 @@ class CategoryLocalRepository implements ICategoryRepository {
   }
 
   @override
-  Future<Either<Failure, CategoryEntity>> getCategoryById(
-      String categoryId) async {
+  Future<Either<Failure, CategoryEntity>> getCategoryById(String id) async {
     try {
-      final category =
-          await _categoryLocalDataSource.getCategoryById(categoryId);
+      final category = await _categoryLocalDataSource.getCategoryById(id);
       return Right(category);
     } catch (e) {
       return Left(
@@ -47,7 +44,8 @@ class CategoryLocalRepository implements ICategoryRepository {
   }
 
   @override
-  Future<Either<Failure, void>> updateCategory(CategoryEntity category) async {
+  Future<Either<Failure, void>> updateCategory(
+      CategoryEntity category, String? token) async {
     try {
       await _categoryLocalDataSource.updateCategory(category);
       return Right(null);
