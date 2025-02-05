@@ -76,7 +76,7 @@ class WorkshopHiveModelAdapter extends TypeAdapter<WorkshopHiveModel> {
 class WorkshopModuleHiveModelAdapter
     extends TypeAdapter<WorkshopModuleHiveModel> {
   @override
-  final int typeId = 14;
+  final int typeId = 2;
 
   @override
   WorkshopModuleHiveModel read(BinaryReader reader) {

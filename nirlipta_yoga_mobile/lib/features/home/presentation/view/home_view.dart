@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/common/logo.dart';
 import '../../../../core/common/snackbar/snackbar.dart';
 import '../view_model/home_cubit.dart';
 import '../view_model/home_state.dart';
@@ -14,36 +15,38 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home'),
-        centerTitle: true,
+        title: Row(
+          children: [
+            SizedBox(
+              height: 50, // Increase the size of the logo as needed
+              child: Logo.white(height: 40.0), // Larger logo
+            ),
+          ],
+        ),
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),
         actions: [
+          Switch(
+            value: _isDarkTheme,
+            onChanged: (value) {
+              // Change theme logic
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {
-              // Logout code
               showMySnackBar(
                 context: context,
                 message: 'Logging out...',
                 color: Colors.black54,
               );
-
               context.read<HomeCubit>().logout(context);
-            },
-          ),
-          Switch(
-            value: _isDarkTheme,
-            onChanged: (value) {
-              // Change theme
-              // setState(() {
-              //   _isDarkTheme = value;
-              // });
             },
           ),
         ],
       ),
+
       // body: _views.elementAt(_selectedIndex),
       body: BlocBuilder<HomeCubit, HomeState>(builder: (context, state) {
         return state.views.elementAt(state.selectedIndex);
@@ -58,11 +61,15 @@ class HomeView extends StatelessWidget {
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.book),
-                label: 'Course',
+                label: 'Category',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.group),
                 label: 'Workshop',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.cast_for_education),
+                label: 'Enrollments',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.account_circle),

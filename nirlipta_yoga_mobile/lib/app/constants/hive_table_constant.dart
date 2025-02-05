@@ -10,8 +10,8 @@ class HiveTableConstant {
   static const int workshopModuleTableId = 2;
   static const String workshopModuleBox = 'workshopModuleBox';
 
-  static const int workshopCategoryTableId = 3;
-  static const String workshopCategoryBox = 'workshopCategoryBox';
+  static const int categoryTableId = 3;
+  static const String categoryBox = 'categoryBox';
 
   static const int scheduleTableId = 4;
   static const String scheduleBox = 'scheduleBox';

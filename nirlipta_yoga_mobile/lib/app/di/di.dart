@@ -13,6 +13,7 @@ import '../../features/auth/data/data_source/remote_datasource/user_remote_data_
 import '../../features/auth/data/repository/user_remote_repository.dart';
 import '../../features/auth/domain/use_case/create_user_usecase.dart';
 import '../../features/auth/domain/use_case/login_user_usecase.dart';
+import '../../features/home/presentation/view/bottom_view_model/dashboard_bloc.dart';
 import '../../features/home/presentation/view_model/home_cubit.dart';
 import '../../features/onboarding/presentation/view_model/onboarding_cubit.dart';
 import '../../features/splash/presentation/view_model/splash_cubit.dart';
@@ -24,6 +25,16 @@ import '../../features/workshop/domain/use_case/get_all_workshops_usecase.dart';
 import '../../features/workshop/domain/use_case/get_workshop_by_id_usecase.dart';
 import '../../features/workshop/domain/use_case/update_workshop_usecase.dart';
 import '../../features/workshop/presentation/view_model/workshop_bloc.dart';
+import '../../features/workshop_category/data/data_source/local_datasource/category_local_data_source.dart';
+import '../../features/workshop_category/data/data_source/remote_datasource/category_remote_data_source.dart';
+import '../../features/workshop_category/data/repository/category_local_repository.dart';
+import '../../features/workshop_category/data/repository/category_remote_repository.dart';
+import '../../features/workshop_category/domain/use_case/create_category_usecase.dart';
+import '../../features/workshop_category/domain/use_case/delete_category_usecase.dart';
+import '../../features/workshop_category/domain/use_case/get_all_categories_usecase.dart';
+import '../../features/workshop_category/domain/use_case/get_category_by_id_usecase.dart';
+import '../../features/workshop_category/domain/use_case/update_category_usecase.dart';
+import '../../features/workshop_category/presentation/view_model/category_bloc.dart';
 import '../shared_prefs/token_shared_prefs.dart';
 
 final getIt = GetIt.instance;
@@ -35,18 +46,24 @@ Future<void> initDependencies() async {
   await _initApiService();
   await _initSharedPreferences();
 
-  await _initWorkshopDependencies();
+  // Start with Splash
+  await _initSplashScreenDependencies();
 
-  // Before Home and Register
+  // Onboarding
+  await _initOnboardingScreenDependencies();
+
+  // Initialize Authentication Dependencies
   await _initLoginDependencies();
-
-  // Initialize Home and Register dependencies before LoginBloc
-  await _initHomeDependencies();
   await _initRegisterDependencies();
 
-  // Initialize other dependencies
-  await _initSplashScreenDependencies();
-  await _initOnboardingScreenDependencies();
+  // Initialize Home
+  await _initHomeDependencies();
+
+  // Initialize Dashboard and Others
+  await _initDashboardDependencies();
+
+  await _initWorkshopDependencies();
+  await _initCategoryDependencies();
 }
 
 _initHiveService() {
@@ -146,6 +163,63 @@ _initWorkshopDependencies() async {
   );
 }
 
+_initCategoryDependencies() async {
+  // Local Data Source
+  getIt.registerFactory<CategoryLocalDataSource>(
+      () => CategoryLocalDataSource(getIt<HiveService>()));
+
+  // Remote Data Source
+  getIt.registerFactory<CategoryRemoteDataSource>(
+      () => CategoryRemoteDataSource(getIt<Dio>()));
+
+  // Local Repository
+  getIt.registerLazySingleton<CategoryLocalRepository>(() =>
+      CategoryLocalRepository(
+          categoryLocalDataSource: getIt<CategoryLocalDataSource>()));
+
+  // Remote Repository
+  getIt.registerLazySingleton<CategoryRemoteRepository>(() =>
+      CategoryRemoteRepository(
+          categoryRemoteDataSource: getIt<CategoryRemoteDataSource>()));
+
+  // Remote Usecases
+  getIt.registerLazySingleton<CreateCategoryUseCase>(() =>
+      CreateCategoryUseCase(
+          categoryRepository: getIt<CategoryRemoteRepository>()));
+
+  getIt.registerLazySingleton<GetAllCategoriesUseCase>(() =>
+      GetAllCategoriesUseCase(
+          categoryRepository: getIt<CategoryRemoteRepository>()));
+
+  getIt.registerLazySingleton<DeleteCategoryUseCase>(
+    () => DeleteCategoryUseCase(
+        categoryRepository: getIt<CategoryRemoteRepository>(),
+        tokenSharedPrefs: getIt<TokenSharedPrefs>()),
+  );
+
+  getIt.registerLazySingleton<UpdateCategoryUseCase>(
+    () => UpdateCategoryUseCase(
+        categoryRepository: getIt<CategoryRemoteRepository>(),
+        tokenSharedPrefs: getIt<TokenSharedPrefs>()),
+  );
+
+  getIt.registerLazySingleton<GetCategoryByIdUseCase>(
+    () => GetCategoryByIdUseCase(
+        categoryRepository: getIt<CategoryRemoteRepository>()),
+  );
+
+  // Bloc
+  getIt.registerFactory<CategoryBloc>(
+    () => CategoryBloc(
+      createCategoryUseCase: getIt<CreateCategoryUseCase>(),
+      getAllCategoriesUseCase: getIt<GetAllCategoriesUseCase>(),
+      deleteCategoryUseCase: getIt<DeleteCategoryUseCase>(),
+      updateCategoryUseCase: getIt<UpdateCategoryUseCase>(),
+      // getCategoryByIdUseCase: getIt<GetCategoryByIdUseCase>(),
+    ),
+  );
+}
+
 _initHomeDependencies() async {
   // getIt.registerLazySingleton<TokenSharedPrefs>(
   //   () => TokenSharedPrefs(getIt<SharedPreferences>()),
@@ -220,4 +294,8 @@ _initOnboardingScreenDependencies() async {
   getIt.registerFactory<OnboardingCubit>(
     () => OnboardingCubit(getIt<LoginBloc>()),
   );
+}
+
+_initDashboardDependencies() {
+  getIt.registerFactory<DashboardBloc>(() => DashboardBloc());
 }

@@ -4,6 +4,7 @@ import 'package:path_provider/path_provider.dart';
 import '../../app/constants/hive_table_constant.dart';
 import '../../features/auth/data/model/user_hive_model.dart';
 import '../../features/workshop/data/model/workshop_hive_model.dart';
+import '../../features/workshop_category/data/model/category_hive_model.dart';
 
 class HiveService {
   Future<void> init() async {
@@ -16,6 +17,7 @@ class HiveService {
 
     //Register Adapters
     Hive.registerAdapter(UserHiveModelAdapter());
+    Hive.registerAdapter(CategoryHiveModelAdapter());
     Hive.registerAdapter(WorkshopHiveModelAdapter());
   }
 
@@ -76,5 +78,36 @@ class HiveService {
     var box =
         await Hive.openBox<WorkshopHiveModel>(HiveTableConstant.workshopBox);
     await box.put(workshop.workshopId, workshop);
+  }
+
+  // Category Queries
+  Future<void> addCategory(CategoryHiveModel category) async {
+    var box =
+        await Hive.openBox<CategoryHiveModel>(HiveTableConstant.categoryBox);
+    await box.put(category.id, category);
+  }
+
+  Future<void> deleteCategory(String id) async {
+    var box =
+        await Hive.openBox<CategoryHiveModel>(HiveTableConstant.categoryBox);
+    await box.delete(id);
+  }
+
+  Future<List<CategoryHiveModel>> getAllCategories() async {
+    var box =
+        await Hive.openBox<CategoryHiveModel>(HiveTableConstant.categoryBox);
+    return box.values.toList();
+  }
+
+  Future<CategoryHiveModel?> getCategoryById(String id) async {
+    var box =
+        await Hive.openBox<CategoryHiveModel>(HiveTableConstant.categoryBox);
+    return box.get(id);
+  }
+
+  Future<void> updateCategory(CategoryHiveModel category) async {
+    var box =
+        await Hive.openBox<CategoryHiveModel>(HiveTableConstant.categoryBox);
+    await box.put(category.id, category);
   }
 }
