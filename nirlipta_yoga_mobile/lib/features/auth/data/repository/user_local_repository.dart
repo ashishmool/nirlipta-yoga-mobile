@@ -34,9 +34,10 @@ class UserLocalRepository implements IUserRepository {
   }
 
   @override
-  Future<Either<Failure, List<UserEntity>>> getAllUsers() async {
+  Future<Either<Failure, List<UserEntity>>> getAllUsers(String token) async {
     try {
-      final List<UserEntity> users = await _userLocalDataSource.getAllUsers();
+      final List<UserEntity> users =
+          await _userLocalDataSource.getAllUsers(token);
       return Right(users);
     } catch (e) {
       return Left(LocalDatabaseFailure(message: e.toString()));

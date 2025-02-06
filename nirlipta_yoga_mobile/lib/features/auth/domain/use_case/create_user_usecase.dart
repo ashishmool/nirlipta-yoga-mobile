@@ -32,6 +32,18 @@ class CreateUserParams extends Equatable {
     required this.gender,
   });
 
+  // Initialize Empty Constructor
+  const CreateUserParams.empty()
+      : id = '_empty.id',
+        name = '_empty.name',
+        username = '_empty.username',
+        phone = '_empty.phone',
+        email = '_empty.email',
+        password = '_empty.password',
+        photo = '_empty.photo',
+        medical_conditions = '_empty.medical_conditions',
+        gender = '_empty.gender';
+
   @override
   List<Object?> get props => [
         name,

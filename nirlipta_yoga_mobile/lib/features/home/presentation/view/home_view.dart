@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/common/logo.dart';
-import '../../../../core/common/snackbar/snackbar.dart';
+import '../../../../core/common/app_bar/main_app_bar.dart';
 import '../view_model/home_cubit.dart';
 import '../view_model/home_state.dart';
 
@@ -14,38 +13,7 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: [
-            SizedBox(
-              height: 50, // Increase the size of the logo as needed
-              child: Logo.white(height: 40.0), // Larger logo
-            ),
-          ],
-        ),
-        iconTheme: const IconThemeData(
-          color: Colors.white,
-        ),
-        actions: [
-          Switch(
-            value: _isDarkTheme,
-            onChanged: (value) {
-              // Change theme logic
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () {
-              showMySnackBar(
-                context: context,
-                message: 'Logging out...',
-                color: Colors.black54,
-              );
-              context.read<HomeCubit>().logout(context);
-            },
-          ),
-        ],
-      ),
+      appBar: MainAppBar(isDarkTheme: false),
 
       // body: _views.elementAt(_selectedIndex),
       body: BlocBuilder<HomeCubit, HomeState>(builder: (context, state) {

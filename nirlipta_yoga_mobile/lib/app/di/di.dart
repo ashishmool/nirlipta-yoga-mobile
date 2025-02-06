@@ -242,7 +242,7 @@ _initRegisterDependencies() async {
         () => UserRemoteRepository(getIt<UserRemoteDataSource>()));
   }
 
-  // Register CreateStudentUsecase
+  // Register CreateUserUsecase
   getIt.registerLazySingleton<CreateUserUsecase>(
       () => CreateUserUsecase(userRepository: getIt<UserRemoteRepository>()));
 

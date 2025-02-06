@@ -34,4 +34,8 @@ class ApiEndpoints {
   static const String getCategoryById = "workshop-categories/";
   static const String updateCategory = "workshop-categories/update/";
   static const String deleteCategory = "workshop-categories/delete/";
+
+  // ============= User Routes =============
+  static const String createUser = "users/save";
+  static const String getAllUser = "users/";
 }

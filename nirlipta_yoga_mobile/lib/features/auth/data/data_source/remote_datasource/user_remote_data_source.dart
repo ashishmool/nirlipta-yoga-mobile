@@ -51,7 +51,7 @@ class UserRemoteDataSource {
   }
 
   /// Gets all users
-  Future<List<UserEntity>> getAllUsers() async {
+  Future<List<UserEntity>> getAllUsers(String token) async {
     try {
       var response = await _dio.get(ApiEndpoints.getAllUsers);
       if (response.statusCode == 200) {

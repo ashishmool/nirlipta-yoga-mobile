@@ -28,7 +28,7 @@ class UserLocalDatasource implements IUserDataSource {
   }
 
   @override
-  Future<List<UserEntity>> getAllUsers() async {
+  Future<List<UserEntity>> getAllUsers(String token) async {
     try {
       return await _hiveService.getAllUsers().then((value) {
         return value.map((e) => e.toEntity()).toList();
