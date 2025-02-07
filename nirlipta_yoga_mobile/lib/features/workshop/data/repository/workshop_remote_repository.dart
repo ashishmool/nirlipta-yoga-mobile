@@ -56,9 +56,10 @@ class WorkshopRemoteRepository implements IWorkshopRepository {
   }
 
   @override
-  Future<Either<Failure, void>> updateWorkshop(WorkshopEntity workshop) async {
+  Future<Either<Failure, void>> updateWorkshop(
+      WorkshopEntity workshop, String? token) async {
     try {
-      await _workshopRemoteDataSource.updateWorkshop(workshop);
+      await _workshopRemoteDataSource.updateWorkshop(workshop, token);
       return Right(null);
     } catch (e) {
       return Left(ApiFailure(message: 'Error updating workshop: $e'));

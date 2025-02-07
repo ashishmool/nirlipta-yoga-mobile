@@ -143,7 +143,8 @@ _initWorkshopDependencies() async {
 
   getIt.registerLazySingleton<UpdateWorkshopUseCase>(
     () => UpdateWorkshopUseCase(
-        workshopRepository: getIt<WorkshopRemoteRepository>()),
+        workshopRepository: getIt<WorkshopRemoteRepository>(),
+        tokenSharedPrefs: getIt<TokenSharedPrefs>()),
   );
 
   getIt.registerLazySingleton<GetWorkshopByIdUseCase>(

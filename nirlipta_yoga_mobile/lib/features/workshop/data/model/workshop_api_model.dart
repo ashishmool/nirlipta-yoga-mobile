@@ -67,7 +67,7 @@ class WorkshopApiModel extends Equatable {
         discountPrice: discountPrice,
         categoryId: categoryId,
         photo: photo,
-        modules: [], // Assuming modules are handled separately.
+        modules: [],
       );
 
   // Convert Entity to API Object

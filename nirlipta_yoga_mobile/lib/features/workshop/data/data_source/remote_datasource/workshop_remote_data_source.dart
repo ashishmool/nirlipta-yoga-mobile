@@ -63,7 +63,8 @@ class WorkshopRemoteDataSource {
     }
   }
 
-  Future<void> updateWorkshop(WorkshopEntity workshopEntity) async {
+  Future<void> updateWorkshop(
+      WorkshopEntity workshopEntity, String? token) async {
     try {
       var workshopApiModel = WorkshopApiModel.fromEntity(workshopEntity);
       var response = await _dio.put(

@@ -80,6 +80,7 @@ class WorkshopView extends StatelessWidget {
                             difficultyLevel:
                                 workshopDifficultyLevelController.text,
                             categoryId: workshopCategoryController.text,
+                            modules: [],
                           ),
                         );
                     workshopTitleController.clear();

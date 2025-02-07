@@ -58,7 +58,8 @@ class WorkshopLocalRepository implements IWorkshopRepository {
   }
 
   @override
-  Future<Either<Failure, void>> updateWorkshop(WorkshopEntity workshop) async {
+  Future<Either<Failure, void>> updateWorkshop(
+      WorkshopEntity workshop, String? token) async {
     try {
       await _workshopLocalDataSource.updateWorkshop(workshop);
       return Right(null);

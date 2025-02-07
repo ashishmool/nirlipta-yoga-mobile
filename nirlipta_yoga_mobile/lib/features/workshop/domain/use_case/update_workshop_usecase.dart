@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../../../app/shared_prefs/token_shared_prefs.dart';
 import '../../../../app/usecase/usecase.dart';
 import '../../../../core/error/failure.dart';
 import '../entity/workshop_entity.dart';
@@ -18,11 +19,27 @@ class UpdateWorkshopParams extends Equatable {
 class UpdateWorkshopUseCase
     implements UsecaseWithParams<void, UpdateWorkshopParams> {
   final IWorkshopRepository workshopRepository;
+  final TokenSharedPrefs tokenSharedPrefs;
 
-  UpdateWorkshopUseCase({required this.workshopRepository});
+  UpdateWorkshopUseCase({
+    required this.workshopRepository,
+    required this.tokenSharedPrefs,
+  });
 
   @override
   Future<Either<Failure, void>> call(UpdateWorkshopParams params) async {
-    return workshopRepository.updateWorkshop(params.workshop);
+    // Ensure the workshop has a valid ID for updating
+    if (params.workshop.id == null) {
+      return Left(ApiFailure(message: 'Workshop ID is required for updating.'));
+    }
+
+    // Retrieve token from shared preferences
+    final token = await tokenSharedPrefs.getToken();
+    return token.fold(
+      (l) => Left(l),
+      (r) async {
+        return await workshopRepository.updateWorkshop(params.workshop, r);
+      },
+    );
   }
 }

@@ -26,8 +26,8 @@ class WorkshopBloc extends Bloc<WorkshopEvent, WorkshopState> {
     on<AddWorkshop>(_onAddWorkshop);
     on<DeleteWorkshop>(_onDeleteWorkshop);
 
-    // // Trigger initial loading
-    // add(LoadWorkshops());
+    // Trigger initial loading
+    add(LoadWorkshops());
   }
 
   Future<void> _onLoadWorkshops(

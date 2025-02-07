@@ -31,9 +31,9 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     on<DeleteCategory>(_onDeleteCategory);
     on<UpdateCategory>(_onUpdateCategory);
 
-    // // Need to comment before running the Bloc Test
-    // // Trigger initial loading
-    // add(LoadCategories());
+    // Need to comment before running the Bloc Test
+    // Trigger initial loading
+    add(LoadCategories());
   }
 
   Future<void> _onLoadCategories(

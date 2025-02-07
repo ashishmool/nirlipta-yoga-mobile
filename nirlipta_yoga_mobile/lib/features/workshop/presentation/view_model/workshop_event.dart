@@ -10,19 +10,48 @@ sealed class WorkshopEvent extends Equatable {
 final class LoadWorkshops extends WorkshopEvent {}
 
 final class AddWorkshop extends WorkshopEvent {
+  final String? workshopId;
   final String title;
-  final double price;
+  final String? description;
+  final String? address;
+  final String? classroomInfo;
+  final String? mapLocation;
   final String difficultyLevel;
+  final double price;
+  final double? discountPrice;
   final String categoryId;
+  final String? photo;
+  final List<ModuleEntity> modules;
 
   const AddWorkshop(
-      {required this.title,
-      required this.price,
+      {this.workshopId,
+      required this.title,
+      this.description,
+      this.address,
+      this.classroomInfo,
+      this.mapLocation,
       required this.difficultyLevel,
-      required this.categoryId});
+      required this.price,
+      this.discountPrice,
+      required this.categoryId,
+      this.photo,
+      required this.modules});
 
   @override
-  List<Object?> get props => [title, price, difficultyLevel, categoryId];
+  List<Object?> get props => [
+        workshopId,
+        title,
+        description,
+        address,
+        classroomInfo,
+        mapLocation,
+        difficultyLevel,
+        price,
+        discountPrice,
+        categoryId,
+        photo,
+        modules
+      ];
 }
 
 final class DeleteWorkshop extends WorkshopEvent {
