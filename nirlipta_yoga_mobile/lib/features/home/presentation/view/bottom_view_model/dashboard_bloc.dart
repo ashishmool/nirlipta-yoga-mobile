@@ -40,7 +40,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
             "category": workshop["category"]["name"],
             "price": workshop["price"].toDouble(),
             "photo": "http://10.0.2.2:5000" + workshop["photo"],
-            "isPremium": workshop["isPremium"] ?? false,
+            "description": workshop["description"] ?? null,
           };
         }).toList();
 

@@ -3,6 +3,7 @@ import 'package:path_provider/path_provider.dart';
 
 import '../../app/constants/hive_table_constant.dart';
 import '../../features/auth/data/model/user_hive_model.dart';
+import '../../features/enrollment/data/model/enrollment_hive_model.dart';
 import '../../features/workshop/data/model/workshop_hive_model.dart';
 import '../../features/workshop_category/data/model/category_hive_model.dart';
 
@@ -19,6 +20,7 @@ class HiveService {
     Hive.registerAdapter(UserHiveModelAdapter());
     Hive.registerAdapter(CategoryHiveModelAdapter());
     Hive.registerAdapter(WorkshopHiveModelAdapter());
+    Hive.registerAdapter(EnrollmentHiveModelAdapter());
   }
 
 // User Queries
@@ -109,5 +111,36 @@ class HiveService {
     var box =
         await Hive.openBox<CategoryHiveModel>(HiveTableConstant.categoryBox);
     await box.put(category.id, category);
+  }
+
+  // Enrollment Queries
+  Future<void> addEnrollment(EnrollmentHiveModel enrollment) async {
+    var box = await Hive.openBox<EnrollmentHiveModel>(
+        HiveTableConstant.enrollmentBox);
+    await box.put(enrollment.id, enrollment);
+  }
+
+  Future<void> deleteEnrollment(String id) async {
+    var box = await Hive.openBox<EnrollmentHiveModel>(
+        HiveTableConstant.enrollmentBox);
+    await box.delete(id);
+  }
+
+  Future<List<EnrollmentHiveModel>> getAllEnrollments() async {
+    var box = await Hive.openBox<EnrollmentHiveModel>(
+        HiveTableConstant.enrollmentBox);
+    return box.values.toList();
+  }
+
+  Future<EnrollmentHiveModel?> getEnrollmentById(String id) async {
+    var box = await Hive.openBox<EnrollmentHiveModel>(
+        HiveTableConstant.enrollmentBox);
+    return box.get(id);
+  }
+
+  Future<void> updateEnrollment(EnrollmentHiveModel enrollment) async {
+    var box = await Hive.openBox<EnrollmentHiveModel>(
+        HiveTableConstant.enrollmentBox);
+    await box.put(enrollment.id, enrollment);
   }
 }

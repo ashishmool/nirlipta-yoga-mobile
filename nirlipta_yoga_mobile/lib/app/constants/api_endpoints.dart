@@ -35,6 +35,14 @@ class ApiEndpoints {
   static const String updateCategory = "workshop-categories/update/";
   static const String deleteCategory = "workshop-categories/delete/";
 
+  // ============= Enrollment Routes =============
+  static const String createEnrollment = "enrollments/save";
+  static const String getAllEnrollments = "enrollments/";
+  static const String getEnrollmentById = "enrollments/";
+  static const String getEnrollmentByUser = "enrollments/user/";
+  static const String updateEnrollment = "enrollments/update/";
+  static const String deleteEnrollment = "enrollments/delete/";
+
   // ============= User Routes =============
   static const String createUser = "users/save";
   static const String getAllUser = "users/";

@@ -13,6 +13,14 @@ import '../../features/auth/data/data_source/remote_datasource/user_remote_data_
 import '../../features/auth/data/repository/user_remote_repository.dart';
 import '../../features/auth/domain/use_case/create_user_usecase.dart';
 import '../../features/auth/domain/use_case/login_user_usecase.dart';
+import '../../features/enrollment/data/data_source/remote_datasource/enrollment_remote_data_source.dart';
+import '../../features/enrollment/data/repository/enrollment_remote_repository.dart';
+import '../../features/enrollment/domain/use_case/create_enrollment_usecase.dart';
+import '../../features/enrollment/domain/use_case/delete_enrollment_usecase.dart';
+import '../../features/enrollment/domain/use_case/get_all_enrollments_usecase.dart';
+import '../../features/enrollment/domain/use_case/get_enrollment_by_id_usecase.dart';
+import '../../features/enrollment/domain/use_case/update_enrollment_usecase.dart';
+import '../../features/enrollment/presentation/view_model/enrollment_bloc.dart';
 import '../../features/home/presentation/view/bottom_view_model/dashboard_bloc.dart';
 import '../../features/home/presentation/view_model/home_cubit.dart';
 import '../../features/onboarding/presentation/view_model/onboarding_cubit.dart';
@@ -64,6 +72,7 @@ Future<void> initDependencies() async {
 
   await _initWorkshopDependencies();
   await _initCategoryDependencies();
+  await _initEnrollmentDependencies();
 }
 
 _initHiveService() {
@@ -100,31 +109,6 @@ _initWorkshopDependencies() async {
   getIt.registerLazySingleton<WorkshopRemoteRepository>(() =>
       WorkshopRemoteRepository(
           workshopRemoteDataSource: getIt<WorkshopRemoteDataSource>()));
-
-  // // Local Usecases
-  // getIt.registerLazySingleton<CreateWorkshopUseCase>(() =>
-  //     CreateWorkshopUseCase(
-  //         workshopRepository: getIt<WorkshopLocalRepository>()));
-  //
-  // getIt.registerLazySingleton<GetAllWorkshopsUseCase>(() =>
-  //     GetAllWorkshopsUseCase(
-  //         workshopRepository: getIt<WorkshopLocalRepository>()));
-  //
-  // getIt.registerLazySingleton<DeleteWorkshopUseCase>(
-  //   () => DeleteWorkshopUseCase(
-  //       workshopRepository: getIt<WorkshopLocalRepository>(),
-  //       tokenSharedPrefs: getIt<TokenSharedPrefs>()),
-  // );
-  //
-  // getIt.registerLazySingleton<UpdateWorkshopUseCase>(
-  //   () => UpdateWorkshopUseCase(
-  //       workshopRepository: getIt<WorkshopLocalRepository>()),
-  // );
-  //
-  // getIt.registerLazySingleton<GetWorkshopByIdUseCase>(
-  //   () => GetWorkshopByIdUseCase(
-  //       workshopRepository: getIt<WorkshopLocalRepository>()),
-  // );
 
   // Remote Usecases
   getIt.registerLazySingleton<CreateWorkshopUseCase>(() =>
@@ -299,4 +283,53 @@ _initOnboardingScreenDependencies() async {
 
 _initDashboardDependencies() {
   getIt.registerFactory<DashboardBloc>(() => DashboardBloc());
+}
+
+_initEnrollmentDependencies() async {
+  // Remote Data Source
+  getIt.registerFactory<EnrollmentRemoteDataSource>(
+      () => EnrollmentRemoteDataSource(getIt<Dio>()));
+
+  // Repository
+  getIt.registerLazySingleton<EnrollmentRemoteRepository>(
+      () => EnrollmentRemoteRepository(getIt<EnrollmentRemoteDataSource>()));
+
+  // Use Cases
+  getIt.registerLazySingleton<CreateEnrollmentUseCase>(() =>
+      CreateEnrollmentUseCase(
+          enrollmentRepository: getIt<EnrollmentRemoteRepository>()));
+
+  getIt.registerLazySingleton<GetAllEnrollmentsUseCase>(() =>
+      GetAllEnrollmentsUseCase(
+          enrollmentRepository: getIt<EnrollmentRemoteRepository>()));
+
+  getIt.registerLazySingleton<DeleteEnrollmentUseCase>(
+    () => DeleteEnrollmentUseCase(
+        enrollmentRepository: getIt<EnrollmentRemoteRepository>(),
+        tokenSharedPrefs: getIt<TokenSharedPrefs>()),
+  );
+
+  getIt.registerLazySingleton<UpdateEnrollmentUseCase>(
+    () => UpdateEnrollmentUseCase(
+        enrollmentRepository: getIt<EnrollmentRemoteRepository>(),
+        tokenSharedPrefs: getIt<TokenSharedPrefs>()),
+  );
+
+  getIt.registerLazySingleton<GetEnrollmentByIdUseCase>(
+    () => GetEnrollmentByIdUseCase(
+        enrollmentRepository: getIt<EnrollmentRemoteRepository>()),
+  );
+
+  // Bloc
+  getIt.registerFactory<EnrollmentBloc>(
+    () => EnrollmentBloc(
+      createEnrollmentUseCase: getIt<CreateEnrollmentUseCase>(),
+      getAllEnrollmentUseCase: getIt<GetAllEnrollmentsUseCase>(),
+      deleteEnrollmentUseCase: getIt<DeleteEnrollmentUseCase>(),
+
+      // updateEnrollmentUseCase: getIt<UpdateEnrollmentUseCase>(),
+      // getEnrollmentByIdUseCase: getIt<GetEnrollmentByIdUseCase>(),
+      // getEnrollmentByUserUseCase: getIt<GetEnrollmentByUserUseCase>(),
+    ),
+  );
 }

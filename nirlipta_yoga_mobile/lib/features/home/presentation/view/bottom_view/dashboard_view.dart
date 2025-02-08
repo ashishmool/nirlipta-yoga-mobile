@@ -6,6 +6,7 @@ import '../../../../workshop/presentation/view/single_workshop_view.dart';
 import '../bottom_view_model/dashboard_bloc.dart';
 import '../bottom_view_model/dashboard_event.dart';
 import '../bottom_view_model/dashboard_state.dart';
+import 'workshop_card_view.dart';
 
 class DashboardView extends StatefulWidget {
   const DashboardView({super.key});
@@ -103,12 +104,23 @@ class _DashboardViewState extends State<DashboardView> {
                               ),
                             );
                           },
-                          child: _WorkshopCard(
+                          child: WorkshopCard(
                             title: workshop["title"],
                             category: workshop["category"],
                             price: workshop["price"],
                             photo: workshop["photo"],
-                            isPremium: workshop["isPremium"],
+                            description: workshop["description"],
+                            onTap: () {
+                              print("Workshop ID: ${workshop["workshopId"]}");
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SingleWorkshopView(
+                                    workshopId: workshop["workshopId"],
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                         );
                       },
@@ -123,89 +135,6 @@ class _DashboardViewState extends State<DashboardView> {
             }
           },
         ),
-      ),
-    );
-  }
-}
-
-class _WorkshopCard extends StatelessWidget {
-  final String title;
-  final String category;
-  final String? photo;
-  final double price;
-  final bool isPremium;
-
-  const _WorkshopCard({
-    required this.title,
-    required this.category,
-    required this.price,
-    this.photo,
-    this.isPremium = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      elevation: 4,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(10),
-              topRight: Radius.circular(10),
-            ),
-            child: photo != null
-                ? Image.network(
-                    photo!,
-                    width: double.infinity,
-                    height: 120,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) => Container(
-                      width: double.infinity,
-                      height: 120,
-                      color: Colors.grey[300],
-                      child:
-                          const Icon(Icons.image, size: 50, color: Colors.grey),
-                    ),
-                  )
-                : Container(
-                    width: double.infinity,
-                    height: 120,
-                    color: Colors.grey[300],
-                    child:
-                        const Icon(Icons.image, size: 50, color: Colors.grey),
-                  ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title,
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
-                const SizedBox(height: 5),
-                Text(category, style: const TextStyle(color: Colors.grey)),
-                const SizedBox(height: 5),
-                Text(
-                  "AU\$ $price",
-                  style: const TextStyle(
-                      color: Colors.green, fontWeight: FontWeight.bold),
-                ),
-                if (isPremium)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5),
-                    child: Chip(
-                      label: const Text('Premium',
-                          style: TextStyle(color: Colors.white)),
-                      backgroundColor: Colors.orange,
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }

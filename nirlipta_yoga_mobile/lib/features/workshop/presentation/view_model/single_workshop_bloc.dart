@@ -21,17 +21,34 @@ class SingleWorkshopBloc
 
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonData = json.decode(response.body);
+
+        // Ensure every key exists before using it
         Map<String, dynamic> workshop = {
-          "id": jsonData["_id"],
-          "title": jsonData["title"],
-          "description": jsonData["description"],
-          "category": jsonData["category"]["name"],
-          "price": jsonData["price"].toDouble(),
-          "photo": "http://10.0.2.2:5000" + jsonData["photo"],
-          "isPremium": jsonData["isPremium"] ?? false,
-          "instructor": jsonData["instructor"]["name"],
-          "duration": jsonData["duration"],
-          "schedule": jsonData["schedule"],
+          "id": jsonData["_id"] ?? "",
+          "title": jsonData["title"] ?? "No Title",
+          "description": jsonData["description"] ?? "No Description",
+          "address": jsonData["address"] ?? "No Address",
+          "classroom_info": jsonData["classroom_info"] ?? "No Classroom Info",
+          "map_location": jsonData["map_location"] ?? "No Location",
+          "difficulty_level": jsonData["difficulty_level"] ?? "Unknown Level",
+          "category": jsonData["category"]?["name"] ?? "No Category",
+          "price":
+              jsonData["price"] != null ? jsonData["price"].toDouble() : 0.0,
+          "discount_price": jsonData["discount_price"]?.toDouble(),
+          "photo": jsonData["photo"] != null
+              ? "http://10.0.2.2:5000${jsonData["photo"]}"
+              : null,
+          "duration": jsonData["duration"] ?? "No Duration",
+          "schedule": jsonData["schedule"] ?? [],
+          "modules": jsonData["modules"] != null
+              ? List<Map<String, dynamic>>.from(
+                  jsonData["modules"].map((module) => {
+                        "id": module["_id"] ?? "",
+                        "name": module["name"] ?? "No Name",
+                        "duration": module["duration"] ?? "No Duration",
+                      }),
+                )
+              : [],
         };
 
         emit(SingleWorkshopLoaded(workshop: workshop));

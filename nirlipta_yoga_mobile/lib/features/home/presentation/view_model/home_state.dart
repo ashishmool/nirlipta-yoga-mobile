@@ -1,10 +1,13 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nirlipta_yoga_mobile/features/home/presentation/view/bottom_view/account_view.dart';
 import 'package:nirlipta_yoga_mobile/features/home/presentation/view/bottom_view/dashboard_view.dart';
 import 'package:nirlipta_yoga_mobile/features/workshop_category/presentation/view/category_view.dart';
 
 import '../../../../app/di/di.dart';
+import '../../../enrollment/presentation/view/enrollment_view.dart';
+import '../../../enrollment/presentation/view_model/enrollment_bloc.dart';
 import '../../../workshop/presentation/view/workshop_view.dart';
 import '../../../workshop/presentation/view_model/workshop_bloc.dart';
 import '../../../workshop_category/presentation/view_model/category_bloc.dart';
@@ -39,8 +42,15 @@ class HomeState extends Equatable {
           create: (context) => getIt<WorkshopBloc>(),
           child: WorkshopView(),
         ),
-        const Center(child: Text('Enrollments')),
-        const Center(child: Text('Account')),
+        BlocProvider(
+          create: (context) => getIt<EnrollmentBloc>(),
+          child: EnrollmentView(),
+        ),
+        // const Text ('My Enrollments'),
+        BlocProvider(
+          create: (context) => getIt<DashboardBloc>(),
+          child: AccountView(),
+        ),
       ],
     );
   }
