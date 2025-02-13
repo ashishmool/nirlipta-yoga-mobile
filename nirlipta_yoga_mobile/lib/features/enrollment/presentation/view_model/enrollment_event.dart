@@ -11,13 +11,22 @@ sealed class EnrollmentEvent extends Equatable {
 // Load all enrollments
 final class LoadEnrollments extends EnrollmentEvent {}
 
-// Load all enrollments
-final class LoadEnrollment extends EnrollmentEvent {}
+// Load enrollments by user
+final class LoadEnrollmentByUser extends EnrollmentEvent {
+  final String userId;
+
+  const LoadEnrollmentByUser({required this.userId});
+
+  @override
+  List<Object?> get props => [userId];
+}
 
 // Add a new enrollment
 final class AddEnrollment extends EnrollmentEvent {
   final String userId;
   final String workshopId;
+
+  // final WorkshopEntity workshopId;
   final String paymentStatus;
   final DateTime enrollmentDate;
   final String completionStatus;

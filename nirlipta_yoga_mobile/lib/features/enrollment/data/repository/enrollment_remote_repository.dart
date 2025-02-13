@@ -66,9 +66,14 @@ class EnrollmentRemoteRepository implements IEnrollmentRepository {
 
   @override
   Future<Either<Failure, List<EnrollmentEntity>>> getEnrollmentByUser(
-      String userId) {
-    // TODO: implement getEnrollmentByUser
-    throw UnimplementedError();
+      String id) async {
+    try {
+      final enrollments =
+          await _enrollmentRemoteDataSource.getEnrollmentByUser(id);
+      return Right(enrollments);
+    } catch (e) {
+      return Left(ApiFailure(message: 'Error fetching enrollments: $e'));
+    }
   }
 
 // @override

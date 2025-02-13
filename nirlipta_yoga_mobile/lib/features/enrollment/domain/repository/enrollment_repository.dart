@@ -11,8 +11,8 @@ abstract interface class IEnrollmentRepository {
 
   Future<Either<Failure, EnrollmentEntity>> getEnrollmentById(String id);
 
-  // Future<Either<Failure, List<EnrollmentEntity>>> getEnrollmentByUser(
-  //     String userId);
+  Future<Either<Failure, List<EnrollmentEntity>>> getEnrollmentByUser(
+      String userId);
 
   Future<Either<Failure, void>> updateEnrollment(
       EnrollmentEntity enrollmentEntity, String? token);

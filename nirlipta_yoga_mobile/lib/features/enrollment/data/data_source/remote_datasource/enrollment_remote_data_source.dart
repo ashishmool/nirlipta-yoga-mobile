@@ -71,6 +71,7 @@ class EnrollmentRemoteDataSource implements IEnrollmentDataSource {
     }
   }
 
+  // @override
   // Future<EnrollmentEntity> getEnrollmentByUser(String userId) async {
   //   try {
   //     var response =
@@ -113,6 +114,31 @@ class EnrollmentRemoteDataSource implements IEnrollmentDataSource {
       var response = await _dio.delete('${ApiEndpoints.deleteEnrollment}/$id');
       if (response.statusCode == 200) {
         return;
+      } else {
+        throw Exception(response.statusMessage);
+      }
+    } on DioException catch (e) {
+      throw Exception(e.message);
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  @override
+  Future<List<EnrollmentEntity>> getEnrollmentByUser(String userId) async {
+    try {
+      var response = await _dio.get('${ApiEndpoints.getEnrollment}/$userId');
+
+      if (response.statusCode == 200) {
+        // Ensure response.data is a list before mapping
+        if (response.data is List) {
+          return response.data
+              .map<EnrollmentEntity>(
+                  (e) => EnrollmentApiModel.fromJson(e).toEntity())
+              .toList();
+        } else {
+          throw Exception("Unexpected response format: Not a list");
+        }
       } else {
         throw Exception(response.statusMessage);
       }

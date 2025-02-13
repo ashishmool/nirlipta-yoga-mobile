@@ -1,54 +1,45 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:nirlipta_yoga_mobile/features/enrollment/domain/use_case/get_enrollment_by_user_usecase.dart';
 
 import '../../domain/entity/enrollment_entity.dart';
 import '../../domain/use_case/create_enrollment_usecase.dart';
 import '../../domain/use_case/delete_enrollment_usecase.dart';
-import '../../domain/use_case/get_all_enrollments_usecase.dart';
 
 part 'enrollment_event.dart';
 part 'enrollment_state.dart';
 
 class EnrollmentBloc extends Bloc<EnrollmentEvent, EnrollmentState> {
   final CreateEnrollmentUseCase _createEnrollmentUseCase;
-  final GetAllEnrollmentsUseCase _getAllEnrollmentUseCase;
   final DeleteEnrollmentUseCase _deleteEnrollmentUseCase;
+  final GetEnrollmentByUserUseCase _getEnrollmentByUserUseCase;
+  final String userId;
 
   EnrollmentBloc({
     required CreateEnrollmentUseCase createEnrollmentUseCase,
-    required GetAllEnrollmentsUseCase getAllEnrollmentUseCase,
+    required GetEnrollmentByUserUseCase getEnrollmentByUserUseCase,
     required DeleteEnrollmentUseCase deleteEnrollmentUseCase,
+    required this.userId,
   })  : _createEnrollmentUseCase = createEnrollmentUseCase,
-        _getAllEnrollmentUseCase = getAllEnrollmentUseCase,
         _deleteEnrollmentUseCase = deleteEnrollmentUseCase,
+        _getEnrollmentByUserUseCase = getEnrollmentByUserUseCase,
         super(EnrollmentState.initial()) {
     on<LoadEnrollments>(_onLoadEnrollments);
+    on<LoadEnrollmentByUser>(_onLoadEnrollmentByUser);
     on<AddEnrollment>(_onAddEnrollment);
     on<DeleteEnrollment>(_onDeleteEnrollment);
 
-    // Should be turned OFF for testing purposes
-    // Trigger initial enrollment loading
-    add(LoadEnrollments());
+    add(LoadEnrollmentByUser(userId: userId));
   }
-
-  // Future<void> _onLoadEnrollments(
-  //     LoadEnrollments event, Emitter<EnrollmentState> emit) async {
-  //   // emit(state.copyWith(isLoading: true));
-  //   final result = await _getAllEnrollmentUseCase.call();
-  //   result.fold(
-  //     (failure) =>
-  //         emit(state.copyWith(isLoading: false, error: failure.message)),
-  //     (enrollments) => emit(state.copyWith(
-  //         isLoading: false, error: null, enrollments: enrollments)),
-  //   );
-  // }
 
   Future<void> _onLoadEnrollments(
       LoadEnrollments event, Emitter<EnrollmentState> emit) async {
-    print("Loading enrollments..."); // Debugging log
+    print("Loading all enrollments...");
+    emit(state.copyWith(isLoading: true));
 
-    final result = await _getAllEnrollmentUseCase.call();
+    final result = await _getEnrollmentByUserUseCase
+        .call(GetEnrollmentByUserParams(userId: "some_default_user"));
 
     result.fold(
       (failure) {
@@ -57,6 +48,27 @@ class EnrollmentBloc extends Bloc<EnrollmentEvent, EnrollmentState> {
       },
       (enrollments) {
         print("Enrollments fetched: $enrollments");
+        emit(state.copyWith(
+            isLoading: false, error: null, enrollments: enrollments));
+      },
+    );
+  }
+
+  Future<void> _onLoadEnrollmentByUser(
+      LoadEnrollmentByUser event, Emitter<EnrollmentState> emit) async {
+    print("Loading enrollments for user: ${event.userId}");
+    emit(state.copyWith(isLoading: true));
+
+    final result = await _getEnrollmentByUserUseCase
+        .call(GetEnrollmentByUserParams(userId: event.userId));
+
+    result.fold(
+      (failure) {
+        print("Error loading user enrollments: ${failure.message}");
+        emit(state.copyWith(isLoading: false, error: failure.message));
+      },
+      (enrollments) {
+        print("User enrollments fetched: $enrollments");
         emit(state.copyWith(
             isLoading: false, error: null, enrollments: enrollments));
       },

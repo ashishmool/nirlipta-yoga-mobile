@@ -7,7 +7,7 @@ abstract interface class IEnrollmentDataSource {
 
   Future<EnrollmentEntity> getEnrollmentById(String id);
 
-  // Future<List<EnrollmentEntity>> getEnrollmentByUser(String userId);
+  Future<List<EnrollmentEntity>> getEnrollmentByUser(String userId);
 
   Future<void> updateEnrollment(EnrollmentEntity enrollmentEntity);
 

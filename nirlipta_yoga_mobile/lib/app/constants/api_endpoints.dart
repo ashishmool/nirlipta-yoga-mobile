@@ -39,7 +39,7 @@ class ApiEndpoints {
   static const String createEnrollment = "enrollments/save";
   static const String getAllEnrollments = "enrollments/";
   static const String getEnrollmentById = "enrollments/";
-  static const String getEnrollmentByUser = "enrollments/user/";
+  static const String getEnrollment = "enrollments/user/";
   static const String updateEnrollment = "enrollments/update/";
   static const String deleteEnrollment = "enrollments/delete/";
 

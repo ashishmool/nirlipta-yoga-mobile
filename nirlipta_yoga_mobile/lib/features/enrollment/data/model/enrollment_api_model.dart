@@ -43,20 +43,16 @@ class EnrollmentApiModel extends Equatable {
   factory EnrollmentApiModel.fromJson(Map<String, dynamic> json) {
     return EnrollmentApiModel(
       id: json['_id'] as String? ?? '',
-      // Handle null case
-      userId: json['user_id']?['_id'] as String? ?? "",
-      // Already safe
-      workshopId: json['workshop_id']?['_id'] as String? ?? "",
-      // Already safe
+      userId: json['user_id'] as String? ?? "",
+      workshopId:
+          (json['workshop_id'] as Map<String, dynamic>?)?['_id'] as String? ??
+              "",
       enrollmentDate: json['enrollment_date'] != null
           ? DateTime.parse(json['enrollment_date'] as String)
           : DateTime.now(),
-      // Handle null case
       completionStatus: json['completion_status'] as String? ?? "not started",
-      // Handle null case
       paymentStatus: json['payment_status'] as String? ?? "pending",
-      // Handle null case
-      feedback: json['feedback'] as String?, // This is nullable
+      feedback: json['feedback'] as String?,
     );
   }
 
