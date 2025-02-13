@@ -14,13 +14,11 @@ class EnrollmentBloc extends Bloc<EnrollmentEvent, EnrollmentState> {
   final CreateEnrollmentUseCase _createEnrollmentUseCase;
   final DeleteEnrollmentUseCase _deleteEnrollmentUseCase;
   final GetEnrollmentByUserUseCase _getEnrollmentByUserUseCase;
-  final String userId;
 
   EnrollmentBloc({
     required CreateEnrollmentUseCase createEnrollmentUseCase,
     required GetEnrollmentByUserUseCase getEnrollmentByUserUseCase,
     required DeleteEnrollmentUseCase deleteEnrollmentUseCase,
-    required this.userId,
   })  : _createEnrollmentUseCase = createEnrollmentUseCase,
         _deleteEnrollmentUseCase = deleteEnrollmentUseCase,
         _getEnrollmentByUserUseCase = getEnrollmentByUserUseCase,
@@ -30,7 +28,8 @@ class EnrollmentBloc extends Bloc<EnrollmentEvent, EnrollmentState> {
     on<AddEnrollment>(_onAddEnrollment);
     on<DeleteEnrollment>(_onDeleteEnrollment);
 
-    add(LoadEnrollmentByUser(userId: userId));
+    /// Dispatch LoadEnrollments when bloc is initialized
+    add(LoadEnrollments());
   }
 
   Future<void> _onLoadEnrollments(
@@ -39,7 +38,7 @@ class EnrollmentBloc extends Bloc<EnrollmentEvent, EnrollmentState> {
     emit(state.copyWith(isLoading: true));
 
     final result = await _getEnrollmentByUserUseCase
-        .call(GetEnrollmentByUserParams(userId: "some_default_user"));
+        .call(GetEnrollmentByUserParams(userId: "67a9bc8608b32dce76f212ed"));
 
     result.fold(
       (failure) {
@@ -83,8 +82,10 @@ class EnrollmentBloc extends Bloc<EnrollmentEvent, EnrollmentState> {
     result.fold(
       (failure) =>
           emit(state.copyWith(isLoading: false, error: failure.message)),
-      (enrollments) {
+      (_) {
         emit(state.copyWith(isLoading: false, error: null));
+
+        /// Fetch fresh enrollments after adding a new one
         add(LoadEnrollments());
       },
     );
@@ -98,8 +99,10 @@ class EnrollmentBloc extends Bloc<EnrollmentEvent, EnrollmentState> {
     result.fold(
       (failure) =>
           emit(state.copyWith(isLoading: false, error: failure.message)),
-      (enrollments) {
+      (_) {
         emit(state.copyWith(isLoading: false, error: null));
+
+        /// Fetch fresh enrollments after deletion
         add(LoadEnrollments());
       },
     );

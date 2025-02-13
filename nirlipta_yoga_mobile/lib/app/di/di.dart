@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:nirlipta_yoga_mobile/features/auth/domain/use_case/upload_image_usecase.dart';
 import 'package:nirlipta_yoga_mobile/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:nirlipta_yoga_mobile/features/auth/presentation/view_model/signup/register_bloc.dart';
+import 'package:nirlipta_yoga_mobile/features/enrollment/domain/use_case/get_enrollment_by_user_usecase.dart';
 import 'package:nirlipta_yoga_mobile/features/workshop/data/data_source/local_datasource/workshop_local_data_source.dart';
 import 'package:nirlipta_yoga_mobile/features/workshop/data/data_source/remote_datasource/workshop_remote_data_source.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -303,6 +304,10 @@ _initEnrollmentDependencies() async {
       GetAllEnrollmentsUseCase(
           enrollmentRepository: getIt<EnrollmentRemoteRepository>()));
 
+  getIt.registerLazySingleton<GetEnrollmentByUserUseCase>(() =>
+      GetEnrollmentByUserUseCase(
+          enrollmentRepository: getIt<EnrollmentRemoteRepository>()));
+
   getIt.registerLazySingleton<DeleteEnrollmentUseCase>(
     () => DeleteEnrollmentUseCase(
         enrollmentRepository: getIt<EnrollmentRemoteRepository>(),
@@ -324,8 +329,8 @@ _initEnrollmentDependencies() async {
   getIt.registerFactory<EnrollmentBloc>(
     () => EnrollmentBloc(
       createEnrollmentUseCase: getIt<CreateEnrollmentUseCase>(),
-      getAllEnrollmentUseCase: getIt<GetAllEnrollmentsUseCase>(),
       deleteEnrollmentUseCase: getIt<DeleteEnrollmentUseCase>(),
+      getEnrollmentByUserUseCase: getIt<GetEnrollmentByUserUseCase>(),
 
       // updateEnrollmentUseCase: getIt<UpdateEnrollmentUseCase>(),
       // getEnrollmentByIdUseCase: getIt<GetEnrollmentByIdUseCase>(),

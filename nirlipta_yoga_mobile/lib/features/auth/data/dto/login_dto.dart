@@ -7,23 +7,21 @@ class LoginDTO {
   final bool success;
   final String token;
   final int statusCode;
-
-  // final String user_id;
-  // final String email;
-  // final String role;
-  // final String? image;
-  // final String message;
+  final String user_id;
+  final String email;
+  final String role;
+  final String photo;
+  final String message;
 
   LoginDTO({
     required this.success,
     required this.token,
     required this.statusCode,
-
-    // required this.user_id,
-    // required this.email,
-    // required this.role,
-    // this.image,
-    // required this.message,
+    required this.user_id,
+    required this.email,
+    required this.role,
+    required this.photo,
+    required this.message,
   });
 
   /// Factory constructor for creating a `LoginDTO` from JSON
