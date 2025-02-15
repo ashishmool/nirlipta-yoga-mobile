@@ -46,4 +46,6 @@ class ApiEndpoints {
   // ============= User Routes =============
   static const String createUser = "users/save";
   static const String getAllUser = "users/";
+  static const String getUserById = "users/getById/";
+  static const String updateUser = "users/update/";
 }

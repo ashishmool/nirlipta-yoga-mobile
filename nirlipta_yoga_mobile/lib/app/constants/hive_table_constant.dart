@@ -21,4 +21,7 @@ class HiveTableConstant {
 
   static const int paymentTableId = 6;
   static const String paymentBox = 'paymentBox';
+
+  static const int onboardingTableId = 7;
+  static const String onboardingBox = 'onboardingBox';
 }

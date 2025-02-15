@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:nirlipta_yoga_mobile/app/app.dart';
 import 'package:nirlipta_yoga_mobile/app/di/di.dart';
 
@@ -10,6 +11,13 @@ void main() async {
   // Initialize Hive Database
   await HiveService().init();
   await initDependencies(); // Initialize dependencies
+
+  SystemChrome.setPreferredOrientations(
+    [
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ],
+  );
   runApp(
     App(),
   );

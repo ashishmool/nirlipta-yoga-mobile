@@ -119,4 +119,42 @@ class UserRemoteDataSource {
       throw Exception('Unexpected error: $e');
     }
   }
+
+  // Get user by ID
+  Future<UserEntity> getUserById(String userId) async {
+    try {
+      var response = await _dio.get('${ApiEndpoints.getUserById}$userId');
+      if (response.statusCode == 200) {
+        var data = response.data;
+        var user = UserApiModel.fromJson(data).toEntity();
+        return user;
+      } else {
+        throw Exception(response.statusMessage);
+      }
+    } on DioException catch (e) {
+      throw Exception('Network error: ${e.message}');
+    } catch (e) {
+      throw Exception('Unexpected error: $e');
+    }
+  }
+
+  // Update user
+  Future<void> updateUser(UserEntity userEntity) async {
+    try {
+      var userApiModel = UserApiModel.fromEntity(userEntity);
+      var response = await _dio.put(
+        ApiEndpoints.updateUser,
+        data: userApiModel.toJson(),
+      );
+      if (response.statusCode == 200) {
+        return;
+      } else {
+        throw Exception(response.statusMessage);
+      }
+    } on DioException catch (e) {
+      throw Exception('Network error: ${e.message}');
+    } catch (e) {
+      throw Exception('Unexpected error: $e');
+    }
+  }
 }

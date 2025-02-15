@@ -78,6 +78,21 @@ class WorkshopHiveModel extends Equatable {
         photo = null,
         modules = const [];
 
+  // Empty Constructor
+  const WorkshopHiveModel.empty()
+      : workshopId = '',
+        title = '',
+        description = null,
+        address = null,
+        classroomInfo = null,
+        mapLocation = null,
+        difficultyLevel = '',
+        price = 0.0,
+        discountPrice = null,
+        categoryId = '',
+        photo = null,
+        modules = const [];
+
   // From Entity
   factory WorkshopHiveModel.fromEntity(WorkshopEntity entity) {
     return WorkshopHiveModel(

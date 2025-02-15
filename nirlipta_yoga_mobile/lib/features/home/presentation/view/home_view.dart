@@ -29,19 +29,15 @@ class HomeView extends StatelessWidget {
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.book),
-                label: 'Category',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.group),
-                label: 'Workshop',
+                label: 'My Fitness',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.cast_for_education),
-                label: 'Enrollments',
+                label: 'My Enrollments',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.account_circle),
-                label: 'Account',
+                label: 'My Profile',
               ),
             ],
             currentIndex: state.selectedIndex,

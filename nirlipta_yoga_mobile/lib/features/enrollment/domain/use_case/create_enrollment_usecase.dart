@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
+import 'package:nirlipta_yoga_mobile/features/workshop/domain/entity/workshop_entity.dart';
 
 import '../../../../app/usecase/usecase.dart';
 import '../../../../core/error/failure.dart';
@@ -8,7 +9,9 @@ import '../repository/enrollment_repository.dart';
 
 class CreateEnrollmentParams extends Equatable {
   final String userId;
-  final String workshopId;
+
+  // final String workshopId;
+  final WorkshopEntity workshop;
   final String paymentStatus;
   final DateTime enrollmentDate;
   final String completionStatus;
@@ -16,7 +19,8 @@ class CreateEnrollmentParams extends Equatable {
 
   CreateEnrollmentParams({
     required this.userId,
-    required this.workshopId,
+    required this.workshop,
+    // required this.workshopId,
     this.paymentStatus = "pending",
     DateTime? enrollmentDate,
     this.completionStatus = "not started",
@@ -26,7 +30,7 @@ class CreateEnrollmentParams extends Equatable {
   factory CreateEnrollmentParams.empty() {
     return CreateEnrollmentParams(
       userId: '_empty.userId',
-      workshopId: '_empty.workshopId',
+      workshop: WorkshopEntity.empty(),
       paymentStatus: "pending",
       enrollmentDate: DateTime(1970, 1, 1),
       // Unix Epoch start
@@ -38,7 +42,7 @@ class CreateEnrollmentParams extends Equatable {
   @override
   List<Object?> get props => [
         userId,
-        workshopId,
+        workshop,
         paymentStatus,
         enrollmentDate,
         completionStatus,
@@ -57,7 +61,7 @@ class CreateEnrollmentUseCase
     return await enrollmentRepository.createEnrollment(
       EnrollmentEntity(
         userId: params.userId,
-        workshopId: params.workshopId,
+        workshop: params.workshop,
         paymentStatus: params.paymentStatus,
         enrollmentDate: params.enrollmentDate,
         completionStatus: params.completionStatus,

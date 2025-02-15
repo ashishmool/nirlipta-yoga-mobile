@@ -3,12 +3,13 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../app/constants/hive_table_constant.dart';
+import '../../../workshop/data/model/workshop_hive_model.dart';
 import '../../domain/entity/enrollment_entity.dart';
 
 part 'enrollment_hive_model.g.dart';
 
 // Command to Generate Adapter: dart run build_runner build -d
-// Need to run each time changes are made to the model.
+// Run this each time changes are made to the model.
 
 @HiveType(typeId: HiveTableConstant.enrollmentTableId)
 class EnrollmentHiveModel extends Equatable {
@@ -19,7 +20,7 @@ class EnrollmentHiveModel extends Equatable {
   final String userId;
 
   @HiveField(2)
-  final String workshopId;
+  final WorkshopHiveModel workshop;
 
   @HiveField(3)
   final String paymentStatus;
@@ -36,7 +37,7 @@ class EnrollmentHiveModel extends Equatable {
   EnrollmentHiveModel({
     String? id,
     required this.userId,
-    required this.workshopId,
+    required this.workshop,
     this.paymentStatus = "pending",
     DateTime? enrollmentDate,
     this.completionStatus = "not started",
@@ -44,11 +45,11 @@ class EnrollmentHiveModel extends Equatable {
   })  : id = id ?? const Uuid().v4(),
         enrollmentDate = enrollmentDate ?? DateTime.now();
 
-  // Initial Constructor
+  // Initial Constructor with Default Values
   EnrollmentHiveModel.initial()
       : id = '',
         userId = '',
-        workshopId = '',
+        workshop = WorkshopHiveModel.empty(),
         paymentStatus = "pending",
         enrollmentDate = DateTime(1970, 1, 1),
         // Unix Epoch start
@@ -60,7 +61,8 @@ class EnrollmentHiveModel extends Equatable {
     return EnrollmentHiveModel(
       id: entity.id,
       userId: entity.userId,
-      workshopId: entity.workshopId,
+      workshop: WorkshopHiveModel.fromEntity(entity.workshop),
+      // FIXED
       paymentStatus: entity.paymentStatus,
       enrollmentDate: entity.enrollmentDate,
       completionStatus: entity.completionStatus,
@@ -73,7 +75,8 @@ class EnrollmentHiveModel extends Equatable {
     return EnrollmentEntity(
       id: id,
       userId: userId,
-      workshopId: workshopId,
+      workshop: workshop.toEntity(),
+      // FIXED
       paymentStatus: paymentStatus,
       enrollmentDate: enrollmentDate,
       completionStatus: completionStatus,
@@ -93,7 +96,7 @@ class EnrollmentHiveModel extends Equatable {
   List<Object?> get props => [
         id,
         userId,
-        workshopId,
+        workshop,
         paymentStatus,
         enrollmentDate,
         completionStatus,

@@ -19,7 +19,7 @@ class EnrollmentHiveModelAdapter extends TypeAdapter<EnrollmentHiveModel> {
     return EnrollmentHiveModel(
       id: fields[0] as String?,
       userId: fields[1] as String,
-      workshopId: fields[2] as String,
+      workshop: fields[2] as WorkshopHiveModel,
       paymentStatus: fields[3] as String,
       enrollmentDate: fields[4] as DateTime?,
       completionStatus: fields[5] as String,
@@ -36,7 +36,7 @@ class EnrollmentHiveModelAdapter extends TypeAdapter<EnrollmentHiveModel> {
       ..writeByte(1)
       ..write(obj.userId)
       ..writeByte(2)
-      ..write(obj.workshopId)
+      ..write(obj.workshop)
       ..writeByte(3)
       ..write(obj.paymentStatus)
       ..writeByte(4)

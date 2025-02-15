@@ -1,9 +1,12 @@
 import 'package:equatable/equatable.dart';
+import 'package:nirlipta_yoga_mobile/features/workshop/domain/entity/workshop_entity.dart';
 
 class EnrollmentEntity extends Equatable {
   final String? id;
   final String userId;
-  final String workshopId;
+
+  // final String workshopId;
+  final WorkshopEntity workshop;
   final String paymentStatus;
   final DateTime enrollmentDate;
   final String completionStatus;
@@ -12,7 +15,8 @@ class EnrollmentEntity extends Equatable {
   EnrollmentEntity({
     this.id,
     required this.userId,
-    required this.workshopId,
+    required this.workshop,
+    // required this.workshopId,
     this.paymentStatus = "pending",
     DateTime? enrollmentDate,
     this.completionStatus = "not started",
@@ -24,7 +28,8 @@ class EnrollmentEntity extends Equatable {
     return EnrollmentEntity(
       id: '_empty.id',
       userId: '_empty.userId',
-      workshopId: '_empty.workshopId',
+      // workshopId: '_empty.workshopId',
+      workshop: WorkshopEntity.empty(),
       paymentStatus: "pending",
       enrollmentDate: DateTime(1970, 1, 1),
       completionStatus: "not started",
@@ -36,7 +41,8 @@ class EnrollmentEntity extends Equatable {
   List<Object?> get props => [
         id,
         userId,
-        workshopId,
+        // workshopId,
+        workshop,
         paymentStatus,
         enrollmentDate,
         completionStatus,

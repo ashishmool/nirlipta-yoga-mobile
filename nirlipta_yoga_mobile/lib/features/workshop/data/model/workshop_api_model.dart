@@ -48,8 +48,20 @@ class WorkshopApiModel extends Equatable {
         photo = null;
 
   // From JSON
-  factory WorkshopApiModel.fromJson(Map<String, dynamic> json) =>
-      _$WorkshopApiModelFromJson(json);
+  // factory WorkshopApiModel.fromJson(Map<String, dynamic> json) =>
+  //     _$WorkshopApiModelFromJson(json);
+
+  factory WorkshopApiModel.fromJson(Map<String, dynamic> json) {
+    return WorkshopApiModel(
+      workshopId: json['_id'] as String? ?? '',
+      title: json['title'] as String? ?? '',
+      description: json['description'] as String? ?? '',
+      difficultyLevel: json['difficulty_level'] as String? ?? '',
+      categoryId: json['category'] as String? ?? '',
+      photo: json['photo'] as String? ?? '',
+      price: json['price'] ?? 0.0,
+    );
+  }
 
   // To JSON
   Map<String, dynamic> toJson() => _$WorkshopApiModelToJson(this);

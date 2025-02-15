@@ -110,6 +110,7 @@ class _DashboardViewState extends State<DashboardView> {
                             price: workshop["price"],
                             photo: workshop["photo"],
                             description: workshop["description"],
+                            discountPrice: workshop["discount_price"],
                             onTap: () {
                               print("Workshop ID: ${workshop["workshopId"]}");
                               Navigator.push(

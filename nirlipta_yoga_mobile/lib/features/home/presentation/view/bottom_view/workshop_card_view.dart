@@ -10,6 +10,7 @@ class WorkshopCard extends StatelessWidget {
   final String? photo;
   final String? description;
   final double price;
+  final double? discountPrice;
   final VoidCallback onTap;
 
   const WorkshopCard({
@@ -17,6 +18,7 @@ class WorkshopCard extends StatelessWidget {
     required this.title,
     required this.category,
     required this.price,
+    this.discountPrice,
     this.photo,
     this.description,
     required this.onTap,
@@ -119,11 +121,17 @@ class WorkshopCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 5),
                   Text(
-                    "\$ $price",
-                    style: const TextStyle(
-                        color: primaryColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold),
+                    "\$ ${discountPrice ?? price}",
+                    style: TextStyle(
+                      color:
+                          discountPrice != null ? Colors.green : primaryColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      decoration: discountPrice != null
+                          ? TextDecoration
+                              .lineThrough // Strike-through if discount exists
+                          : null,
+                    ),
                   ),
                 ],
               ),

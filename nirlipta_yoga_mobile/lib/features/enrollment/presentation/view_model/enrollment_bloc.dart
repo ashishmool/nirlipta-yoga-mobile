@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:nirlipta_yoga_mobile/features/enrollment/domain/use_case/get_enrollment_by_user_usecase.dart';
 
+import '../../../workshop/domain/entity/workshop_entity.dart';
 import '../../domain/entity/enrollment_entity.dart';
 import '../../domain/use_case/create_enrollment_usecase.dart';
 import '../../domain/use_case/delete_enrollment_usecase.dart';
@@ -77,8 +78,8 @@ class EnrollmentBloc extends Bloc<EnrollmentEvent, EnrollmentState> {
   Future<void> _onAddEnrollment(
       AddEnrollment event, Emitter<EnrollmentState> emit) async {
     emit(state.copyWith(isLoading: true));
-    final result = await _createEnrollmentUseCase.call(CreateEnrollmentParams(
-        userId: event.userId, workshopId: event.workshopId));
+    final result = await _createEnrollmentUseCase.call(
+        CreateEnrollmentParams(userId: event.userId, workshop: event.workshop));
     result.fold(
       (failure) =>
           emit(state.copyWith(isLoading: false, error: failure.message)),

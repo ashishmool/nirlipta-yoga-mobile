@@ -80,4 +80,28 @@ class UserRemoteRepository implements IUserRepository {
       return Left(ApiFailure(message: e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, UserEntity>> getUserById(String id) async {
+    try {
+      final user = await _userRemoteDataSource.getUserById(id);
+      return Right(user); // Successfully fetched user
+    } catch (e) {
+      return Left(ApiFailure(
+          message: e
+              .toString())); // Handle error (ServerFailure can be customized to represent different types of failures)
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> updateUser(UserEntity userEntity) async {
+    try {
+      await _userRemoteDataSource.updateUser(userEntity);
+      return const Right(null); // Successfully updated user
+    } catch (e) {
+      return Left(ApiFailure(
+          message:
+              e.toString())); // Handle error (ServerFailure can be customized)
+    }
+  }
 }

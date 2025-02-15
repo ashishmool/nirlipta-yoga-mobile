@@ -29,6 +29,19 @@ class WorkshopEntity extends Equatable {
     required this.modules,
   });
 
+  // Empty Constructor with default values
+  factory WorkshopEntity.empty() {
+    return WorkshopEntity(
+      id: '_empty.id',
+      title: '_empty.title',
+      description: '_empty.description',
+      difficultyLevel: '_empty.difficulty_level',
+      price: 0,
+      categoryId: '_empty.category',
+      modules: [],
+    );
+  }
+
   @override
   List<Object?> get props => [
         id,

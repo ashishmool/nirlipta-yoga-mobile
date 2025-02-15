@@ -63,4 +63,16 @@ class UserLocalRepository implements IUserRepository {
       return Left(LocalDatabaseFailure(message: e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, UserEntity>> getUserById(String id) {
+    // TODO: implement getUserById
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, void>> updateUser(UserEntity userEntity) {
+    // TODO: implement updateUser
+    throw UnimplementedError();
+  }
 }

@@ -10,6 +10,10 @@ abstract interface class IUserRepository {
 
   Future<Either<Failure, List<UserEntity>>> getAllUsers(String token);
 
+  Future<Either<Failure, UserEntity>> getUserById(String id);
+
+  Future<Either<Failure, void>> updateUser(UserEntity userEntity);
+
   Future<Either<Failure, void>> deleteUser(String id);
 
   Future<Either<Failure, String>> login(String email, String password);

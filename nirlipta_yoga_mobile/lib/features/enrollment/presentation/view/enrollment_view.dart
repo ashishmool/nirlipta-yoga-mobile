@@ -27,9 +27,6 @@ class EnrollmentView extends StatelessWidget {
                 itemCount: state.enrollments.length,
                 itemBuilder: (context, index) {
                   final enrollment = state.enrollments[index];
-                  final workshop =
-                      enrollment.workshopId; // This should be an object
-                  final imageUrl = "$baseUrl${enrollment.workshopId}";
                   final date = (enrollment.enrollmentDate);
                   final formattedDate =
                       "${date.day}/${date.month}/${date.year}"; // Format date
@@ -41,68 +38,83 @@ class EnrollmentView extends StatelessWidget {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Column(
+                      child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          ClipRRect(
-                            borderRadius: const BorderRadius.vertical(
-                                top: Radius.circular(10)),
-                            child: Image.network(
-                              imageUrl,
-                              height: 120,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  const Icon(Icons.broken_image, size: 120),
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          // Text(
-                          //   workshop.title, // Show the title
-                          //   style: const TextStyle(
-                          //     fontSize: 16,
-                          //     fontWeight: FontWeight.bold,
-                          //   ),
-                          // ),
-                          const SizedBox(height: 5),
-                          Text(
-                            "Status: ${enrollment.completionStatus}",
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey,
-                            ),
-                          ),
-                          const SizedBox(height: 5),
-                          Text(
-                            "Enrollment Date: $formattedDate",
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey,
-                            ),
-                          ),
-                          const SizedBox(height: 5),
-                          Text(
-                            "Payment Status: ${enrollment.paymentStatus}",
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          // Show "Generate Certificate" button if completed
-                          if (enrollment.completionStatus == "completed")
-                            ElevatedButton(
-                              onPressed: () {
-                                // Action to generate the certificate
-                                print("Generate Certificate");
-                              },
-                              child: const Text('Generate Certificate'),
-                              style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                          // Left side: Workshop details
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Workshop Title: ${enrollment.workshop.title ?? 'N/A'}",
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey,
+                                  ),
                                 ),
-                              ),
+                                const SizedBox(height: 5),
+                                Text(
+                                  "Status: ${enrollment.completionStatus}",
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                const SizedBox(height: 5),
+                                Text(
+                                  "Enrollment Date: $formattedDate",
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                const SizedBox(height: 5),
+                                Text(
+                                  "Payment Status: ${enrollment.paymentStatus}",
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                if (enrollment.completionStatus == "completed")
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      print("Generate Certificate");
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                    child: const Text('Generate Certificate'),
+                                  ),
+                              ],
                             ),
+                          ),
+
+                          // Right side: Workshop Image
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            // Optional: Rounded corners
+                            child: enrollment.workshop.photo != null &&
+                                    enrollment.workshop.photo!.isNotEmpty
+                                ? Image.network(
+                                    "http://10.0.2.2:5000${enrollment.workshop.photo}", // Ensure correct API URL
+                                    width: 80, // Adjust as needed
+                                    height: 80,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Container(
+                                    width: 80,
+                                    height: 80,
+                                    color: Colors
+                                        .grey[300], // Placeholder background
+                                    child: const Icon(Icons.image_not_supported,
+                                        color: Colors.grey),
+                                  ),
+                          ),
                         ],
                       ),
                     ),

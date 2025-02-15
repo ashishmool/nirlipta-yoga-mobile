@@ -24,7 +24,9 @@ final class LoadEnrollmentByUser extends EnrollmentEvent {
 // Add a new enrollment
 final class AddEnrollment extends EnrollmentEvent {
   final String userId;
-  final String workshopId;
+
+  // final String workshopId;
+  final WorkshopEntity workshop;
 
   // final WorkshopEntity workshopId;
   final String paymentStatus;
@@ -34,7 +36,7 @@ final class AddEnrollment extends EnrollmentEvent {
 
   const AddEnrollment(
       {required this.userId,
-      required this.workshopId,
+      required this.workshop,
       required this.paymentStatus,
       required this.enrollmentDate,
       required this.completionStatus,
@@ -43,7 +45,7 @@ final class AddEnrollment extends EnrollmentEvent {
   @override
   List<Object?> get props => [
         userId,
-        workshopId,
+        workshop,
         paymentStatus,
         enrollmentDate,
         completionStatus,
@@ -55,7 +57,9 @@ final class AddEnrollment extends EnrollmentEvent {
 final class UpdateEnrollment extends EnrollmentEvent {
   final String? id;
   final String userId;
-  final String workshopId;
+
+  // final String workshopId;
+  final WorkshopEntity workshop;
   final String paymentStatus;
   final DateTime enrollmentDate;
   final String completionStatus;
@@ -64,7 +68,7 @@ final class UpdateEnrollment extends EnrollmentEvent {
   const UpdateEnrollment(
       {required this.id,
       required this.userId,
-      required this.workshopId,
+      required this.workshop,
       required this.paymentStatus,
       required this.enrollmentDate,
       required this.completionStatus,
@@ -74,7 +78,7 @@ final class UpdateEnrollment extends EnrollmentEvent {
   List<Object?> get props => [
         id,
         userId,
-        workshopId,
+        workshop,
         paymentStatus,
         enrollmentDate,
         completionStatus,
