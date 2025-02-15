@@ -10,13 +10,17 @@ import 'auth_repo.mock.dart';
 void main() {
   late AuthRepoMock repository;
   late MockTokenSharedPrefs sharedPrefs;
+  late MockUserSharedPrefs userSharedPrefs;
   late LoginUserUsecase usecase;
 
   setUp(() {
     repository = AuthRepoMock();
     sharedPrefs = MockTokenSharedPrefs();
+    userSharedPrefs = MockUserSharedPrefs();
     usecase = LoginUserUsecase(
-        userRepository: repository, tokenSharedPrefs: sharedPrefs);
+        userRepository: repository,
+        tokenSharedPrefs: sharedPrefs,
+        userSharedPrefs: userSharedPrefs);
   });
 
   test(

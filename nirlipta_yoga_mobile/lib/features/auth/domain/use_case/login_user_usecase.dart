@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:nirlipta_yoga_mobile/app/shared_prefs/token_shared_prefs.dart';
 
+import '../../../../app/shared_prefs/user_shared_prefs.dart';
 import '../../../../app/usecase/usecase.dart';
 import '../../../../core/error/failure.dart';
 import '../repository/user_repository.dart';
@@ -15,6 +16,10 @@ class LoginUserParams extends Equatable {
     required this.password,
   });
 
+  const LoginUserParams.empty()
+      : email = '_empty.email',
+        password = '_empty.password';
+
   @override
   List<Object?> get props => [
         email,
@@ -25,9 +30,12 @@ class LoginUserParams extends Equatable {
 class LoginUserUsecase implements UsecaseWithParams<String, LoginUserParams> {
   final IUserRepository userRepository;
   final TokenSharedPrefs tokenSharedPrefs;
+  final UserSharedPrefs userSharedPrefs;
 
   const LoginUserUsecase(
-      {required this.userRepository, required this.tokenSharedPrefs});
+      {required this.userRepository,
+      required this.tokenSharedPrefs,
+      required this.userSharedPrefs});
 
   @override
   Future<Either<Failure, String>> call(LoginUserParams params) async {
@@ -45,30 +53,5 @@ class LoginUserUsecase implements UsecaseWithParams<String, LoginUserParams> {
         },
       );
     });
-
-    // try {
-    //   // Call login function from the repository
-    //   final result = await userRepository.login(params.email, params.password);
-    //
-    //   return result.fold(
-    //     (failure) {
-    //       // On failure, return the failure response (including status code and message)
-    //       return Left(ApiFailure(
-    //         message: failure.message,
-    //         statusCode: failure.statusCode ??
-    //             500, // Set default statusCode as 500 if null
-    //       ));
-    //     },
-    //     (_) {
-    //       // On success, return success with no data (void)
-    //       return const Right(null);
-    //     },
-    //   );
-    // } catch (e) {
-    //   // In case of any unexpected error, we handle it here
-    //   return Left(ApiFailure(
-    //     message: 'An unexpected error occurred: $e',
-    //     statusCode: 500, // Default status code for unhandled exceptions
-    //   ));
   }
 }

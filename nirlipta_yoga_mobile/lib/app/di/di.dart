@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:nirlipta_yoga_mobile/app/shared_prefs/user_shared_prefs.dart';
 import 'package:nirlipta_yoga_mobile/features/auth/domain/use_case/upload_image_usecase.dart';
 import 'package:nirlipta_yoga_mobile/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:nirlipta_yoga_mobile/features/auth/presentation/view_model/signup/register_bloc.dart';
@@ -252,11 +253,15 @@ _initLoginDependencies() async {
     () => TokenSharedPrefs(getIt<SharedPreferences>()),
   );
 
-  // Use common StudentRemoteDataSource and StudentLocalRepository
+  getIt.registerLazySingleton<UserSharedPrefs>(
+    () => UserSharedPrefs(getIt<SharedPreferences>()),
+  );
+
   if (!getIt.isRegistered<LoginUserUsecase>()) {
     getIt.registerLazySingleton<LoginUserUsecase>(() => LoginUserUsecase(
         tokenSharedPrefs: getIt<TokenSharedPrefs>(),
-        userRepository: getIt<UserRemoteRepository>()));
+        userRepository: getIt<UserRemoteRepository>(),
+        userSharedPrefs: getIt<UserSharedPrefs>()));
   }
 
   getIt.registerFactory<LoginBloc>(

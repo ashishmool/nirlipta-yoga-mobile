@@ -39,7 +39,7 @@ class EnrollmentBloc extends Bloc<EnrollmentEvent, EnrollmentState> {
     emit(state.copyWith(isLoading: true));
 
     final result = await _getEnrollmentByUserUseCase
-        .call(GetEnrollmentByUserParams(userId: "67a9bc8608b32dce76f212ed"));
+        .call(GetEnrollmentByUserParams(userId: "67886b6d3c5af4181ad7821a"));
 
     result.fold(
       (failure) {
