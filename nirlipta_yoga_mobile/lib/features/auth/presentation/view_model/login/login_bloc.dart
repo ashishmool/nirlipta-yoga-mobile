@@ -14,20 +14,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final RegisterBloc _registerBloc;
   final HomeCubit _homeCubit;
 
-  // final BatchBloc _batchBloc;
-  // final WorkshopBloc _workshopBloc;
   final LoginUserUsecase _loginUserUsecase;
 
   LoginBloc({
     required RegisterBloc registerBloc,
     required HomeCubit homeCubit,
-    // required BatchBloc batchBloc,
-    // required WorkshopBloc workshopBloc,
     required LoginUserUsecase loginUserUsecase,
   })  : _registerBloc = registerBloc,
         _homeCubit = homeCubit,
-        // _batchBloc = batchBloc,
-        // _workshopBloc = workshopBloc,
         _loginUserUsecase = loginUserUsecase,
         super(LoginState.initial()) {
     on<NavigateRegisterScreenEvent>((event, emit) {
@@ -37,8 +31,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           builder: (context) => MultiBlocProvider(
             providers: [
               BlocProvider.value(value: _registerBloc),
-              // BlocProvider.value(value: _batchBloc),
-              // BlocProvider.value(value: _workshopBloc),
             ],
             child: event.destination,
           ),
