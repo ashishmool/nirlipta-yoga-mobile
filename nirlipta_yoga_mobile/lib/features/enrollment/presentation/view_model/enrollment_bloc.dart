@@ -35,6 +35,21 @@ class EnrollmentBloc extends Bloc<EnrollmentEvent, EnrollmentState> {
 
     /// Dispatch LoadEnrollments when bloc is initialized
     add(LoadEnrollments());
+
+    /// Fetch userId and then dispatch LoadEnrollmentByUser
+    _fetchAndLoadUserEnrollments();
+  }
+
+  void _fetchAndLoadUserEnrollments() async {
+    final userData = await _userSharedPrefs.getUserData();
+    final userId = userData.fold(
+      (failure) => null,
+      (data) => data[2], // Extracting userId from user data
+    );
+
+    if (userId != null) {
+      add(LoadEnrollmentByUser(userId: userId));
+    }
   }
 
   Future<void> _onLoadEnrollments(

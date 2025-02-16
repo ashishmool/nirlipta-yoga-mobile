@@ -43,4 +43,15 @@ class UserSharedPrefs {
       return Left(SharedPrefsFailure(message: e.toString()));
     }
   }
+
+  // Clear User Data
+  Future<Either<Failure, bool>> clear() async {
+    try {
+      _sharedPreferences = await SharedPreferences.getInstance();
+      await _sharedPreferences.clear(); // Clears all data in SharedPreferences
+      return Right(true);
+    } catch (e) {
+      return Left(SharedPrefsFailure(message: e.toString()));
+    }
+  }
 }

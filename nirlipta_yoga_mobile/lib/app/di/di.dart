@@ -144,8 +144,6 @@ _initWorkshopDependencies() async {
       createWorkshopUseCase: getIt<CreateWorkshopUseCase>(),
       getAllWorkshopsUseCase: getIt<GetAllWorkshopsUseCase>(),
       deleteWorkshopUseCase: getIt<DeleteWorkshopUseCase>(),
-      // updateWorkshopUseCase: getIt<UpdateWorkshopUseCase>(),
-      // getWorkshopByIdUseCase: getIt<GetWorkshopByIdUseCase>(),
     ),
   );
 }
@@ -213,7 +211,9 @@ _initHomeDependencies() async {
   // );
 
   getIt.registerSingleton<HomeCubit>(
-    HomeCubit(tokenSharedPrefs: getIt<TokenSharedPrefs>()),
+    HomeCubit(
+        tokenSharedPrefs: getIt<TokenSharedPrefs>(),
+        userSharedPrefs: getIt<UserSharedPrefs>()),
   );
 }
 
@@ -338,10 +338,6 @@ _initEnrollmentDependencies() async {
       deleteEnrollmentUseCase: getIt<DeleteEnrollmentUseCase>(),
       getEnrollmentByUserUseCase: getIt<GetEnrollmentByUserUseCase>(),
       userSharedPrefs: getIt<UserSharedPrefs>(),
-
-      // updateEnrollmentUseCase: getIt<UpdateEnrollmentUseCase>(),
-      // getEnrollmentByIdUseCase: getIt<GetEnrollmentByIdUseCase>(),
-      // getEnrollmentByUserUseCase: getIt<GetEnrollmentByUserUseCase>(),
     ),
   );
 }
