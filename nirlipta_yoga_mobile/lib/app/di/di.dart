@@ -254,14 +254,15 @@ _initLoginDependencies() async {
   );
 
   getIt.registerLazySingleton<UserSharedPrefs>(
-    () => UserSharedPrefs(getIt<SharedPreferences>()),
+    () => UserSharedPrefs(),
   );
 
   if (!getIt.isRegistered<LoginUserUsecase>()) {
     getIt.registerLazySingleton<LoginUserUsecase>(() => LoginUserUsecase(
-        tokenSharedPrefs: getIt<TokenSharedPrefs>(),
-        userRepository: getIt<UserRemoteRepository>(),
-        userSharedPrefs: getIt<UserSharedPrefs>()));
+          tokenSharedPrefs: getIt<TokenSharedPrefs>(),
+          userRepository: getIt<UserRemoteRepository>(),
+          userSharedPrefs: getIt<UserSharedPrefs>(),
+        ));
   }
 
   getIt.registerFactory<LoginBloc>(
@@ -336,6 +337,7 @@ _initEnrollmentDependencies() async {
       createEnrollmentUseCase: getIt<CreateEnrollmentUseCase>(),
       deleteEnrollmentUseCase: getIt<DeleteEnrollmentUseCase>(),
       getEnrollmentByUserUseCase: getIt<GetEnrollmentByUserUseCase>(),
+      userSharedPrefs: getIt<UserSharedPrefs>(),
 
       // updateEnrollmentUseCase: getIt<UpdateEnrollmentUseCase>(),
       // getEnrollmentByIdUseCase: getIt<GetEnrollmentByIdUseCase>(),

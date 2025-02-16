@@ -16,7 +16,7 @@ abstract interface class IUserRepository {
 
   Future<Either<Failure, void>> deleteUser(String id);
 
-  Future<Either<Failure, String>> login(String email, String password);
+  Future<Either<Failure, List<String>>> login(String email, String password);
 
   Future<Either<Failure, String>> uploadImage(File file);
 }

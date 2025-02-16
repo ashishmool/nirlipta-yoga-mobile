@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:nirlipta_yoga_mobile/app/shared_prefs/user_shared_prefs.dart';
 import 'package:nirlipta_yoga_mobile/features/enrollment/domain/use_case/get_enrollment_by_user_usecase.dart';
 
 import '../../../workshop/domain/entity/workshop_entity.dart';
@@ -15,14 +16,17 @@ class EnrollmentBloc extends Bloc<EnrollmentEvent, EnrollmentState> {
   final CreateEnrollmentUseCase _createEnrollmentUseCase;
   final DeleteEnrollmentUseCase _deleteEnrollmentUseCase;
   final GetEnrollmentByUserUseCase _getEnrollmentByUserUseCase;
+  final UserSharedPrefs _userSharedPrefs;
 
   EnrollmentBloc({
     required CreateEnrollmentUseCase createEnrollmentUseCase,
     required GetEnrollmentByUserUseCase getEnrollmentByUserUseCase,
     required DeleteEnrollmentUseCase deleteEnrollmentUseCase,
+    required UserSharedPrefs userSharedPrefs,
   })  : _createEnrollmentUseCase = createEnrollmentUseCase,
         _deleteEnrollmentUseCase = deleteEnrollmentUseCase,
         _getEnrollmentByUserUseCase = getEnrollmentByUserUseCase,
+        _userSharedPrefs = userSharedPrefs,
         super(EnrollmentState.initial()) {
     on<LoadEnrollments>(_onLoadEnrollments);
     on<LoadEnrollmentByUser>(_onLoadEnrollmentByUser);
@@ -38,8 +42,20 @@ class EnrollmentBloc extends Bloc<EnrollmentEvent, EnrollmentState> {
     print("Loading all enrollments...");
     emit(state.copyWith(isLoading: true));
 
+    final userData = await _userSharedPrefs.getUserData();
+    final userId = userData.fold(
+      (failure) => null,
+      (data) => data[2],
+    );
+
+    if (userId == null) {
+      emit(state.copyWith(isLoading: false, error: "User ID not found"));
+      return;
+    }
+
+    // Use the fetched user_id
     final result = await _getEnrollmentByUserUseCase
-        .call(GetEnrollmentByUserParams(userId: "67886b6d3c5af4181ad7821a"));
+        .call(GetEnrollmentByUserParams(userId: userId));
 
     result.fold(
       (failure) {

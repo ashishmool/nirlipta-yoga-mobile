@@ -55,10 +55,11 @@ class UserLocalRepository implements IUserRepository {
   }
 
   @override
-  Future<Either<Failure, String>> login(String email, String password) async {
+  Future<Either<Failure, List<String>>> login(
+      String email, String password) async {
     try {
       // Placeholder for actual login implementation
-      return Right('Login successful');
+      return Right(['Login successful']);
     } catch (e) {
       return Left(LocalDatabaseFailure(message: e.toString()));
     }

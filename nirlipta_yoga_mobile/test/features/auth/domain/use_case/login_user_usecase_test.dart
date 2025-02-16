@@ -31,7 +31,7 @@ void main() {
         final email = invocation.positionalArguments[0] as String;
         final password = invocation.positionalArguments[1] as String;
         if (email == 'a3.asis@gmail.com' && password == 'test12345') {
-          return Future.value(const Right('token'));
+          return Future.value(const Right(['token']));
         } else {
           return Future.value(
               Left(ApiFailure(message: 'Invalid email or password')));

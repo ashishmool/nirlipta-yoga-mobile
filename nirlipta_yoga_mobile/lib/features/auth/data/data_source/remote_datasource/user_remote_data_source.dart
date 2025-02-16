@@ -70,7 +70,8 @@ class UserRemoteDataSource {
   }
 
   /// Logs in a user
-  Future<String> login(String email, String password) async {
+  @override
+  Future<List<String>> login(String email, String password) async {
     try {
       Response response = await _dio.post(
         ApiEndpoints.login,
@@ -82,9 +83,29 @@ class UserRemoteDataSource {
 
       // Check if response is not null and has statusCode 200
       if (response.statusCode == 200 && response.data != null) {
-        final str = response.data['token'];
+        final responseData = response.data;
 
-        return str;
+        // Extract all required fields from the response
+        final success = responseData['success']?.toString() ?? '';
+        final token = responseData['token']?.toString() ?? '';
+        final userId = responseData['user_id']?.toString() ?? '';
+        final photo = responseData['photo']?.toString() ?? '';
+        final email = responseData['email']?.toString() ?? '';
+        final role = responseData['role']?.toString() ?? '';
+        final message = responseData['message']?.toString() ?? '';
+        final statusCode = responseData['statusCode']?.toString() ?? '';
+
+        // Return the fields as a List<String>
+        return [
+          success,
+          token,
+          userId,
+          photo,
+          email,
+          role,
+          message,
+          statusCode
+        ];
       } else {
         throw Exception('Invalid response: ${response.statusMessage}');
       }

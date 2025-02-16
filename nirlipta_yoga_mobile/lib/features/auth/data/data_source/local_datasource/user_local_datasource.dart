@@ -39,10 +39,10 @@ class UserLocalDatasource implements IUserDataSource {
   }
 
   @override
-  Future<UserEntity> login(String email, String password) async {
+  Future<List<String>> login(String email, String password) async {
     try {
       final userHiveModel = await _hiveService.loginUser(email, password);
-      return userHiveModel!.toEntity();
+      return [''];
     } catch (e) {
       throw Exception(e);
     }

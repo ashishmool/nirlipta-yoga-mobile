@@ -27,7 +27,8 @@ class LoginUserParams extends Equatable {
       ];
 }
 
-class LoginUserUsecase implements UsecaseWithParams<String, LoginUserParams> {
+class LoginUserUsecase
+    implements UsecaseWithParams<List<String>, LoginUserParams> {
   final IUserRepository userRepository;
   final TokenSharedPrefs tokenSharedPrefs;
   final UserSharedPrefs userSharedPrefs;
@@ -37,19 +38,45 @@ class LoginUserUsecase implements UsecaseWithParams<String, LoginUserParams> {
       required this.tokenSharedPrefs,
       required this.userSharedPrefs});
 
+  // @override
+  // Future<Either<Failure, String>> call(LoginUserParams params) async {
+  //   //Save token in Shared Preferences
+  //   return userRepository.login(params.email, params.password).then((value) {
+  //     return value.fold(
+  //       (failure) => Left(failure),
+  //       (token) {
+  //         tokenSharedPrefs.saveToken(token);
+  //         // // To check and match Token
+  //         // tokenSharedPrefs.getToken().then((value) {
+  //         //   print(value);
+  //         // });
+  //         return Right(token);
+  //       },
+  //     );
+  //   });
+  // }
+
   @override
-  Future<Either<Failure, String>> call(LoginUserParams params) async {
-    //Save token in Shared Preferences
+  Future<Either<Failure, List<String>>> call(LoginUserParams params) async {
+    // Call the repository to login
     return userRepository.login(params.email, params.password).then((value) {
       return value.fold(
         (failure) => Left(failure),
-        (token) {
-          tokenSharedPrefs.saveToken(token);
-          // // To check and match Token
-          // tokenSharedPrefs.getToken().then((value) {
-          //   print(value);
-          // });
-          return Right(token);
+        (userData) {
+          // Save user data in Shared Preferences
+          userSharedPrefs.setUserData(userData as List<String>).then((_) {
+            // Print the response fields
+            print('User Data Saved:');
+            print('Success: ${userData[0]}');
+            print('Token: ${userData[1]}');
+            print('User ID: ${userData[2]}');
+            print('Photo: ${userData[3]}');
+            print('Email: ${userData[4]}');
+            print('Role: ${userData[5]}');
+            print('Message: ${userData[6]}');
+            print('Status Code: ${userData[7]}');
+          });
+          return Right(userData as List<String>);
         },
       );
     });

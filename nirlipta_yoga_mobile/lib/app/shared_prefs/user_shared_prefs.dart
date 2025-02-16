@@ -4,25 +4,41 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/error/failure.dart';
 
 class UserSharedPrefs {
-  final SharedPreferences _sharedPreferences;
+  late SharedPreferences _sharedPreferences;
 
-  UserSharedPrefs(this._sharedPreferences);
-
-  // Save user_id
-  Future<Either<Failure, void>> saveUserId(String userId) async {
+  // Set User Details
+  Future<Either<Failure, bool>> setUserData(List<String> data) async {
     try {
-      await _sharedPreferences.setString('user_id', userId);
-      return Right(null);
+      _sharedPreferences = await SharedPreferences.getInstance();
+
+      await _sharedPreferences.setString('success', data[0]);
+      await _sharedPreferences.setString('token', data[1]);
+      await _sharedPreferences.setString('user_id', data[2]);
+      await _sharedPreferences.setString('photo', data[3]);
+      await _sharedPreferences.setString('email', data[4]);
+      await _sharedPreferences.setString('role', data[5]);
+      await _sharedPreferences.setString('message', data[6]);
+      await _sharedPreferences.setString('statusCode', data[6]);
+      return Right(true);
     } catch (e) {
       return Left(SharedPrefsFailure(message: e.toString()));
     }
   }
 
-  // Retrieve user_id
-  Future<Either<Failure, String>> getUserId() async {
+  // Get User Data
+  Future<Either<Failure, List<String?>>> getUserData() async {
     try {
-      final userId = _sharedPreferences.getString('user_id');
-      return Right(userId ?? '');
+      _sharedPreferences = await SharedPreferences.getInstance();
+      final success = _sharedPreferences.getString('success');
+      final token = _sharedPreferences.getString('token');
+      final user_id = _sharedPreferences.getString('user_id');
+      final photo = _sharedPreferences.getString('photo');
+      final email = _sharedPreferences.getString('email');
+      final role = _sharedPreferences.getString('role');
+      final message = _sharedPreferences.getString('message');
+      final statusCode = _sharedPreferences.getString('statusCode');
+      return Right(
+          [success, token, user_id, photo, email, role, message, statusCode]);
     } catch (e) {
       return Left(SharedPrefsFailure(message: e.toString()));
     }
