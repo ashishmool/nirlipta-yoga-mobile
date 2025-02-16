@@ -14,6 +14,11 @@ class AppTheme {
       scaffoldBackgroundColor: Colors.grey[200],
       fontFamily: 'Montserrat Regular',
 
+      // CircularProgressIndicator Theme
+      progressIndicatorTheme: ProgressIndicatorThemeData(
+        color: primaryColor, // Sets the color for CircularProgressIndicator
+      ),
+
       // AppBar Theme
       appBarTheme: const AppBarTheme(
         centerTitle: true,
