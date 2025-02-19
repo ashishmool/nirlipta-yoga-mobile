@@ -8,7 +8,6 @@ import '../../domain/use_case/update_category_usecase.dart';
 import 'category_state.dart';
 
 part 'category_event.dart';
-// part 'category_state.dart';
 
 class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
   final CreateCategoryUseCase _createCategoryUseCase;

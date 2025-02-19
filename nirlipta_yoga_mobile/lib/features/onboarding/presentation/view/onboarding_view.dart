@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../view_model/onboarding_cubit.dart';
+import 'shake_button_animation.dart'; // Import the ShakeButtonAnimation
 
 class OnboardingView extends StatelessWidget {
   const OnboardingView({super.key});
@@ -11,8 +12,7 @@ class OnboardingView extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          // Fullscreen background image
-          _buildBackgroundImage('assets/images/onboarding-1.jpg'),
+          _buildBackgroundImage('assets/images/onboarding-2.jpg'),
           _buildSlideContent(context),
         ],
       ),
@@ -59,38 +59,40 @@ class OnboardingView extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 40),
-            ElevatedButton(
-              onPressed: () {
-                // Navigate to LoginView
-                context.read<OnboardingCubit>().goToLogin(context);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.transparent,
-                shadowColor: Colors.transparent,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.0),
+            ShakeButtonAnimation(
+              child: ElevatedButton(
+                onPressed: () {
+                  // Navigate to LoginView
+                  context.read<OnboardingCubit>().goToLogin(context);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.transparent,
+                  shadowColor: Colors.transparent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: const [
-                  Text(
-                    'Start Your Journey',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    Text(
+                      'Start Your Journey',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
-                  SizedBox(width: 8),
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    color: Colors.white,
-                    size: 18,
-                  ),
-                ],
+                    SizedBox(width: 8),
+                    Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.white,
+                      size: 18,
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

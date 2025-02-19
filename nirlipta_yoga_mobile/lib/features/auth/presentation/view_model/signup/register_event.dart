@@ -7,7 +7,7 @@ sealed class RegisterEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadCoursesAndBatches extends RegisterEvent {}
+class LoadUsers extends RegisterEvent {}
 
 class LoadImage extends RegisterEvent {
   final File file;

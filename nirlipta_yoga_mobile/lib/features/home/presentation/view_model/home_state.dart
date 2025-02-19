@@ -1,10 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nirlipta_yoga_mobile/features/home/presentation/view/bottom_view/account_view.dart';
 import 'package:nirlipta_yoga_mobile/features/home/presentation/view/bottom_view/dashboard_view.dart';
 
 import '../../../../app/di/di.dart';
+import '../../../auth/presentation/view/profile_view.dart';
+import '../../../auth/presentation/view_model/profile/profile_bloc.dart';
 import '../../../enrollment/presentation/view/enrollment_view.dart';
 import '../../../enrollment/presentation/view_model/enrollment_bloc.dart';
 import '../../../workshop_category/presentation/view_model/category_bloc.dart';
@@ -42,8 +43,8 @@ class HomeState extends Equatable {
         ),
         // const Text ('My Enrollments'),
         BlocProvider(
-          create: (context) => getIt<DashboardBloc>(),
-          child: AccountView(),
+          create: (context) => getIt<ProfileBloc>(),
+          child: ProfileView(),
         ),
       ],
     );

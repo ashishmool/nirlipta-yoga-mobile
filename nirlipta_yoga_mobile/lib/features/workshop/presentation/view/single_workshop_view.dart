@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../app/shared_prefs/user_shared_prefs.dart';
+import '../../../enrollment/presentation/view_model/enrollment_bloc.dart';
 import '../view_model/single_workshop_bloc.dart';
 import '../view_model/single_workshop_event.dart';
 import '../view_model/single_workshop_state.dart';
@@ -78,10 +80,11 @@ class SingleWorkshopView extends StatelessWidget {
                       const SizedBox(height: 16),
                       const Divider(),
 
-                      // Price & Discount
+                      // Price & Enroll Now Button
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          // Price Display
                           if (workshop["discount_price"] != null &&
                               workshop["discount_price"] > 0 &&
                               workshop["discount_price"] < workshop["price"])
@@ -114,6 +117,47 @@ class SingleWorkshopView extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                   color: primaryColor),
                             ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: primaryColor,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 10),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            onPressed: () {
+                              final userId =
+                                  context.read<UserSharedPrefs>().getUserData();
+
+                              if (userId == null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text("User not logged in!")),
+                                );
+                                return;
+                              }
+
+                              final enrollmentBloc =
+                                  context.read<EnrollmentBloc>();
+
+                              // enrollmentBloc.add(
+                              //   AddEnrollment(
+                              //     userId: userId,
+                              //     workshop: ,
+                              //     // Ensure this is the correct workshop entity
+                              //     paymentStatus: "Pending",
+                              //     enrollmentDate: DateTime.now(),
+                              //     completionStatus: "In Progress",
+                              //     feedback: null,
+                              //   ),
+                              // );
+                            },
+                            child: const Text("Enroll Now",
+                                style: TextStyle(color: Colors.white)),
+                          ),
+                          // Your button code here
+                          // "Enroll Now" Button
                         ],
                       ),
 

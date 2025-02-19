@@ -109,11 +109,22 @@ class EnrollmentBloc extends Bloc<EnrollmentEvent, EnrollmentState> {
   Future<void> _onAddEnrollment(
       AddEnrollment event, Emitter<EnrollmentState> emit) async {
     emit(state.copyWith(isLoading: true));
+
     final result = await _createEnrollmentUseCase.call(
-        CreateEnrollmentParams(userId: event.userId, workshop: event.workshop));
+      CreateEnrollmentParams(
+        userId: event.userId,
+        workshop: event.workshop,
+        paymentStatus: event.paymentStatus,
+        enrollmentDate: event.enrollmentDate,
+        completionStatus: event.completionStatus,
+        feedback: event.feedback,
+      ),
+    );
+
     result.fold(
-      (failure) =>
-          emit(state.copyWith(isLoading: false, error: failure.message)),
+      (failure) {
+        emit(state.copyWith(isLoading: false, error: failure.message));
+      },
       (_) {
         emit(state.copyWith(isLoading: false, error: null));
 
