@@ -17,7 +17,7 @@ class CreateUserParams extends Equatable {
 
   // final DateTime? dob;
   final String gender;
-  final String medical_conditions;
+  final List<String>? medical_conditions;
 
   const CreateUserParams({
     this.id,
@@ -27,7 +27,7 @@ class CreateUserParams extends Equatable {
     required this.email,
     required this.password,
     this.photo,
-    required this.medical_conditions,
+    this.medical_conditions,
     // this.dob,
     required this.gender,
   });
@@ -41,7 +41,7 @@ class CreateUserParams extends Equatable {
         email = '_empty.email',
         password = '_empty.password',
         photo = '_empty.photo',
-        medical_conditions = '_empty.medical_conditions',
+        medical_conditions = null,
         gender = '_empty.gender';
 
   @override

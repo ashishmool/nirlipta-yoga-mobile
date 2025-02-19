@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nirlipta_yoga_mobile/app/shared_prefs/user_shared_prefs.dart';
+import 'package:nirlipta_yoga_mobile/features/auth/domain/use_case/get_user_by_id_usecase.dart';
+import 'package:nirlipta_yoga_mobile/features/auth/domain/use_case/update_user_usecase.dart';
 import 'package:nirlipta_yoga_mobile/features/auth/domain/use_case/upload_image_usecase.dart';
 import 'package:nirlipta_yoga_mobile/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:nirlipta_yoga_mobile/features/auth/presentation/view_model/signup/register_bloc.dart';
@@ -15,6 +17,7 @@ import '../../features/auth/data/data_source/remote_datasource/user_remote_data_
 import '../../features/auth/data/repository/user_remote_repository.dart';
 import '../../features/auth/domain/use_case/create_user_usecase.dart';
 import '../../features/auth/domain/use_case/login_user_usecase.dart';
+import '../../features/auth/presentation/view_model/profile/profile_bloc.dart';
 import '../../features/enrollment/data/data_source/remote_datasource/enrollment_remote_data_source.dart';
 import '../../features/enrollment/data/repository/enrollment_remote_repository.dart';
 import '../../features/enrollment/domain/use_case/create_enrollment_usecase.dart';
@@ -75,6 +78,7 @@ Future<void> initDependencies() async {
   await _initWorkshopDependencies();
   await _initCategoryDependencies();
   await _initEnrollmentDependencies();
+  await _initProfileDependencies();
 }
 
 _initHiveService() {
@@ -244,6 +248,38 @@ _initRegisterDependencies() async {
       // workshopBloc: getIt<WorkshopBloc>(),
       createUserUsecase: getIt<CreateUserUsecase>(),
       uploadImageUseCase: getIt<UploadImageUseCase>(),
+    ),
+  );
+}
+
+_initProfileDependencies() async {
+  if (!getIt.isRegistered<UserRemoteDataSource>()) {
+    getIt.registerFactory<UserRemoteDataSource>(
+      () => UserRemoteDataSource(getIt<Dio>()),
+    );
+  }
+
+  if (!getIt.isRegistered<UserRemoteRepository>()) {
+    getIt.registerLazySingleton<UserRemoteRepository>(
+        () => UserRemoteRepository(getIt<UserRemoteDataSource>()));
+  }
+
+  // FetchUser
+  getIt.registerLazySingleton<GetUserByIdUsecase>(
+      () => GetUserByIdUsecase(userRepository: getIt<UserRemoteRepository>()));
+
+  // UpdateUserUsecase
+  getIt.registerLazySingleton<UpdateUserUsecase>(
+      () => UpdateUserUsecase(userRepository: getIt<UserRemoteRepository>()));
+
+  // Register RegisterBloc
+  getIt.registerFactory<ProfileBloc>(
+    () => ProfileBloc(
+      // batchBloc: getIt<BatchBloc>(),
+      // workshopBloc: getIt<WorkshopBloc>(),
+      updateUserUsecase: getIt<UpdateUserUsecase>(),
+      getUserByIdUsecase: getIt<GetUserByIdUsecase>(),
+      userSharedPrefs: getIt<UserSharedPrefs>(),
     ),
   );
 }

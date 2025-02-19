@@ -25,7 +25,7 @@ class UserHiveModelAdapter extends TypeAdapter<UserHiveModel> {
       password: fields[5] as String,
       photo: fields[6] as String?,
       gender: fields[7] as String,
-      medicalConditions: fields[8] as String?,
+      medicalConditions: (fields[8] as List?)?.cast<String>(),
     );
   }
 

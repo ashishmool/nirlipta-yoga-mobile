@@ -17,7 +17,7 @@ class UpdateUserParams extends Equatable {
 
   // final DateTime? dob;
   final String gender;
-  final String medical_conditions;
+  final List<String>? medical_conditions;
 
   const UpdateUserParams({
     required this.id,
@@ -27,13 +27,13 @@ class UpdateUserParams extends Equatable {
     required this.email,
     required this.password,
     this.photo,
-    required this.medical_conditions,
+    this.medical_conditions,
     // this.dob,
     required this.gender,
   });
 
   // Initialize Empty Constructor
-  const UpdateUserParams.empty()
+  UpdateUserParams.empty()
       : id = '_empty.id',
         name = '_empty.name',
         username = '_empty.username',
@@ -41,11 +41,12 @@ class UpdateUserParams extends Equatable {
         email = '_empty.email',
         password = '_empty.password',
         photo = '_empty.photo',
-        medical_conditions = '_empty.medical_conditions',
+        medical_conditions = ['None'],
         gender = '_empty.gender';
 
   @override
-  List<Object?> get props => [
+  List<Object?> get props =>
+      [
         id,
         name,
         username,

@@ -464,7 +464,7 @@ class _RegisterViewState extends State<RegisterView> {
                                   email: _emailController.text,
                                   password: _passwordController.text,
                                   gender: _genderValue.toString(),
-                                  medical_conditions: '',
+                                  medical_conditions: ['None'],
                                   photo: imageName,
                                 ));
                           }

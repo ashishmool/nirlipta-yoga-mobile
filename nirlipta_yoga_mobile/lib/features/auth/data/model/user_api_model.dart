@@ -16,7 +16,7 @@ class UserApiModel extends Equatable {
   // @JsonKey(name: 'photo') // Maps the server field "photo" to the "image" field
   final String? photo;
   final String gender;
-  final String medical_conditions;
+  final List<String>? medical_conditions;
 
   const UserApiModel({
     this.id,
@@ -27,7 +27,7 @@ class UserApiModel extends Equatable {
     required this.password,
     this.photo,
     required this.gender,
-    this.medical_conditions = 'None',
+    this.medical_conditions,
   });
 
   const UserApiModel.empty()
@@ -39,7 +39,7 @@ class UserApiModel extends Equatable {
         password = '',
         photo = '',
         gender = '',
-        medical_conditions = 'None';
+        medical_conditions = null;
 
   /// Factory constructor for creating a `UserApiModel` from JSON
   factory UserApiModel.fromJson(Map<String, dynamic> json) {
@@ -52,7 +52,7 @@ class UserApiModel extends Equatable {
       password: json['password'] as String,
       photo: json['photo'] as String?,
       gender: json['gender'] as String,
-      medical_conditions: json['medical_conditions'] as String? ?? 'None',
+      medical_conditions: List<String>.from(json["medical_conditions"]),
     );
   }
 

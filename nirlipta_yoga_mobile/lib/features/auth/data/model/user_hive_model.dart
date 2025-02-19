@@ -35,7 +35,7 @@ class UserHiveModel extends Equatable {
   final String gender;
 
   @HiveField(8)
-  final String medicalConditions;
+  final List<String>? medicalConditions;
 
   UserHiveModel({
     String? id,
@@ -46,9 +46,9 @@ class UserHiveModel extends Equatable {
     required this.password,
     this.photo,
     required this.gender,
-    String? medicalConditions,
+    List<String>? medicalConditions,
   })  : id = id ?? const Uuid().v4(),
-        medicalConditions = medicalConditions ?? 'None';
+        medicalConditions = medicalConditions ?? null;
 
   /// Initial constructor with default values
   const UserHiveModel.initial()
@@ -60,7 +60,7 @@ class UserHiveModel extends Equatable {
         password = '',
         photo = null,
         gender = '',
-        medicalConditions = 'None';
+        medicalConditions = null;
 
   /// Convert from entity
   factory UserHiveModel.fromEntity(UserEntity entity) {

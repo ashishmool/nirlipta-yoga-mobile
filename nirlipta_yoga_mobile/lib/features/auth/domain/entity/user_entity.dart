@@ -11,7 +11,7 @@ class UserEntity extends Equatable {
 
   // final DateTime? dob;
   final String gender;
-  final String medical_conditions;
+  final List<String>? medical_conditions;
 
   const UserEntity({
     this.id,
@@ -35,7 +35,7 @@ class UserEntity extends Equatable {
         email = '_empty.email',
         password = '_empty.password',
         photo = '_empty.photo',
-        medical_conditions = '_empty.medical_conditions',
+        medical_conditions = null,
         gender = '_empty.gender';
 
   @override

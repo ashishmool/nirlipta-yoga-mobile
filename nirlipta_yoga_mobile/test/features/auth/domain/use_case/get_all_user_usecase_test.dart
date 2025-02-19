@@ -32,7 +32,7 @@ void main() {
     phone: '9813943777',
     email: 'testuser1@email.com',
     password: 'test@12345',
-    medical_conditions: 'None',
+    medical_conditions: null,
     gender: 'male',
   );
 
@@ -44,7 +44,7 @@ void main() {
     phone: '9813943776',
     email: 'testuser2@email.com',
     password: 'test@123456',
-    medical_conditions: 'Diabetes',
+    medical_conditions: ['Diabetes'],
     gender: 'female',
   );
 

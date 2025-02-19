@@ -27,7 +27,7 @@ class RegisterUser extends RegisterEvent {
 
   // final DateTime? dob;
   final String gender;
-  final String medical_conditions;
+  final List<String>? medical_conditions;
 
   const RegisterUser({
     required this.name,
@@ -36,7 +36,7 @@ class RegisterUser extends RegisterEvent {
     required this.email,
     required this.password,
     this.photo,
-    required this.medical_conditions,
+    this.medical_conditions,
     // this.dob,
     required this.gender,
   });
@@ -48,7 +48,6 @@ class RegisterUser extends RegisterEvent {
         phone,
         email,
         password,
-        medical_conditions,
         gender,
       ];
 }
