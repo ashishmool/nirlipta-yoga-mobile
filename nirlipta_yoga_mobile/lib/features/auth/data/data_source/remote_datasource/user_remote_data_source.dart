@@ -160,14 +160,14 @@ class UserRemoteDataSource {
   }
 
   // Update user
-  Future<void> updateUser(UserEntity userEntity) async {
+  Future<void> updateUser(UserEntity userEntity, String token) async {
     try {
       var userApiModel = UserApiModel.fromEntity(userEntity);
       var response = await _dio.put(
-        ApiEndpoints.updateUser,
+        '${ApiEndpoints.updateUser}/${userEntity.id}',
         data: userApiModel.toJson(),
       );
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         return;
       } else {
         throw Exception(response.statusMessage);

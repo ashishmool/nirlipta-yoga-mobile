@@ -7,6 +7,16 @@ sealed class ProfileEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class LoadUsers extends ProfileEvent {}
+
+class LoadImage extends ProfileEvent {
+  final File file;
+
+  const LoadImage({
+    required this.file,
+  });
+}
+
 class FetchUserById extends ProfileEvent {
   final String userId;
 
@@ -17,10 +27,39 @@ class FetchUserById extends ProfileEvent {
 }
 
 class UpdateUserProfile extends ProfileEvent {
-  final UpdateUserParams params;
+  final String id;
+  final String name;
+  final String username;
+  final String phone;
+  final String email;
+  final String password;
+  final String? photo;
 
-  const UpdateUserProfile({required this.params});
+  // final DateTime? dob;
+  final String gender;
+  final List<String>? medical_conditions;
+
+  const UpdateUserProfile({
+    required this.id,
+    required this.name,
+    required this.username,
+    required this.phone,
+    required this.email,
+    required this.password,
+    this.photo,
+    this.medical_conditions,
+    // this.dob,
+    required this.gender,
+  });
 
   @override
-  List<Object> get props => [params];
+  List<Object> get props => [
+        id,
+        name,
+        username,
+        phone,
+        email,
+        password,
+        gender,
+      ];
 }

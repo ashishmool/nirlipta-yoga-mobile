@@ -269,8 +269,10 @@ _initProfileDependencies() async {
       () => GetUserByIdUsecase(userRepository: getIt<UserRemoteRepository>()));
 
   // UpdateUserUsecase
-  getIt.registerLazySingleton<UpdateUserUsecase>(
-      () => UpdateUserUsecase(userRepository: getIt<UserRemoteRepository>()));
+  getIt.registerLazySingleton<UpdateUserUsecase>(() => UpdateUserUsecase(
+      userRepository: getIt<UserRemoteRepository>(),
+      tokenSharedPrefs: getIt<TokenSharedPrefs>(),
+      userSharedPrefs: getIt<UserSharedPrefs>()));
 
   // Register RegisterBloc
   getIt.registerFactory<ProfileBloc>(
@@ -280,6 +282,7 @@ _initProfileDependencies() async {
       updateUserUsecase: getIt<UpdateUserUsecase>(),
       getUserByIdUsecase: getIt<GetUserByIdUsecase>(),
       userSharedPrefs: getIt<UserSharedPrefs>(),
+      uploadImageUseCase: getIt<UploadImageUseCase>(),
     ),
   );
 }

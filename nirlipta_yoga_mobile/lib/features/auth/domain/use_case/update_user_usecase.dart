@@ -1,13 +1,15 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../../../app/shared_prefs/token_shared_prefs.dart';
+import '../../../../app/shared_prefs/user_shared_prefs.dart';
 import '../../../../app/usecase/usecase.dart';
 import '../../../../core/error/failure.dart';
 import '../entity/user_entity.dart';
 import '../repository/user_repository.dart';
 
 class UpdateUserParams extends Equatable {
-  final String id;
+  final String? id;
   final String name;
   final String username;
   final String phone;
@@ -20,7 +22,7 @@ class UpdateUserParams extends Equatable {
   final List<String>? medical_conditions;
 
   const UpdateUserParams({
-    required this.id,
+    this.id,
     required this.name,
     required this.username,
     required this.phone,
@@ -45,8 +47,7 @@ class UpdateUserParams extends Equatable {
         gender = '_empty.gender';
 
   @override
-  List<Object?> get props =>
-      [
+  List<Object?> get props => [
         id,
         name,
         username,
@@ -75,24 +76,35 @@ class UpdateUserParams extends Equatable {
 
 class UpdateUserUsecase implements UsecaseWithParams<void, UpdateUserParams> {
   final IUserRepository userRepository;
+  final TokenSharedPrefs tokenSharedPrefs;
+  final UserSharedPrefs userSharedPrefs;
 
-  const UpdateUserUsecase({required this.userRepository});
+  const UpdateUserUsecase({
+    required this.userRepository,
+    required this.tokenSharedPrefs,
+    required this.userSharedPrefs,
+  });
 
   @override
   Future<Either<Failure, void>> call(UpdateUserParams params) async {
-    final userEntity = UserEntity(
-      id: params.id,
-      name: params.name,
-      username: params.username,
-      phone: params.phone,
-      email: params.email,
-      password: params.password,
-      photo: params.photo,
-      gender: params.gender,
-      medical_conditions: params.medical_conditions,
-    );
+    final tokenResult = await tokenSharedPrefs.getToken();
 
-    // Call the repository method to create the user
-    return await userRepository.updateUser(userEntity);
+    // Handle token retrieval failure
+    return tokenResult.fold(
+        (failure) => Left(failure),
+        (token) async => await userRepository.updateUser(
+              UserEntity(
+                id: params.id,
+                name: params.name,
+                username: params.username,
+                phone: params.phone,
+                email: params.email,
+                password: params.password,
+                photo: params.photo,
+                gender: params.gender,
+                medical_conditions: params.medical_conditions,
+              ),
+              token,
+            ));
   }
 }

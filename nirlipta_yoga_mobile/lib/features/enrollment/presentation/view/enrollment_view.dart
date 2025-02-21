@@ -50,7 +50,7 @@ class EnrollmentView extends StatelessWidget {
                                   "Workshop Title: ${enrollment.workshop.title ?? 'N/A'}",
                                   style: const TextStyle(
                                     fontSize: 14,
-                                    color: Colors.grey,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                                 const SizedBox(height: 5),
@@ -58,7 +58,6 @@ class EnrollmentView extends StatelessWidget {
                                   "Status: ${enrollment.completionStatus}",
                                   style: const TextStyle(
                                     fontSize: 14,
-                                    color: Colors.grey,
                                   ),
                                 ),
                                 const SizedBox(height: 5),
@@ -66,7 +65,6 @@ class EnrollmentView extends StatelessWidget {
                                   "Enrollment Date: $formattedDate",
                                   style: const TextStyle(
                                     fontSize: 14,
-                                    color: Colors.grey,
                                   ),
                                 ),
                                 const SizedBox(height: 5),
@@ -74,10 +72,11 @@ class EnrollmentView extends StatelessWidget {
                                   "Payment Status: ${enrollment.paymentStatus}",
                                   style: const TextStyle(
                                     fontSize: 14,
-                                    color: Colors.grey,
                                   ),
                                 ),
                                 const SizedBox(height: 8),
+
+                                // Show "Generate Certificate" button if status is completed
                                 if (enrollment.completionStatus == "completed")
                                   ElevatedButton(
                                     onPressed: () {
@@ -90,6 +89,25 @@ class EnrollmentView extends StatelessWidget {
                                     ),
                                     child: const Text('Generate Certificate'),
                                   ),
+
+                                // Show "Make Payment" button if payment status is failed
+                                if (enrollment.paymentStatus == "failed")
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      print("Redirect to Payment Page");
+                                      // Add logic to navigate to the payment screen
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.red,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                    child: const Text(
+                                      'Make Payment',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
                               ],
                             ),
                           ),
@@ -97,20 +115,18 @@ class EnrollmentView extends StatelessWidget {
                           // Right side: Workshop Image
                           ClipRRect(
                             borderRadius: BorderRadius.circular(10),
-                            // Optional: Rounded corners
                             child: enrollment.workshop.photo != null &&
                                     enrollment.workshop.photo!.isNotEmpty
                                 ? Image.network(
-                                    "http://10.0.2.2:5000${enrollment.workshop.photo}", // Ensure correct API URL
-                                    width: 80, // Adjust as needed
+                                    "$baseUrl${enrollment.workshop.photo}",
+                                    width: 80,
                                     height: 80,
                                     fit: BoxFit.cover,
                                   )
                                 : Container(
                                     width: 80,
                                     height: 80,
-                                    color: Colors
-                                        .grey[300], // Placeholder background
+                                    color: Colors.grey[300],
                                     child: const Icon(Icons.image_not_supported,
                                         color: Colors.grey),
                                   ),

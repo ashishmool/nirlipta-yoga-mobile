@@ -95,9 +95,10 @@ class UserRemoteRepository implements IUserRepository {
   }
 
   @override
-  Future<Either<Failure, void>> updateUser(UserEntity userEntity) async {
+  Future<Either<Failure, void>> updateUser(
+      UserEntity userEntity, String token) async {
     try {
-      await _userRemoteDataSource.updateUser(userEntity);
+      await _userRemoteDataSource.updateUser(userEntity, token);
       return const Right(null); // Successfully updated user
     } catch (e) {
       return Left(ApiFailure(

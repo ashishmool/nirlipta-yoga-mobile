@@ -5,7 +5,10 @@ class ProfileState extends Equatable {
   final bool isSuccess;
   final bool isUpdateLoading;
   final bool isUpdateSuccess;
+  final bool isImageLoading;
+  final bool isImageSuccess;
   final UserEntity? user;
+  final String? imageName;
   final String? errorMessage;
 
   ProfileState({
@@ -13,7 +16,10 @@ class ProfileState extends Equatable {
     required this.isSuccess,
     required this.isUpdateLoading,
     required this.isUpdateSuccess,
+    required this.isImageLoading,
+    required this.isImageSuccess,
     this.user,
+    this.imageName,
     this.errorMessage,
   });
 
@@ -22,7 +28,10 @@ class ProfileState extends Equatable {
         isSuccess = false,
         isUpdateLoading = false,
         isUpdateSuccess = false,
+        isImageLoading = false,
+        isImageSuccess = false,
         user = null,
+        imageName = null,
         errorMessage = null;
 
   ProfileState copyWith({
@@ -30,8 +39,11 @@ class ProfileState extends Equatable {
     bool? isSuccess,
     bool? isUpdateLoading,
     bool? isUpdateSuccess,
+    bool? isImageLoading,
+    bool? isImageSuccess,
     UserEntity? user,
     String? errorMessage,
+    String? imageName,
   }) {
     return ProfileState(
       isLoading: isLoading ?? this.isLoading,
@@ -39,7 +51,10 @@ class ProfileState extends Equatable {
       isUpdateLoading: isUpdateLoading ?? this.isUpdateLoading,
       isUpdateSuccess: isUpdateSuccess ?? this.isUpdateSuccess,
       user: user ?? this.user,
+      imageName: imageName ?? this.imageName,
       errorMessage: errorMessage ?? this.errorMessage,
+      isImageLoading: isImageLoading ?? this.isImageLoading,
+      isImageSuccess: isImageSuccess ?? this.isImageSuccess,
     );
   }
 
@@ -50,6 +65,7 @@ class ProfileState extends Equatable {
         isUpdateLoading,
         isUpdateSuccess,
         user,
+        imageName,
         errorMessage,
       ];
 }

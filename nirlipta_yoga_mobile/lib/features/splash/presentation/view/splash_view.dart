@@ -27,31 +27,36 @@ class _SplashViewState extends State<SplashView> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Lottie.asset(
-                'assets/animations/loading.json',
-                height: screenHeight * 0.5, // Occupy 50% of screen height
-                repeat: true,
+        child: Stack(
+          children: [
+            // Center the main content
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Lottie.asset(
+                    'assets/animations/loading.json',
+                    height: screenHeight * 0.5, // Occupy 50% of screen height
+                    repeat: true,
+                  ),
+                  const SizedBox(height: 30),
+                  const CircularProgressIndicator(),
+                  const SizedBox(height: 10),
+                  const Text('Version: 1.0.0'),
+                  const SizedBox(height: 30),
+                ],
               ),
-              const SizedBox(height: 30),
-              const CircularProgressIndicator(),
-              const SizedBox(height: 10),
-              const Text('Version: 1.0.0'),
-              const SizedBox(height: 30),
-              // Footer
-              Positioned(
-                bottom: 10,
-                left: MediaQuery.of(context).size.width / 4,
-                child: const Text(
-                  'Developed by: Ashish Mool', // Replace with your name
-                  style: TextStyle(fontSize: 15),
-                ),
+            ),
+            // Positioned footer at the bottom
+            Positioned(
+              bottom: 10,
+              left: screenWidth / 4,
+              child: const Text(
+                'Developed by: Ashish Mool', // Replace with your name
+                style: TextStyle(fontSize: 15),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

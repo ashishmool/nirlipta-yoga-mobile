@@ -72,7 +72,8 @@ class UserLocalRepository implements IUserRepository {
   }
 
   @override
-  Future<Either<Failure, void>> updateUser(UserEntity userEntity) {
+  Future<Either<Failure, void>> updateUser(
+      UserEntity userEntity, String? token) {
     // TODO: implement updateUser
     throw UnimplementedError();
   }
