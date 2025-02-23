@@ -74,10 +74,10 @@ Future<void> initDependencies() async {
 
   // Initialize Dashboard and Others
   await _initDashboardDependencies();
+  await _initEnrollmentDependencies();
 
   await _initWorkshopDependencies();
   await _initCategoryDependencies();
-  await _initEnrollmentDependencies();
   await _initProfileDependencies();
 }
 
@@ -292,10 +292,6 @@ _initLoginDependencies() async {
     () => TokenSharedPrefs(getIt<SharedPreferences>()),
   );
 
-  getIt.registerLazySingleton<UserSharedPrefs>(
-    () => UserSharedPrefs(),
-  );
-
   if (!getIt.isRegistered<LoginUserUsecase>()) {
     getIt.registerLazySingleton<LoginUserUsecase>(() => LoginUserUsecase(
           tokenSharedPrefs: getIt<TokenSharedPrefs>(),
@@ -322,8 +318,12 @@ _initSplashScreenDependencies() async {
 }
 
 _initOnboardingScreenDependencies() async {
+  getIt.registerLazySingleton<UserSharedPrefs>(
+    () => UserSharedPrefs(),
+  );
   getIt.registerFactory<OnboardingCubit>(
-    () => OnboardingCubit(getIt<LoginBloc>()),
+    () => OnboardingCubit(
+        getIt<LoginBloc>(), getIt<TokenSharedPrefs>(), getIt<HomeCubit>()),
   );
 }
 

@@ -7,5 +7,7 @@ abstract interface class IUserDataSource {
 
   Future<void> deleteUser(String id);
 
+  Future<void> updateUser(String id, String token);
+
   Future<List<String>> login(String email, String password);
 }

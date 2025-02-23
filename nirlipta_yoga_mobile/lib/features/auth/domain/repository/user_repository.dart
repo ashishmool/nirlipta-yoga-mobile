@@ -12,7 +12,8 @@ abstract interface class IUserRepository {
 
   Future<Either<Failure, UserEntity>> getUserById(String id);
 
-  Future<Either<Failure, void>> updateUser(UserEntity userEntity, String token);
+  Future<Either<Failure, void>> updateUser(
+      String id, String token, Map<String, dynamic> userData);
 
   Future<Either<Failure, void>> deleteUser(String id);
 

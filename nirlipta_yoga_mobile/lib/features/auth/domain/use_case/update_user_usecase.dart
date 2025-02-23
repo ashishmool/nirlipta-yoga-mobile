@@ -5,7 +5,6 @@ import '../../../../app/shared_prefs/token_shared_prefs.dart';
 import '../../../../app/shared_prefs/user_shared_prefs.dart';
 import '../../../../app/usecase/usecase.dart';
 import '../../../../core/error/failure.dart';
-import '../entity/user_entity.dart';
 import '../repository/user_repository.dart';
 
 class UpdateUserParams extends Equatable {
@@ -87,24 +86,27 @@ class UpdateUserUsecase implements UsecaseWithParams<void, UpdateUserParams> {
 
   @override
   Future<Either<Failure, void>> call(UpdateUserParams params) async {
-    final tokenResult = await tokenSharedPrefs.getToken();
+    // Fetch user data from SharedPreferences
+    final userDataResult = await userSharedPrefs.getUserData();
 
-    // Handle token retrieval failure
-    return tokenResult.fold(
-        (failure) => Left(failure),
-        (token) async => await userRepository.updateUser(
-              UserEntity(
-                id: params.id,
-                name: params.name,
-                username: params.username,
-                phone: params.phone,
-                email: params.email,
-                password: params.password,
-                photo: params.photo,
-                gender: params.gender,
-                medical_conditions: params.medical_conditions,
-              ),
-              token,
-            ));
+    return userDataResult.fold(
+      (failure) => Left(failure),
+      // Return failure if fetching user data fails
+      (userData) async {
+        if (userData[2] == null || userData[1] == null) {
+          return Left(
+              SharedPrefsFailure(message: "User ID or Token is missing"));
+        }
+
+        final String userId = userData[2]!; // Extract userId
+        final String token = userData[1]!; // Extract token
+
+        return await userRepository.updateUser(
+          userId,
+          token,
+          params.toJson(), // Pass the user data
+        );
+      },
+    );
   }
 }

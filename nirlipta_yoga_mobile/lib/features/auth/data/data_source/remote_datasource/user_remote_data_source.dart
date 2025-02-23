@@ -160,16 +160,21 @@ class UserRemoteDataSource {
   }
 
   // Update user
-  Future<void> updateUser(UserEntity userEntity, String token) async {
+  Future<void> updateUser(
+      String userId, String token, Map<String, dynamic> userData) async {
     try {
-      var userApiModel = UserApiModel.fromEntity(userEntity);
       var response = await _dio.put(
-        '${ApiEndpoints.updateUser}/${userEntity.id}',
-        data: userApiModel.toJson(),
+        '${ApiEndpoints.updateUser}/$userId',
+        data: userData,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
+          },
+        ),
       );
-      if (response.statusCode == 201) {
-        return;
-      } else {
+
+      if (response.statusCode != 200) {
         throw Exception(response.statusMessage);
       }
     } on DioException catch (e) {

@@ -9,6 +9,7 @@ class ProfileState extends Equatable {
   final bool isImageSuccess;
   final UserEntity? user;
   final String? imageName;
+  final String? userId;
   final String? errorMessage;
 
   ProfileState({
@@ -20,6 +21,7 @@ class ProfileState extends Equatable {
     required this.isImageSuccess,
     this.user,
     this.imageName,
+    this.userId,
     this.errorMessage,
   });
 
@@ -32,6 +34,7 @@ class ProfileState extends Equatable {
         isImageSuccess = false,
         user = null,
         imageName = null,
+        userId = null,
         errorMessage = null;
 
   ProfileState copyWith({
@@ -44,6 +47,7 @@ class ProfileState extends Equatable {
     UserEntity? user,
     String? errorMessage,
     String? imageName,
+    String? userId,
   }) {
     return ProfileState(
       isLoading: isLoading ?? this.isLoading,
@@ -55,6 +59,7 @@ class ProfileState extends Equatable {
       errorMessage: errorMessage ?? this.errorMessage,
       isImageLoading: isImageLoading ?? this.isImageLoading,
       isImageSuccess: isImageSuccess ?? this.isImageSuccess,
+      userId: userId ?? this.userId,
     );
   }
 
@@ -67,5 +72,6 @@ class ProfileState extends Equatable {
         user,
         imageName,
         errorMessage,
+        userId
       ];
 }

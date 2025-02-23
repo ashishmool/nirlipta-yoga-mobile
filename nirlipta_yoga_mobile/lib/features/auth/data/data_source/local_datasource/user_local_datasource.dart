@@ -47,4 +47,10 @@ class UserLocalDatasource implements IUserDataSource {
       throw Exception(e);
     }
   }
+
+  @override
+  Future<void> updateUser(String id, String token) {
+    // TODO: implement updateUser
+    throw UnimplementedError();
+  }
 }

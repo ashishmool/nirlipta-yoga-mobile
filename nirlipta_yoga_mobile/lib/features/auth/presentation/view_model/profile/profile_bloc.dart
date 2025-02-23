@@ -29,7 +29,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         _uploadImageUseCase = uploadImageUseCase,
         super(ProfileState.initial()) {
     on<LoadImage>(_onLoadImage);
-
     on<FetchUserById>(_onFetchUserById);
     on<UpdateUserProfile>(_onUpdateUserProfile);
 
@@ -49,25 +48,27 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     );
 
     result.fold(
-        (l) =>
-            emit(state.copyWith(isImageLoading: false, isImageSuccess: false)),
-        (r) {
-      emit(state.copyWith(
-          isImageLoading: false, isImageSuccess: true, imageName: r));
-    });
+      (l) => emit(state.copyWith(isImageLoading: false, isImageSuccess: false)),
+      (r) {
+        emit(state.copyWith(
+          isImageLoading: false,
+          isImageSuccess: true,
+          imageName: r,
+        ));
+      },
+    );
   }
 
-  void _fetchAndLoadUserProfile() async {
+  Future<void> _fetchAndLoadUserProfile() async {
     final userData = await _userSharedPrefs.getUserData();
     final userId = userData.fold(
       (failure) => null,
-      (data) => data[2], // Assuming userId is at index 2 in the user data
+      (data) => data[2], // userId is at index 2 in the user data
     );
 
-    print("Fetched userId from SharedPrefs: $userId"); // Debugging line
-
     if (userId != null) {
-      add(FetchUserById(userId: userId));
+      emit(state.copyWith(userId: userId));
+      add(FetchUserById(userId: userId)); // Only fetch user data on page load
     }
   }
 
@@ -75,15 +76,14 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     FetchUserById event,
     Emitter<ProfileState> emit,
   ) async {
-    print("Fetching user with ID: ${event.userId}"); // Debugging line
     emit(state.copyWith(isLoading: true));
 
-    final result = await _getUserByIdUsecase
-        .call(GetUserByIdParams(user_id: event.userId));
+    final result = await _getUserByIdUsecase.call(
+      GetUserByIdParams(user_id: event.userId),
+    );
 
     result.fold(
       (failure) {
-        print("Fetch failed: ${failure.message}"); // Debugging line
         emit(state.copyWith(
           isLoading: false,
           isSuccess: false,
@@ -91,7 +91,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         ));
       },
       (user) {
-        print("User fetched successfully: $user"); // Debugging line
         emit(state.copyWith(
           isLoading: false,
           isSuccess: true,
@@ -108,12 +107,13 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     emit(state.copyWith(isUpdateLoading: true));
 
     final params = UpdateUserParams(
+      id: event.id,
       name: event.name,
       username: event.username,
       phone: event.phone,
       email: event.email,
       password: event.password,
-      photo: state.imageName,
+      photo: event.photo,
       gender: event.gender,
       medical_conditions: event.medical_conditions,
     );
@@ -132,7 +132,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           isUpdateSuccess: true,
         ));
 
-        // Trigger FetchUserById after a successful update
+        // Optionally, fetch the updated user data
         add(FetchUserById(userId: event.id));
       },
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nirlipta_yoga_mobile/features/workshop/domain/entity/workshop_entity.dart';
 
 import '../../../../app/shared_prefs/user_shared_prefs.dart';
 import '../../../enrollment/presentation/view_model/enrollment_bloc.dart';
@@ -14,8 +15,7 @@ const Color secondaryColor = Color(0xFFB8978C);
 class SingleWorkshopView extends StatelessWidget {
   final String workshopId;
 
-  const SingleWorkshopView({Key? key, required this.workshopId})
-      : super(key: key);
+  const SingleWorkshopView({super.key, required this.workshopId});
 
   @override
   Widget build(BuildContext context) {
@@ -126,9 +126,14 @@ class SingleWorkshopView extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(8),
                               ),
                             ),
-                            onPressed: () {
-                              final userId =
-                                  context.read<UserSharedPrefs>().getUserData();
+                            onPressed: () async {
+                              final userData = await context
+                                  .read<UserSharedPrefs>()
+                                  .getUserData();
+                              final userId = userData.fold(
+                                (failure) => null,
+                                (data) => data[2], // User ID is in data[2]
+                              );
 
                               if (userId == null) {
                                 ScaffoldMessenger.of(context).showSnackBar(
@@ -141,17 +146,29 @@ class SingleWorkshopView extends StatelessWidget {
                               final enrollmentBloc =
                                   context.read<EnrollmentBloc>();
 
-                              // enrollmentBloc.add(
-                              //   AddEnrollment(
-                              //     userId: userId,
-                              //     workshop: ,
-                              //     // Ensure this is the correct workshop entity
-                              //     paymentStatus: "Pending",
-                              //     enrollmentDate: DateTime.now(),
-                              //     completionStatus: "In Progress",
-                              //     feedback: null,
-                              //   ),
-                              // );
+                              // Use the actual workshop data from the state
+                              final workshop = state.workshop;
+
+                              enrollmentBloc.add(
+                                AddEnrollment(
+                                  userId: userId,
+                                  workshop: WorkshopEntity(
+                                    id: workshop["workshopId"],
+                                    title: workshop["title"],
+                                    categoryId: workshop["category"],
+                                    price: workshop["price"],
+                                    discountPrice: workshop["discount_price"],
+                                    photo: workshop["photo"],
+                                    description: workshop["description"],
+                                    difficultyLevel: 'difficulty_level',
+                                    modules: [],
+                                  ),
+                                  paymentStatus: "Pending",
+                                  enrollmentDate: DateTime.now(),
+                                  completionStatus: "In Progress",
+                                  feedback: null,
+                                ),
+                              );
                             },
                             child: const Text("Enroll Now",
                                 style: TextStyle(color: Colors.white)),
