@@ -8,8 +8,8 @@ import '../../../auth/presentation/view/profile_view.dart';
 import '../../../auth/presentation/view_model/profile/profile_bloc.dart';
 import '../../../enrollment/presentation/view/enrollment_view.dart';
 import '../../../enrollment/presentation/view_model/enrollment_bloc.dart';
+import '../../../fitness/fitness_view.dart';
 import '../../../workshop_category/presentation/view_model/category_bloc.dart';
-import '../view/bottom_view/fitness_view.dart';
 import '../view/bottom_view_model/dashboard_bloc.dart';
 
 class HomeState extends Equatable {

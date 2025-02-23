@@ -17,8 +17,6 @@ class EnrollmentView extends StatelessWidget {
           builder: (context, state) {
             if (state.isLoading) {
               return const Center(child: CircularProgressIndicator());
-            } else if (state.error != null) {
-              return Center(child: Text("Error: ${state.error}"));
             } else if (state.enrollments.isEmpty) {
               return const Center(child: Text('No Enrollments Added Yet'));
             } else {

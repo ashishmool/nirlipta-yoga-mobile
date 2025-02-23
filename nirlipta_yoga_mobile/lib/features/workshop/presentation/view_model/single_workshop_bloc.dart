@@ -10,6 +10,7 @@ class SingleWorkshopBloc
     extends Bloc<SingleWorkshopEvent, SingleWorkshopState> {
   SingleWorkshopBloc() : super(SingleWorkshopInitial()) {
     on<LoadSingleWorkshop>(_onLoadSingleWorkshop);
+    on<EnrollInWorkshop>(_onEnrollInWorkshop);
   }
 
   void _onLoadSingleWorkshop(
@@ -57,6 +58,31 @@ class SingleWorkshopBloc
       }
     } catch (e) {
       emit(SingleWorkshopError("Error: ${e.toString()}"));
+    }
+  }
+
+  void _onEnrollInWorkshop(
+      EnrollInWorkshop event, Emitter<SingleWorkshopState> emit) async {
+    emit(EnrollmentLoading());
+    try {
+      final response = await http.post(
+        Uri.parse("http://10.0.2.2:5000/api/enrollments/save"),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(
+            {"user_id": event.userId, "workshop_id": event.workshopId}),
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 201) {
+        emit(EnrollmentSuccess(
+            message: responseData["message"] ?? "Enrollment successful!"));
+      } else {
+        emit(EnrollmentError(
+            responseData["message"] ?? "Failed to enroll in workshop"));
+      }
+    } catch (e) {
+      emit(EnrollmentError("Error: ${e.toString()}"));
     }
   }
 }

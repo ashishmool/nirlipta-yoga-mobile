@@ -13,3 +13,13 @@ class LoadSingleWorkshop extends SingleWorkshopEvent {
   @override
   List<Object?> get props => [workshopId];
 }
+
+class EnrollInWorkshop extends SingleWorkshopEvent {
+  final String userId;
+  final String workshopId;
+
+  EnrollInWorkshop({required this.userId, required this.workshopId});
+
+  @override
+  List<Object?> get props => [userId, workshopId];
+}

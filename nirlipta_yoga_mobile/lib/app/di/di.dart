@@ -210,10 +210,6 @@ _initCategoryDependencies() async {
 }
 
 _initHomeDependencies() async {
-  // getIt.registerLazySingleton<TokenSharedPrefs>(
-  //   () => TokenSharedPrefs(getIt<SharedPreferences>()),
-  // );
-
   getIt.registerSingleton<HomeCubit>(
     HomeCubit(
         tokenSharedPrefs: getIt<TokenSharedPrefs>(),

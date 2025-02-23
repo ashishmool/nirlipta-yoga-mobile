@@ -26,3 +26,23 @@ class SingleWorkshopError extends SingleWorkshopState {
   @override
   List<Object?> get props => [message];
 }
+
+class EnrollmentLoading extends SingleWorkshopState {}
+
+class EnrollmentSuccess extends SingleWorkshopState {
+  final String message;
+
+  EnrollmentSuccess({required this.message});
+
+  @override
+  List<Object?> get props => [message];
+}
+
+class EnrollmentError extends SingleWorkshopState {
+  final String message;
+
+  EnrollmentError(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}

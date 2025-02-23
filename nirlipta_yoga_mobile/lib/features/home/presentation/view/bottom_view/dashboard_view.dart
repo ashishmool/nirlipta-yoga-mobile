@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../../workshop/presentation/view/single_workshop_view.dart';
+import '../../../../workshop/presentation/view/workshop_card_view.dart';
 import '../bottom_view_model/dashboard_bloc.dart';
 import '../bottom_view_model/dashboard_event.dart';
 import '../bottom_view_model/dashboard_state.dart';
-import 'workshop_card_view.dart';
 
 class DashboardView extends StatefulWidget {
   const DashboardView({super.key});
