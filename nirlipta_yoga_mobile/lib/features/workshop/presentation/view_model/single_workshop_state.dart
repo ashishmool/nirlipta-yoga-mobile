@@ -11,11 +11,12 @@ class SingleWorkshopLoading extends SingleWorkshopState {}
 
 class SingleWorkshopLoaded extends SingleWorkshopState {
   final Map<String, dynamic> workshop;
+  final bool isEnrolled;
 
-  SingleWorkshopLoaded({required this.workshop});
+  SingleWorkshopLoaded({required this.workshop, required this.isEnrolled});
 
   @override
-  List<Object?> get props => [workshop];
+  List<Object?> get props => [workshop, isEnrolled];
 }
 
 class SingleWorkshopError extends SingleWorkshopState {

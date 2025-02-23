@@ -122,41 +122,46 @@ class SingleWorkshopView extends StatelessWidget {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 16, vertical: 10),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
+                                  borderRadius: BorderRadius.circular(8)),
                             ),
-                            onPressed: () async {
-                              final userData =
-                                  await UserSharedPrefs().getUserData();
-                              final userId = userData.fold(
-                                (failure) => null,
-                                (data) => data[2], // User ID from data[2]
-                              );
+                            onPressed: state.isEnrolled
+                                ? null // Disable button if already enrolled
+                                : () async {
+                                    final userData =
+                                        await UserSharedPrefs().getUserData();
+                                    final userId = userData.fold(
+                                        (failure) => null, (data) => data[2]);
 
-                              if (userId == null) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text("User not logged in!")),
-                                );
-                                return;
-                              }
+                                    if (userId == null) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                            content:
+                                                Text("User not logged in!")),
+                                      );
+                                      return;
+                                    }
 
-                              // Dispatch the enrollment event
-                              context
-                                  .read<SingleWorkshopBloc>()
-                                  .add(EnrollInWorkshop(
-                                    userId: userId,
-                                    workshopId: workshopId,
-                                  ));
+                                    context
+                                        .read<SingleWorkshopBloc>()
+                                        .add(EnrollInWorkshop(
+                                          userId: userId,
+                                          workshopId: workshopId,
+                                        ));
 
-                              showMySnackBar(
-                                  context: context,
-                                  message: "Enrolled Successfully!");
+                                    showMySnackBar(
+                                        context: context,
+                                        message: "Enrolled Successfully!");
 
-                              Navigator.pop(context); // Go back to HomeView
-                            },
-                            child: const Text("Enroll Now",
-                                style: TextStyle(color: Colors.white)),
+                                    Navigator.pop(
+                                        context); // Go back to HomeView
+                                  },
+                            child: Text(
+                              state.isEnrolled
+                                  ? "Already Enrolled"
+                                  : "Enroll Now",
+                              style: const TextStyle(color: Colors.white),
+                            ),
                           ),
 
                           // Your button code here

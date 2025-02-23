@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../../app/shared_prefs/user_shared_prefs.dart';
 import 'single_workshop_event.dart';
 import 'single_workshop_state.dart';
 
@@ -18,12 +19,12 @@ class SingleWorkshopBloc
     emit(SingleWorkshopLoading());
     try {
       final response = await http.get(
-          Uri.parse("http://10.0.2.2:5000/api/workshops/${event.workshopId}"));
+        Uri.parse("http://10.0.2.2:5000/api/workshops/${event.workshopId}"),
+      );
 
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonData = json.decode(response.body);
 
-        // Ensure every key exists before using it
         Map<String, dynamic> workshop = {
           "id": jsonData["_id"] ?? "",
           "title": jsonData["title"] ?? "No Title",
@@ -52,7 +53,26 @@ class SingleWorkshopBloc
               : [],
         };
 
-        emit(SingleWorkshopLoaded(workshop: workshop));
+        // Get user ID
+        final userData = await UserSharedPrefs().getUserData();
+        final userId = userData.fold((failure) => null, (data) => data[2]);
+
+        bool isEnrolled = false;
+
+        if (userId != null) {
+          // Check if user is already enrolled
+          final enrollResponse = await http.get(
+            Uri.parse(
+                "http://10.0.2.2:5000/api/enrollments/check/$userId/${event.workshopId}"),
+          );
+
+          if (enrollResponse.statusCode == 200) {
+            final enrollData = jsonDecode(enrollResponse.body);
+            isEnrolled = enrollData["enrolled"] ?? false;
+          }
+        }
+
+        emit(SingleWorkshopLoaded(workshop: workshop, isEnrolled: isEnrolled));
       } else {
         emit(SingleWorkshopError("Failed to load workshop details"));
       }
