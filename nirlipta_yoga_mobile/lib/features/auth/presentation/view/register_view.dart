@@ -17,19 +17,19 @@ class RegisterView extends StatefulWidget {
 class _RegisterViewState extends State<RegisterView> {
   final _gap = const SizedBox(height: 8);
   final _key = GlobalKey<FormState>();
-  final _nameController = TextEditingController(text: 'Test User');
-  final _usernameController = TextEditingController(text: 'testusername');
+  final _nameController = TextEditingController();
+  final _usernameController = TextEditingController();
   final _medicalConditionsController = TextEditingController();
-  final _phoneController = TextEditingController(text: '9823242526');
+  final _phoneController = TextEditingController();
   final _emailController =
-      TextEditingController(text: 'homesaaztrading@gmail.com');
-  final _passwordController = TextEditingController(text: 'test12345');
-  final _confirmPasswordController = TextEditingController(text: 'test12345');
+  TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
 
-  String? _genderValue = 'other';
+  String? _genderValue;
   bool _isPasswordVisible = false;
   bool _isNoneSelected =
-      true; // Track whether "None" is selected for medical conditions
+  true; // Track whether "None" is selected for medical conditions
 
   File? _img;
 
@@ -55,7 +55,7 @@ class _RegisterViewState extends State<RegisterView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('User Registration'),
+        title: Text('User Registration'),
         centerTitle: true,
         iconTheme: const IconThemeData(
           color: Colors.white,
@@ -66,7 +66,7 @@ class _RegisterViewState extends State<RegisterView> {
           // Listener for Image Upload
           BlocListener<RegisterBloc, RegisterState>(
             listenWhen: (previous, current) =>
-                previous.isImageLoading != current.isImageLoading ||
+            previous.isImageLoading != current.isImageLoading ||
                 previous.isImageSuccess != current.isImageSuccess,
             listener: (context, state) {
               if (state.isImageLoading) {
@@ -98,7 +98,7 @@ class _RegisterViewState extends State<RegisterView> {
           // Listener for Student Registration
           BlocListener<RegisterBloc, RegisterState>(
             listenWhen: (previous, current) =>
-                previous.isLoading != current.isLoading ||
+            previous.isLoading != current.isLoading ||
                 previous.isSuccess != current.isSuccess,
             listener: (context, state) {
               if (state.isLoading) {
@@ -151,40 +151,42 @@ class _RegisterViewState extends State<RegisterView> {
                               top: Radius.circular(20),
                             ),
                           ),
-                          builder: (context) => Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                ElevatedButton.icon(
-                                  onPressed: () async {
-                                    await PermissionChecker
-                                        .checkCameraPermission();
-                                    _browseImage(ImageSource.camera);
-                                    Navigator.pop(context);
-                                  },
-                                  icon: const Icon(
-                                    Icons.camera,
-                                    color: Colors.white,
-                                  ),
-                                  label: const Text('Camera'),
+                          builder: (context) =>
+                              Padding(
+                                padding: const EdgeInsets.all(20),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment
+                                      .spaceAround,
+                                  children: [
+                                    ElevatedButton.icon(
+                                      onPressed: () async {
+                                        await PermissionChecker
+                                            .checkCameraPermission();
+                                        _browseImage(ImageSource.camera);
+                                        Navigator.pop(context);
+                                      },
+                                      icon: const Icon(
+                                        Icons.camera,
+                                        color: Colors.white,
+                                      ),
+                                      label: const Text('Camera'),
+                                    ),
+                                    ElevatedButton.icon(
+                                      onPressed: () async {
+                                        await PermissionChecker
+                                            .checkCameraPermission();
+                                        _browseImage(ImageSource.gallery);
+                                        Navigator.pop(context);
+                                      },
+                                      icon: const Icon(
+                                        Icons.image,
+                                        color: Colors.white,
+                                      ),
+                                      label: const Text('Gallery'),
+                                    ),
+                                  ],
                                 ),
-                                ElevatedButton.icon(
-                                  onPressed: () async {
-                                    await PermissionChecker
-                                        .checkCameraPermission();
-                                    _browseImage(ImageSource.gallery);
-                                    Navigator.pop(context);
-                                  },
-                                  icon: const Icon(
-                                    Icons.image,
-                                    color: Colors.white,
-                                  ),
-                                  label: const Text('Gallery'),
-                                ),
-                              ],
-                            ),
-                          ),
+                              ),
                         );
                       },
                       child: SizedBox(
@@ -201,8 +203,8 @@ class _RegisterViewState extends State<RegisterView> {
                                 backgroundImage: _img != null
                                     ? FileImage(_img!)
                                     : AssetImage(
-                                        'assets/images/profile-placeholder.png',
-                                      ) as ImageProvider,
+                                  'assets/images/profile-placeholder.png',
+                                ) as ImageProvider,
                               ),
                               Positioned(
                                 bottom: 5,
@@ -215,7 +217,7 @@ class _RegisterViewState extends State<RegisterView> {
                                     boxShadow: [
                                       BoxShadow(
                                         color:
-                                            Colors.black.withValues(alpha: 0.3),
+                                        Colors.black.withValues(alpha: 0.3),
                                         blurRadius: 5,
                                         offset: const Offset(0, 2),
                                       ),
@@ -235,6 +237,7 @@ class _RegisterViewState extends State<RegisterView> {
                     ),
                     const SizedBox(height: 25),
                     TextFormField(
+                      key: const ValueKey('fullNameField'),
                       controller: _nameController,
                       decoration: const InputDecoration(
                         labelText: 'Full Name',
@@ -257,10 +260,11 @@ class _RegisterViewState extends State<RegisterView> {
                           child: DropdownButtonFormField<String>(
                             value: _genderValue,
                             items: ['male', 'female', 'other']
-                                .map((gender) => DropdownMenuItem<String>(
-                                      value: gender,
-                                      child: Text(gender),
-                                    ))
+                                .map((gender) =>
+                                DropdownMenuItem<String>(
+                                  value: gender,
+                                  child: Text(gender),
+                                ))
                                 .toList(),
                             onChanged: (value) {
                               setState(() {
@@ -284,6 +288,7 @@ class _RegisterViewState extends State<RegisterView> {
                         Expanded(
                           flex: 6,
                           child: TextFormField(
+                            key: const ValueKey('mobileField'),
                             controller: _phoneController,
                             decoration: const InputDecoration(
                               labelText: 'Mobile No.',
@@ -306,6 +311,7 @@ class _RegisterViewState extends State<RegisterView> {
                         Expanded(
                           flex: 1,
                           child: TextFormField(
+                            key: const ValueKey('passwordField'),
                             controller: _passwordController,
                             obscureText: !_isPasswordVisible,
                             decoration: InputDecoration(
@@ -335,6 +341,8 @@ class _RegisterViewState extends State<RegisterView> {
                         Expanded(
                           flex: 1,
                           child: TextFormField(
+                            key: const ValueKey('confirmPasswordField'),
+
                             controller: _confirmPasswordController,
                             obscureText: !_isPasswordVisible,
                             decoration: InputDecoration(
@@ -368,6 +376,8 @@ class _RegisterViewState extends State<RegisterView> {
                     _gap,
                     _gap,
                     TextFormField(
+                      key: const ValueKey('emailField'),
+
                       controller: _emailController,
                       decoration: const InputDecoration(
                         labelText: 'Email',
@@ -383,6 +393,7 @@ class _RegisterViewState extends State<RegisterView> {
                     _gap,
                     _gap,
                     TextFormField(
+                      key: const ValueKey('usernameField'),
                       controller: _usernameController,
                       decoration: const InputDecoration(
                         labelText: 'Username',
@@ -413,7 +424,7 @@ class _RegisterViewState extends State<RegisterView> {
                                     _isNoneSelected = value ?? false;
                                     if (_isNoneSelected) {
                                       _medicalConditionsController.text =
-                                          'None';
+                                      'None';
                                     } else {
                                       _medicalConditionsController.clear();
                                     }
@@ -428,6 +439,7 @@ class _RegisterViewState extends State<RegisterView> {
                           flex: 7,
                           // Adjusts the TextField width to take more space
                           child: TextFormField(
+                            key: const ValueKey('medicalConditionsField'),
                             controller: _medicalConditionsController,
                             decoration: const InputDecoration(
                               labelText: 'Medical Conditions',
@@ -456,18 +468,20 @@ class _RegisterViewState extends State<RegisterView> {
                         onPressed: () {
                           if (_key.currentState!.validate()) {
                             final registerState =
-                                context.read<RegisterBloc>().state;
+                                context
+                                    .read<RegisterBloc>()
+                                    .state;
                             final imageName = registerState.imageName;
                             context.read<RegisterBloc>().add(RegisterUser(
-                                  name: _nameController.text,
-                                  username: _usernameController.text,
-                                  phone: _phoneController.text,
-                                  email: _emailController.text,
-                                  password: _passwordController.text,
-                                  gender: _genderValue.toString(),
-                                  medical_conditions: ['None'],
-                                  photo: imageName,
-                                ));
+                              name: _nameController.text,
+                              username: _usernameController.text,
+                              phone: _phoneController.text,
+                              email: _emailController.text,
+                              password: _passwordController.text,
+                              gender: _genderValue.toString(),
+                              medical_conditions: ['None'],
+                              photo: imageName,
+                            ));
                           }
                         },
                         child: const Text('Register'),

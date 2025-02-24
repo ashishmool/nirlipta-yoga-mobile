@@ -13,6 +13,7 @@ class UpdateUserParams extends Equatable {
   final String username;
   final String phone;
   final String email;
+
   final String password;
   final String? photo;
 

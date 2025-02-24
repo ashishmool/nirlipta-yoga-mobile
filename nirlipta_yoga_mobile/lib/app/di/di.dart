@@ -290,7 +290,7 @@ _initLoginDependencies() async {
 
   if (!getIt.isRegistered<LoginUserUsecase>()) {
     getIt.registerLazySingleton<LoginUserUsecase>(() => LoginUserUsecase(
-          tokenSharedPrefs: getIt<TokenSharedPrefs>(),
+          // tokenSharedPrefs: getIt<TokenSharedPrefs>(),
           userRepository: getIt<UserRemoteRepository>(),
           userSharedPrefs: getIt<UserSharedPrefs>(),
         ));

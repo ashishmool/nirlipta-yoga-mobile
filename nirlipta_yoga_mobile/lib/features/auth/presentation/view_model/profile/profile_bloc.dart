@@ -66,9 +66,12 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       (data) => data[2], // userId is at index 2 in the user data
     );
 
-    if (userId != null) {
+    print("Fetched userId: $userId"); // Debugging
+
+    if (userId != null && userId != "userId") {
+      // Ensure it’s not a placeholder
       emit(state.copyWith(userId: userId));
-      add(FetchUserById(userId: userId)); // Only fetch user data on page load
+      add(FetchUserById(userId: userId));
     }
   }
 
@@ -79,7 +82,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     emit(state.copyWith(isLoading: true));
 
     final result = await _getUserByIdUsecase.call(
-      GetUserByIdParams(user_id: event.userId),
+      GetUserByIdParams(userId: event.userId),
     );
 
     result.fold(

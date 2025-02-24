@@ -7,14 +7,14 @@ import '../../../../core/error/failure.dart';
 import '../repository/user_repository.dart';
 
 class GetUserByIdParams extends Equatable {
-  final String user_id;
+  final String userId;
 
-  const GetUserByIdParams({required this.user_id});
+  const GetUserByIdParams({required this.userId});
 
-  const GetUserByIdParams.empty() : user_id = "_empty.string";
+  const GetUserByIdParams.empty() : userId = "_empty.string";
 
   @override
-  List<Object?> get props => [id];
+  List<Object?> get props => [userId];
 }
 
 class GetUserByIdUsecase implements UsecaseWithParams<void, GetUserByIdParams> {
@@ -24,6 +24,6 @@ class GetUserByIdUsecase implements UsecaseWithParams<void, GetUserByIdParams> {
 
   @override
   Future<Either<Failure, UserEntity>> call(GetUserByIdParams params) async {
-    return await userRepository.getUserById(params.user_id);
+    return await userRepository.getUserById(params.userId);
   }
 }

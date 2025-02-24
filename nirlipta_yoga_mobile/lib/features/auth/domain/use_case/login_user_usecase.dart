@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:nirlipta_yoga_mobile/app/shared_prefs/token_shared_prefs.dart';
 
 import '../../../../app/shared_prefs/user_shared_prefs.dart';
 import '../../../../app/usecase/usecase.dart';
@@ -30,31 +29,14 @@ class LoginUserParams extends Equatable {
 class LoginUserUsecase
     implements UsecaseWithParams<List<String>, LoginUserParams> {
   final IUserRepository userRepository;
-  final TokenSharedPrefs tokenSharedPrefs;
+
+  // final TokenSharedPrefs tokenSharedPrefs;
   final UserSharedPrefs userSharedPrefs;
 
   const LoginUserUsecase(
       {required this.userRepository,
-      required this.tokenSharedPrefs,
+      // required this.tokenSharedPrefs,
       required this.userSharedPrefs});
-
-  // @override
-  // Future<Either<Failure, String>> call(LoginUserParams params) async {
-  //   //Save token in Shared Preferences
-  //   return userRepository.login(params.email, params.password).then((value) {
-  //     return value.fold(
-  //       (failure) => Left(failure),
-  //       (token) {
-  //         tokenSharedPrefs.saveToken(token);
-  //         // // To check and match Token
-  //         // tokenSharedPrefs.getToken().then((value) {
-  //         //   print(value);
-  //         // });
-  //         return Right(token);
-  //       },
-  //     );
-  //   });
-  // }
 
   @override
   Future<Either<Failure, List<String>>> call(LoginUserParams params) async {

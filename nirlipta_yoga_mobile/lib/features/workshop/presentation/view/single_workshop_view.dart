@@ -142,19 +142,22 @@ class SingleWorkshopView extends StatelessWidget {
                                       return;
                                     }
 
-                                    context
-                                        .read<SingleWorkshopBloc>()
-                                        .add(EnrollInWorkshop(
-                                          userId: userId,
-                                          workshopId: workshopId,
-                                        ));
+                                    context.read<SingleWorkshopBloc>().add(
+                                          EnrollInWorkshop(
+                                            userId: userId,
+                                            workshopId: workshopId,
+                                          ),
+                                        );
 
                                     showMySnackBar(
                                         context: context,
                                         message: "Enrolled Successfully!");
 
+                                    // Store the current context before popping
+                                    final navContext = context;
+
                                     Navigator.pop(
-                                        context); // Go back to HomeView
+                                        context); // Go back to the previous screen
                                   },
                             child: Text(
                               state.isEnrolled

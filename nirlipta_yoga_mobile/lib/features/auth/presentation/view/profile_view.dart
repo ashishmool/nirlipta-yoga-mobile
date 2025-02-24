@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/common/permission_checker/permission_checker.dart';
+import '../../../home/presentation/view_model/home_cubit.dart';
 import '../view_model/profile/profile_bloc.dart';
 
 class ProfileView extends StatefulWidget {
@@ -30,13 +31,6 @@ class _ProfileViewState extends State<ProfileView> {
 
   File? _img;
   String? _previousImageName;
-
-  @override
-  void initState() {
-    super.initState();
-    // Fetch user data when the page loads
-    context.read<ProfileBloc>().add(FetchUserById(userId: 'userId'));
-  }
 
   Future _browseImage(ImageSource imageSource) async {
     try {
@@ -112,6 +106,7 @@ class _ProfileViewState extends State<ProfileView> {
                     backgroundColor: Colors.green,
                   ),
                 );
+                context.read<HomeCubit>().onTabTapped(0);
               } else if (!state.isUpdateLoading && !state.isUpdateSuccess) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -376,7 +371,7 @@ class _ProfileViewState extends State<ProfileView> {
                             });
                           },
                         ),
-                        const Text('Enable Password Edit'),
+                        const Text('Select to Change Password'),
                       ],
                     ),
                     _gap,
@@ -495,11 +490,13 @@ class _ProfileViewState extends State<ProfileView> {
                                     name: _nameController.text,
                                     username: _usernameController.text,
                                     phone: _phoneController.text,
-                                    email: _emailController.text,
                                     password: _passwordController.text,
+                                    email: _emailController.text,
                                     gender: _genderValue.toString(),
                                     medical_conditions: ['None'],
-                                    photo: imageName,
+                                    photo: _img != null
+                                        ? imageName
+                                        : state.user?.photo,
                                   ));
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(

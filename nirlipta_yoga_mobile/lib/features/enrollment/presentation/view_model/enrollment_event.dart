@@ -90,7 +90,7 @@ final class UpdateEnrollment extends EnrollmentEvent {
 final class DeleteEnrollment extends EnrollmentEvent {
   final String id;
 
-  const DeleteEnrollment(this.id);
+  DeleteEnrollment(this.id);
 
   @override
   List<Object?> get props => [id];

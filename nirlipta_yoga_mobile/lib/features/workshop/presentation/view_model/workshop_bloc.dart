@@ -32,7 +32,7 @@ class WorkshopBloc extends Bloc<WorkshopEvent, WorkshopState> {
 
   Future<void> _onLoadWorkshops(
       LoadWorkshops event, Emitter<WorkshopState> emit) async {
-    emit(state.copyWith(isLoading: true));
+    emit(state.copyWith(isLoading: true, workshops: []));
     final result = await _getAllWorkshopsUseCase.call();
     result.fold(
       (failure) =>
