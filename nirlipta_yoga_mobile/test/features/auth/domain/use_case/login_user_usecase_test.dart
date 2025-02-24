@@ -9,18 +9,16 @@ import 'auth_repo.mock.dart';
 
 void main() {
   late AuthRepoMock repository;
-  late MockTokenSharedPrefs sharedPrefs;
   late MockUserSharedPrefs userSharedPrefs;
   late LoginUserUsecase usecase;
 
   setUp(() {
     repository = AuthRepoMock();
-    sharedPrefs = MockTokenSharedPrefs();
     userSharedPrefs = MockUserSharedPrefs();
     usecase = LoginUserUsecase(
-        userRepository: repository,
-        tokenSharedPrefs: sharedPrefs,
-        userSharedPrefs: userSharedPrefs);
+      userRepository: repository,
+      userSharedPrefs: userSharedPrefs,
+    );
   });
 
   test(
@@ -31,7 +29,16 @@ void main() {
         final email = invocation.positionalArguments[0] as String;
         final password = invocation.positionalArguments[1] as String;
         if (email == 'a3.asis@gmail.com' && password == 'test12345') {
-          return Future.value(const Right(['token']));
+          return Future.value(const Right([
+            'success',
+            'token',
+            'userID',
+            'photo',
+            'email',
+            'role',
+            'message',
+            '200'
+          ]));
         } else {
           return Future.value(
               Left(ApiFailure(message: 'Invalid email or password')));
@@ -39,23 +46,37 @@ void main() {
       },
     );
 
-    when(() => sharedPrefs.saveToken(any())).thenAnswer(
-      (_) async => Right(null),
+    when(() => userSharedPrefs.setUserData(any())).thenAnswer(
+      (_) async => const Right(true),
     );
 
     final result = await usecase(
-        LoginUserParams(email: 'a3.asis@gmail.com', password: 'test12345'));
+      LoginUserParams(email: 'a3.asis@gmail.com', password: 'test12345'),
+    );
 
-    expect(result, const Right('token'));
+    expect(
+      result,
+      const Right([
+        'success',
+        'token',
+        'userID',
+        'photo',
+        'email',
+        'role',
+        'message',
+        '200'
+      ]),
+    );
 
     verify(() => repository.login(any(), any())).called(1);
-    verify(() => sharedPrefs.saveToken(any())).called(1);
+    verify(() => userSharedPrefs.setUserData(any())).called(1); // ✅ Fix
 
     verifyNoMoreInteractions(repository);
-    verifyNoMoreInteractions(sharedPrefs);
+    verifyNoMoreInteractions(userSharedPrefs); // ✅ Fix
   });
+
   tearDown(() {
     reset(repository);
-    reset(sharedPrefs);
+    reset(userSharedPrefs); // ✅ Fix
   });
 }
