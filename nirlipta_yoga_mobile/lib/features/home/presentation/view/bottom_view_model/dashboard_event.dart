@@ -38,3 +38,9 @@ class FilterWorkshops extends DashboardEvent {
   @override
   List<Object?> get props => [selectedCategories];
 }
+
+class SearchWorkshops extends DashboardEvent {
+  final String query;
+
+  SearchWorkshops(this.query);
+}

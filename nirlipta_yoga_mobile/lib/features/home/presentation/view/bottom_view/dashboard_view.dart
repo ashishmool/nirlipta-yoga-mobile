@@ -17,26 +17,25 @@ class DashboardView extends StatefulWidget {
 
 class _DashboardViewState extends State<DashboardView> {
   final List<String> _selectedCategories = [];
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => DashboardBloc()..add(LoadDashboardData()),
       child: Scaffold(
+        backgroundColor: Colors.grey[100],
         appBar: AppBar(
-          title: const Text('Yoga Workshops',
-              style: TextStyle(fontWeight: FontWeight.bold)),
+          backgroundColor: primaryColor,
+          title: const Text(
+            'Yoga Workshops',
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+          ),
           actions: [
             IconButton(
-              icon: const Icon(Icons.search, color: Colors.white),
+              icon: const Icon(Icons.filter_list, color: Colors.white),
               onPressed: () {
-                Fluttertoast.showToast(msg: "Search clicked");
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.grid_view, color: Colors.white),
-              onPressed: () {
-                Fluttertoast.showToast(msg: "Grid view clicked");
+                Fluttertoast.showToast(msg: "Filter clicked");
               },
             ),
           ],
@@ -47,16 +46,56 @@ class _DashboardViewState extends State<DashboardView> {
               return const Center(child: CircularProgressIndicator());
             } else if (state is DashboardLoaded) {
               return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Category Filters
+                  // Search Bar
                   Padding(
                     padding: const EdgeInsets.all(16.0),
+                    child: TextField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        hintText: "Search Workshops...",
+                        prefixIcon:
+                            const Icon(Icons.search, color: Colors.grey),
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                      onChanged: (value) {
+                        context
+                            .read<DashboardBloc>()
+                            .add(SearchWorkshops(value));
+                      },
+                    ),
+                  ),
+
+                  // Category Filters
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: const Text(
+                      "Categories",
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
                     child: Wrap(
                       spacing: 10,
                       children: state.categories.map((category) {
                         return FilterChip(
                           label: Text(category),
                           selected: _selectedCategories.contains(category),
+                          selectedColor: secondaryColor,
+                          labelStyle: TextStyle(
+                            color: _selectedCategories.contains(category)
+                                ? Colors.white
+                                : Colors.black,
+                          ),
+                          backgroundColor: Colors.grey[300],
                           onSelected: (bool selected) {
                             setState(() {
                               if (selected) {
@@ -72,65 +111,37 @@ class _DashboardViewState extends State<DashboardView> {
                       }).toList(),
                     ),
                   ),
-                  // Workshop Grid
-                  Expanded(
-                    child: GridView.builder(
-                      padding: const EdgeInsets.all(8),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                        childAspectRatio: 0.8,
-                      ),
-                      itemCount: state.workshops.length,
-                      itemBuilder: (context, index) {
-                        var workshop = state.workshops[index];
 
-                        return GestureDetector(
-                          onTap: () {
-                            // Access the correct workshopId
-                            print(
-                                "Workshop ID: ${workshop["workshopId"]}"); // Print the workshopId for debugging
-
-                            // Navigate to SingleWorkshopView with the correct workshopId
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => SingleWorkshopView(
-                                  workshopId: workshop[
-                                      "workshopId"], // Pass the workshopId here
-                                ),
-                              ),
-                            );
-                          },
-                          child: WorkshopCard(
-                            title: workshop["title"],
-                            category: workshop["category"],
-                            price: workshop["price"],
-                            photo: workshop["photo"],
-                            description: workshop["description"],
-                            discountPrice: workshop["discount_price"],
-                            onTap: () {
-                              print("Workshop ID: ${workshop["workshopId"]}");
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SingleWorkshopView(
-                                    workshopId: workshop["workshopId"],
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        );
-                      },
+                  // Workshop Grid (Using the separate component)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: const Text(
+                      "Workshops",
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
+                  ),
+                  WorkshopCardView(
+                    workshops: state.workshops,
+                    onTap: (workshopId) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              SingleWorkshopView(workshopId: workshopId),
+                        ),
+                      );
+                    },
                   ),
                 ],
               );
             } else if (state is DashboardError) {
-              return Center(child: Text(state.message));
+              return Center(
+                child: Text(
+                  state.message,
+                  style: const TextStyle(color: Colors.red),
+                ),
+              );
             } else {
               return const Center(child: Text("Something went wrong"));
             }

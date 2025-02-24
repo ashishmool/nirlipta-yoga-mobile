@@ -1,143 +1,106 @@
 import 'package:flutter/material.dart';
+import 'package:nirlipta_yoga_mobile/core/theme/app_theme.dart';
 
-// Primary and Secondary Colour for Branding
-const Color primaryColor = Color(0xFF9B6763);
-const Color secondaryColor = Color(0xFFB8978C);
+class WorkshopCardView extends StatelessWidget {
+  final List<dynamic> workshops;
+  final Function(String) onTap;
 
-class WorkshopCard extends StatelessWidget {
-  final String title;
-  final String category;
-  final String? photo;
-  final String? description;
-  final double price;
-  final double? discountPrice;
-  final VoidCallback onTap;
-
-  const WorkshopCard({
-    Key? key,
-    required this.title,
-    required this.category,
-    required this.price,
-    this.discountPrice,
-    this.photo,
-    this.description,
-    required this.onTap,
-  }) : super(key: key);
+  const WorkshopCardView(
+      {super.key, required this.workshops, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        elevation: 4,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Stack(
-              children: [
-                ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10),
-                  ),
-                  child: photo != null
-                      ? Image.network(
-                          photo!,
-                          width: double.infinity,
-                          height: 120,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
-                              Container(
-                            width: double.infinity,
-                            height: 120,
-                            color: Colors.grey[300],
-                            child: const Icon(
-                              Icons.image,
-                              size: 50,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        )
-                      : Container(
-                          width: double.infinity,
-                          height: 120,
-                          color: Colors.grey[300],
-                          child: const Icon(
-                            Icons.image,
-                            size: 50,
-                            color: Colors.grey,
-                          ),
-                        ),
-                ),
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  child: Center(
-                    child: Container(
-                      width: 100, // 🔥 Half the width of the card
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
-                      decoration: const BoxDecoration(
-                        color: primaryColor,
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(10),
-                          bottomRight: Radius.circular(10),
-                        ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          category,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
+    return Expanded(
+      child: GridView.builder(
+        padding: const EdgeInsets.all(8),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+          childAspectRatio: 0.75,
+        ),
+        itemCount: workshops.length,
+        itemBuilder: (context, index) {
+          var workshop = workshops[index];
+          return GestureDetector(
+            onTap: () => onTap(workshop["workshopId"]),
+            child: Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title,
-                      style: const TextStyle(fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 5),
-                  Text(
-                    description != null
-                        ? (description!.length > 25
-                            ? "${description!.substring(0, 25)}..."
-                            : description!)
-                        : "", // ✅ Truncate description
-                    style: const TextStyle(color: Colors.grey),
-                    overflow:
-                        TextOverflow.ellipsis, // ✅ Prevent overflow issues
+                  ClipRRect(
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(12)),
+                    child: Image.network(
+                      workshop["photo"],
+                      height: 120,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                  const SizedBox(height: 5),
-                  Text(
-                    "\$ ${discountPrice ?? price}",
-                    style: TextStyle(
-                      color:
-                          discountPrice != null ? Colors.green : primaryColor,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      decoration: discountPrice != null
-                          ? TextDecoration
-                              .lineThrough // Strike-through if discount exists
-                          : null,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          workshop["title"],
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          workshop["category"],
+                          style:
+                              TextStyle(fontSize: 14, color: Colors.grey[600]),
+                        ),
+                        const SizedBox(height: 5),
+                        Row(
+                          children: [
+                            if (workshop["discountPrice"] != null &&
+                                workshop["discountPrice"] > 0 &&
+                                workshop["discountPrice"] <
+                                    workshop["price"]) ...[
+                              Text(
+                                "\$${workshop["price"]}",
+                                style: const TextStyle(
+                                  decoration: TextDecoration.lineThrough,
+                                  fontSize: 14,
+                                  color: secondaryColor,
+                                ),
+                              ),
+                              const SizedBox(width: 5),
+                              Text(
+                                "\$${workshop["discountPrice"]}",
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: primaryColor,
+                                ),
+                              ),
+                            ] else ...[
+                              Text(
+                                "\$${workshop["price"] ?? 'N/A'}",
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: primaryColor,
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

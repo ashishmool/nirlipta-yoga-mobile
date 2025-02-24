@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nirlipta_yoga_mobile/features/fitness/fitness_view.dart';
+import 'package:nirlipta_yoga_mobile/features/fitness/presentation/view/fitness_view.dart';
 
 void main() {
   testWidgets('Displays Fitness Dashboard screen', (tester) async {
