@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nirlipta_yoga_mobile/core/theme/app_theme.dart';
 import 'package:proximity_screen_lock/proximity_screen_lock.dart';
 
+import '../../../../core/theme/theme_cubit.dart';
 import '../view_model/fitness_bloc.dart';
 
 class FitnessView extends StatelessWidget {
@@ -9,10 +11,19 @@ class FitnessView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeCubit = context.watch<ThemeCubit>(); // Watch theme state
+    final isDarkMode = themeCubit.state.isDarkMode; // Check theme mode
     return BlocProvider(
       create: (context) => FitnessBloc()..add(StartTracking()),
       child: Scaffold(
-        appBar: AppBar(title: const Text('Fitness Dashboard')),
+        appBar: AppBar(
+          title: const Text('Fitness Dashboard'),
+          backgroundColor: isDarkMode ? Colors.black : primaryColor,
+          centerTitle: true,
+          iconTheme: IconThemeData(
+            color: isDarkMode ? Colors.white : Colors.black,
+          ),
+        ),
         body: BlocBuilder<FitnessBloc, FitnessState>(
           builder: (context, state) {
             if (state is! FitnessUpdated) {

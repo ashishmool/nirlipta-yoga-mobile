@@ -2,23 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/common/app_bar/main_app_bar.dart';
+import '../../../../core/theme/theme_cubit.dart';
 import '../view_model/home_cubit.dart';
 import '../view_model/home_state.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
 
-  final bool _isDarkTheme = false;
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: MainAppBar(isDarkTheme: false),
+    final isDarkMode =
+        context.watch<ThemeCubit>().state.isDarkMode; // Get theme mode
 
-      // body: _views.elementAt(_selectedIndex),
-      body: BlocBuilder<HomeCubit, HomeState>(builder: (context, state) {
-        return state.views.elementAt(state.selectedIndex);
-      }),
+    return Scaffold(
+      appBar: MainAppBar(),
+      body: BlocBuilder<HomeCubit, HomeState>(
+        builder: (context, state) {
+          return state.views.elementAt(state.selectedIndex);
+        },
+      ),
       bottomNavigationBar: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {
           return BottomNavigationBar(
@@ -41,9 +43,15 @@ class HomeView extends StatelessWidget {
               ),
             ],
             currentIndex: state.selectedIndex,
-            selectedItemColor: Color(0xFF9B6763),
-            unselectedItemColor: Color(0xFFB8978C),
-            backgroundColor: Colors.black,
+            selectedItemColor:
+                isDarkMode ? Colors.white : const Color(0xFF9B6763),
+            unselectedItemColor:
+                isDarkMode ? Colors.grey[500] : const Color(0xFFB8978C),
+            backgroundColor:
+                isDarkMode ? const Color(0xFF121212) : Colors.white,
+            // Dark theme background
+            type: BottomNavigationBarType.fixed,
+            // Ensures proper styling
             onTap: (index) {
               context.read<HomeCubit>().onTabTapped(index);
             },

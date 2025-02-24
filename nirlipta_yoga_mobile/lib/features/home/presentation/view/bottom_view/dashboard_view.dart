@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../../../../../core/theme/theme_cubit.dart';
 import '../../../../workshop/presentation/view/single_workshop_view.dart';
 import '../../../../workshop/presentation/view/workshop_card_view.dart';
 import '../bottom_view_model/dashboard_bloc.dart';
@@ -21,12 +22,15 @@ class _DashboardViewState extends State<DashboardView> {
 
   @override
   Widget build(BuildContext context) {
+    final themeCubit = context.watch<ThemeCubit>();
+    final isDarkMode = themeCubit.state.isDarkMode;
+
     return BlocProvider(
       create: (context) => DashboardBloc()..add(LoadDashboardData()),
       child: Scaffold(
-        backgroundColor: Colors.grey[100],
+        backgroundColor: isDarkMode ? Colors.black : Colors.grey[100],
         appBar: AppBar(
-          backgroundColor: primaryColor,
+          backgroundColor: isDarkMode ? Colors.black : primaryColor,
           title: const Text(
             'Yoga Workshops',
             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
@@ -55,15 +59,19 @@ class _DashboardViewState extends State<DashboardView> {
                       controller: _searchController,
                       decoration: InputDecoration(
                         hintText: "Search Workshops...",
-                        prefixIcon:
-                            const Icon(Icons.search, color: Colors.grey),
+                        prefixIcon: Icon(Icons.search,
+                            color: isDarkMode ? Colors.white : Colors.grey),
                         filled: true,
-                        fillColor: Colors.white,
+                        fillColor: isDarkMode ? Colors.grey[800] : Colors.white,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide.none,
                         ),
+                        hintStyle: TextStyle(
+                            color: isDarkMode ? Colors.white70 : Colors.grey),
                       ),
+                      style: TextStyle(
+                          color: isDarkMode ? Colors.white : Colors.black),
                       onChanged: (value) {
                         context
                             .read<DashboardBloc>()
@@ -75,10 +83,13 @@ class _DashboardViewState extends State<DashboardView> {
                   // Category Filters
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: const Text(
+                    child: Text(
                       "Categories",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: isDarkMode ? Colors.white : Colors.black,
+                      ),
                     ),
                   ),
                   Padding(
@@ -93,9 +104,10 @@ class _DashboardViewState extends State<DashboardView> {
                           labelStyle: TextStyle(
                             color: _selectedCategories.contains(category)
                                 ? Colors.white
-                                : Colors.black,
+                                : (isDarkMode ? Colors.white : Colors.black),
                           ),
-                          backgroundColor: Colors.grey[300],
+                          backgroundColor:
+                              isDarkMode ? Colors.grey[700] : Colors.grey[300],
                           onSelected: (bool selected) {
                             setState(() {
                               if (selected) {
@@ -115,10 +127,13 @@ class _DashboardViewState extends State<DashboardView> {
                   // Workshop Grid (Using the separate component)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: const Text(
+                    child: Text(
                       "Workshops",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: isDarkMode ? Colors.white : Colors.black,
+                      ),
                     ),
                   ),
                   WorkshopCardView(
