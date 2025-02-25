@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nirlipta_yoga_mobile/core/common/snackbar/snackbar.dart';
 
 import '../../../../app/shared_prefs/user_shared_prefs.dart';
+import '../../../../core/theme/theme_cubit.dart';
 import '../view_model/single_workshop_bloc.dart';
 import '../view_model/single_workshop_event.dart';
 import '../view_model/single_workshop_state.dart';
@@ -18,10 +19,12 @@ class SingleWorkshopView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeCubit = context.watch<ThemeCubit>(); // Watch theme state
+    final isDarkMode = themeCubit.state.isDarkMode; // Check theme mode
     return Scaffold(
       appBar: AppBar(
         title: const Text("Workshop Details"),
-        backgroundColor: primaryColor, // Dark Theme
+        backgroundColor: isDarkMode ? Colors.grey[900] : primaryColor,
         iconTheme: const IconThemeData(
           color: Colors.white, // White Back Button
         ),

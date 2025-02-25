@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:nirlipta_yoga_mobile/core/theme/app_theme.dart';
 
 import '../../../../core/common/permission_checker/permission_checker.dart';
+import '../../../../core/theme/theme_cubit.dart';
 import '../../../home/presentation/view_model/home_cubit.dart';
 import '../view_model/profile/profile_bloc.dart';
 
@@ -49,12 +50,13 @@ class _ProfileViewState extends State<ProfileView> {
 
   @override
   Widget build(BuildContext context) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final themeCubit = context.watch<ThemeCubit>(); // Watch theme state
+    final isDarkMode = themeCubit.state.isDarkMode; // Check theme mode
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
-        backgroundColor: isDarkMode ? Colors.black : primaryColor,
+        backgroundColor: isDarkMode ? Colors.grey[900] : primaryColor,
         centerTitle: true,
         iconTheme: const IconThemeData(
           color: Colors.white,

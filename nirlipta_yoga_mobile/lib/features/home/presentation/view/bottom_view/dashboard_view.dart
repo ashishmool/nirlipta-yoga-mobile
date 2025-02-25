@@ -30,7 +30,7 @@ class _DashboardViewState extends State<DashboardView> {
       child: Scaffold(
         backgroundColor: isDarkMode ? Colors.black : Colors.grey[100],
         appBar: AppBar(
-          backgroundColor: isDarkMode ? Colors.black : primaryColor,
+          backgroundColor: isDarkMode ? Colors.grey[900] : primaryColor,
           title: const Text(
             'Yoga Workshops',
             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),

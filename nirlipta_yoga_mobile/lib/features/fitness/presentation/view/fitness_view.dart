@@ -18,7 +18,7 @@ class FitnessView extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Fitness Dashboard'),
-          backgroundColor: isDarkMode ? Colors.black : primaryColor,
+          backgroundColor: isDarkMode ? Colors.grey[900] : primaryColor,
           centerTitle: true,
           iconTheme: IconThemeData(
             color: isDarkMode ? Colors.white : Colors.black,

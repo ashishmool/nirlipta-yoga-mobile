@@ -51,4 +51,7 @@ class ApiEndpoints {
   static const String getAllUser = "users/";
   static const String getUserById = "users/getById/";
   static const String updateUser = "users/update/";
+
+  // ============= Schedule Routes =============
+  static const String getSchedulesByUser = "schedules/user/";
 }

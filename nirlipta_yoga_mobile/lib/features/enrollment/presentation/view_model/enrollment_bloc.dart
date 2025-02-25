@@ -48,6 +48,7 @@ class EnrollmentBloc extends Bloc<EnrollmentEvent, EnrollmentState> {
     );
 
     if (userId != null) {
+      emit(state.copyWith(userId: userId));
       add(LoadEnrollmentByUser(userId: userId));
     }
   }
@@ -137,16 +138,29 @@ class EnrollmentBloc extends Bloc<EnrollmentEvent, EnrollmentState> {
   Future<void> _onDeleteEnrollment(
       DeleteEnrollment event, Emitter<EnrollmentState> emit) async {
     emit(state.copyWith(isLoading: true));
+
     final result = await _deleteEnrollmentUseCase
         .call(DeleteEnrollmentParams(id: event.id));
-    result.fold(
-      (failure) =>
-          emit(state.copyWith(isLoading: false, error: failure.message)),
-      (_) {
-        emit(state.copyWith(isLoading: false, error: null));
 
-        /// Fetch fresh enrollments after deletion
-        add(LoadEnrollments());
+    result.fold(
+      (failure) {
+        emit(state.copyWith(isLoading: false, error: failure.message));
+      },
+      (_) {
+        // Remove the deleted item from the list manually before fetching new data
+        final updatedEnrollments =
+            state.enrollments.where((e) => e.id != event.id).toList();
+
+        emit(state.copyWith(
+          isLoading: false,
+          error: null,
+          enrollments: updatedEnrollments,
+        ));
+
+        if (updatedEnrollments.isEmpty) {
+          // Explicitly trigger a rebuild when the list is empty
+          emit(state.copyWith(enrollments: []));
+        }
       },
     );
   }

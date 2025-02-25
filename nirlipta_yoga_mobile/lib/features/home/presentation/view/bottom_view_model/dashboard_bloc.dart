@@ -13,6 +13,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   DashboardBloc() : super(DashboardInitial()) {
     on<LoadDashboardData>(_onLoadDashboardData);
     on<FilterWorkshops>(_onFilterWorkshops);
+    on<SearchWorkshops>(_onSearchWorkshops);
   }
 
   void _onLoadDashboardData(
@@ -68,6 +69,30 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         List<Map<String, dynamic>> filteredWorkshops = allWorkshops
             .where((workshop) =>
                 event.selectedCategories.contains(workshop["category"]))
+            .toList();
+
+        emit(DashboardLoaded(
+            categories: allCategories, workshops: filteredWorkshops));
+      }
+    }
+  }
+
+  void _onSearchWorkshops(SearchWorkshops event, Emitter<DashboardState> emit) {
+    if (state is DashboardLoaded) {
+      final query = event.query.toLowerCase();
+
+      if (query.isEmpty) {
+        // If the search query is empty, show all workshops
+        emit(DashboardLoaded(
+            categories: allCategories, workshops: allWorkshops));
+      } else {
+        // Filter workshops based on the search query
+        List<Map<String, dynamic>> filteredWorkshops = allWorkshops
+            .where((workshop) =>
+                workshop["title"].toLowerCase().contains(query) ||
+                workshop["category"].toLowerCase().contains(query) ||
+                (workshop["description"] != null &&
+                    workshop["description"].toLowerCase().contains(query)))
             .toList();
 
         emit(DashboardLoaded(
