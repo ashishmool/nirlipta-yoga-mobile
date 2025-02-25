@@ -308,15 +308,16 @@ _initLoginDependencies() async {
 }
 
 _initSplashScreenDependencies() async {
+  getIt.registerLazySingleton<UserSharedPrefs>(
+    () => UserSharedPrefs(),
+  );
   getIt.registerFactory<SplashCubit>(
-    () => SplashCubit(),
+    () => SplashCubit(getIt<HomeCubit>(), getIt<OnboardingCubit>(),
+        getIt<TokenSharedPrefs>()),
   );
 }
 
 _initOnboardingScreenDependencies() async {
-  getIt.registerLazySingleton<UserSharedPrefs>(
-    () => UserSharedPrefs(),
-  );
   getIt.registerFactory<OnboardingCubit>(
     () => OnboardingCubit(
         getIt<LoginBloc>(), getIt<TokenSharedPrefs>(), getIt<HomeCubit>()),
