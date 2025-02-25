@@ -37,7 +37,7 @@ class WorkshopCardView extends StatelessWidget {
                         const BorderRadius.vertical(top: Radius.circular(12)),
                     child: Image.network(
                       workshop["photo"],
-                      height: 120,
+                      height: 100,
                       width: double.infinity,
                       fit: BoxFit.cover,
                     ),

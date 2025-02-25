@@ -16,3 +16,14 @@ class UpdatePosition extends FitnessEvent {
 
   UpdatePosition(this.position);
 }
+
+class UpdateProximity extends FitnessEvent {
+  final int proximityValue; // ✅ Keep it as int
+  UpdateProximity(this.proximityValue);
+}
+
+class UpdateStepCount extends FitnessEvent {
+  final StepCount stepCount;
+
+  UpdateStepCount(this.stepCount);
+}

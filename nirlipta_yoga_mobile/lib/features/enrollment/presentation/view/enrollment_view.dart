@@ -14,7 +14,7 @@ import '../view_model/enrollment_bloc.dart';
 class EnrollmentView extends StatelessWidget {
   EnrollmentView({super.key});
 
-  final String baseUrl = "http://10.0.2.2:5000";
+  final String baseUrl = "http://192.168.1.19:5000";
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +90,6 @@ class EnrollmentView extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Workshop Image
                           ClipRRect(
                             borderRadius: BorderRadius.circular(12),
                             child: enrollment.workshop.photo != null &&
@@ -118,7 +117,7 @@ class EnrollmentView extends StatelessWidget {
                           ),
                           const SizedBox(height: 12),
 
-                          // Workshop Details
+                          /// Workshop Title
                           Text(
                             "Workshop Title: ${enrollment.workshop.title ?? 'N/A'}",
                             style: TextStyle(
@@ -127,47 +126,84 @@ class EnrollmentView extends StatelessWidget {
                               color: isDarkMode ? Colors.white : Colors.black87,
                             ),
                           ),
-                          const SizedBox(height: 5),
-                          Text(
-                            "Status: ${enrollment.completionStatus}",
-                            style: TextStyle(
-                              fontSize: 14,
-                              color:
-                                  isDarkMode ? Colors.white70 : Colors.black87,
-                            ),
-                          ),
-                          const SizedBox(height: 5),
-                          Text(
-                            "Enrollment Date: $formattedDate",
-                            style: TextStyle(
-                              fontSize: 14,
-                              color:
-                                  isDarkMode ? Colors.white70 : Colors.black87,
-                            ),
-                          ),
-                          const SizedBox(height: 5),
-                          Text(
-                            "Payment Status: ${enrollment.paymentStatus}",
-                            style: TextStyle(
-                              fontSize: 14,
-                              color:
-                                  isDarkMode ? Colors.white70 : Colors.black87,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
+                          const SizedBox(height: 8),
 
-                          // Buttons Section
+                          /// **Status & Payment Status Row**
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              // Generate Certificate Button
+                              Row(
+                                children: [
+                                  _getStatusIcon(enrollment.completionStatus),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    "Status: ${enrollment.completionStatus}",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: isDarkMode
+                                          ? Colors.white70
+                                          : Colors.black87,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                "Enrollment Date: $formattedDate",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: isDarkMode
+                                      ? Colors.white70
+                                      : Colors.black87,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+
+                          /// **Enrollment Date & Price Row**
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  _getPaymentStatusIcon(
+                                      enrollment.paymentStatus),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    "Payment: ${enrollment.paymentStatus}",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: isDarkMode
+                                          ? Colors.white70
+                                          : Colors.black87,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                "Price: ₹${enrollment.workshop.price ?? 'N/A'}",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: isDarkMode
+                                      ? Colors.white
+                                      : Colors.black87,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+
+                          /// **Buttons Row**
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
                               if (enrollment.completionStatus == "completed")
                                 Expanded(
                                   child: ElevatedButton(
                                     onPressed: () async {
                                       final userId = await _getUserId();
                                       final workshopId = enrollment.workshop.id;
-
                                       if (userId != null &&
                                           workshopId != null) {
                                         final url = Uri.parse(
@@ -208,10 +244,7 @@ class EnrollmentView extends StatelessWidget {
                                     child: const Text('Generate Certificate'),
                                   ),
                                 ),
-
                               const SizedBox(width: 10),
-
-                              // Make Payment & Delete Button
                               if (enrollment.paymentStatus == "failed" ||
                                   enrollment.paymentStatus == "pending")
                                 Expanded(
@@ -220,10 +253,7 @@ class EnrollmentView extends StatelessWidget {
                                       Expanded(
                                         child: ElevatedButton(
                                           onPressed: () {
-                                            _showPaymentDialog(
-                                                context,
-                                                enrollment.id!,
-                                                enrollment.workshop.price);
+                                            // _processPayment(context, enrollment.id)
                                           },
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: Colors.red[700],
@@ -232,7 +262,7 @@ class EnrollmentView extends StatelessWidget {
                                                   BorderRadius.circular(8),
                                             ),
                                           ),
-                                          child: const Text('Make Payment'),
+                                          child: const Text('Pay Now'),
                                         ),
                                       ),
                                       const SizedBox(width: 8),
@@ -274,50 +304,38 @@ class EnrollmentView extends StatelessWidget {
     );
   }
 
-  // Function to show the payment modal
-  // Function to show the payment modal
-  void _showPaymentDialog(
-      BuildContext context, String enrollmentId, double? price) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Confirm Payment'),
-          content: Text(
-            'Amount to be paid: ₹${price ?? 0.0}',
-            // Ensuring price is displayed correctly
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context); // Close the modal
-              },
-              child: const Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                Navigator.pop(context); // Close modal
-                await _processPayment(context, enrollmentId);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-              ),
-              child: const Text('Confirm Payment'),
-            ),
-          ],
-        );
-      },
-    );
+  Widget _getStatusIcon(String status) {
+    switch (status.toLowerCase()) {
+      case "completed":
+        return const Icon(Icons.check_circle, color: Colors.green, size: 20);
+      case "not started":
+        return const Icon(Icons.pause_circle, color: Colors.amber, size: 20);
+      case "in progress":
+        return const Icon(Icons.autorenew, color: Colors.blue, size: 20);
+      default:
+        return const Icon(Icons.help_outline, color: Colors.grey, size: 20);
+    }
   }
 
-  // Function to call API and process payment
+  Widget _getPaymentStatusIcon(String paymentStatus) {
+    switch (paymentStatus.toLowerCase()) {
+      case "paid":
+        return const Icon(Icons.check_circle, color: Colors.green, size: 20);
+      case "failed":
+        return const Icon(Icons.cancel, color: Colors.red, size: 20);
+      case "pending":
+        return const Icon(Icons.hourglass_empty,
+            color: Colors.orange, size: 20);
+      default:
+        return const Icon(Icons.help_outline, color: Colors.grey, size: 20);
+    }
+  }
+
   Future<void> _processPayment(
       BuildContext context, String enrollmentId) async {
     final url = Uri.parse("$baseUrl/api/enrollments/status/$enrollmentId");
 
     try {
-      // Retrieve token
       final userData = await UserSharedPrefs().getUserData();
       final token = userData.fold((failure) => null, (data) => data[1]);
 
@@ -340,16 +358,16 @@ class EnrollmentView extends StatelessWidget {
         url,
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer $token", // Add Bearer token here
+          "Authorization": "Bearer $token",
         },
         body: jsonEncode({"payment_status": "paid"}),
       );
 
-      Navigator.pop(context); // Close loading dialog
+      Navigator.pop(context);
 
       if (response.statusCode == 200) {
         showMySnackBar(context: context, message: "Payment Successful!");
-        // context.read<EnrollmentBloc>().add(LoadEnrollments());
+        context.read<EnrollmentBloc>().add(LoadEnrollments());
       } else {
         showMySnackBar(context: context, message: "Payment Failed. Try again.");
       }

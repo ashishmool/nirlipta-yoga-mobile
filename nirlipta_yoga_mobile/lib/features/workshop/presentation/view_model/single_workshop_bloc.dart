@@ -19,7 +19,7 @@ class SingleWorkshopBloc
     emit(SingleWorkshopLoading());
     try {
       final response = await http.get(
-        Uri.parse("http://10.0.2.2:5000/api/workshops/${event.workshopId}"),
+        Uri.parse("http://192.168.1.19:5000/api/workshops/${event.workshopId}"),
       );
 
       if (response.statusCode == 200) {
@@ -38,7 +38,7 @@ class SingleWorkshopBloc
               jsonData["price"] != null ? jsonData["price"].toDouble() : 0.0,
           "discount_price": jsonData["discount_price"]?.toDouble(),
           "photo": jsonData["photo"] != null
-              ? "http://10.0.2.2:5000${jsonData["photo"]}"
+              ? "http://192.168.1.19:5000${jsonData["photo"]}"
               : null,
           "duration": jsonData["duration"] ?? "No Duration",
           "schedule": jsonData["schedule"] ?? [],
@@ -63,7 +63,7 @@ class SingleWorkshopBloc
           // Check if user is already enrolled
           final enrollResponse = await http.get(
             Uri.parse(
-                "http://10.0.2.2:5000/api/enrollments/check/$userId/${event.workshopId}"),
+                "http://192.168.1.19:5000/api/enrollments/check/$userId/${event.workshopId}"),
           );
 
           if (enrollResponse.statusCode == 200) {
@@ -86,7 +86,7 @@ class SingleWorkshopBloc
     emit(EnrollmentLoading());
     try {
       final response = await http.post(
-        Uri.parse("http://10.0.2.2:5000/api/enrollments/save"),
+        Uri.parse("http://192.168.1.19:5000/api/enrollments/save"),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode(
             {"user_id": event.userId, "workshop_id": event.workshopId}),

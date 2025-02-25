@@ -3,16 +3,35 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nirlipta_yoga_mobile/core/theme/app_theme.dart';
 import 'package:proximity_screen_lock/proximity_screen_lock.dart';
 
+import '../../../../core/common/live_location.dart';
 import '../../../../core/theme/theme_cubit.dart';
 import '../view_model/fitness_bloc.dart';
 
-class FitnessView extends StatelessWidget {
+class FitnessView extends StatefulWidget {
   const FitnessView({Key? key}) : super(key: key);
 
   @override
+  State<FitnessView> createState() => _FitnessViewState();
+}
+
+class _FitnessViewState extends State<FitnessView> {
+  @override
+  void initState() {
+    super.initState();
+    ProximityScreenLock.setActive(true); // Keep proximity lock active
+  }
+
+  @override
+  void dispose() {
+    ProximityScreenLock.setActive(false); // Disable proximity lock on exit
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final themeCubit = context.watch<ThemeCubit>(); // Watch theme state
-    final isDarkMode = themeCubit.state.isDarkMode; // Check theme mode
+    final themeCubit = context.watch<ThemeCubit>();
+    final isDarkMode = themeCubit.state.isDarkMode;
+
     return BlocProvider(
       create: (context) => FitnessBloc()..add(StartTracking()),
       child: Scaffold(
@@ -58,7 +77,7 @@ class FitnessView extends StatelessWidget {
                               style: const TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.orange,
+                                color: primaryColor,
                               ),
                             ),
                             const Text(
@@ -71,23 +90,26 @@ class FitnessView extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 32),
 
+                  // ✅ Metrics Row (Distance, Duration, Calories)
                   // ✅ Metrics Row (Distance, Duration, Calories)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       _buildMetric('KM', state.distanceKm.toStringAsFixed(2),
-                          Icons.directions_walk),
+                          Icons.directions_walk, secondaryColor),
                       _buildMetric('MINUTES', state.durationMinutes.toString(),
-                          Icons.timer),
+                          Icons.timer, primaryColor),
                       _buildMetric(
                           'CALORIES',
                           state.caloriesBurned.toStringAsFixed(1),
-                          Icons.local_fire_department),
+                          Icons.local_fire_department,
+                          Colors.red),
                     ],
                   ),
-                  const SizedBox(height: 20),
+
+                  const SizedBox(height: 8),
 
                   // ✅ Live Location Display
                   Container(
@@ -97,6 +119,7 @@ class FitnessView extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
                           "Live Location",
@@ -104,58 +127,56 @@ class FitnessView extends StatelessWidget {
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 5),
-                        Text(
-                          state.position != null
-                              ? 'Latitude: ${state.position!.latitude.toStringAsFixed(6)},\nLongitude: ${state.position!.longitude.toStringAsFixed(6)}'
-                              : 'Fetching location...',
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-
-                  // ✅ Proximity Lock Button
-                  ElevatedButton(
-                    onPressed: () {
-                      ProximityScreenLock.setActive(true);
-                      Future.delayed(const Duration(seconds: 5), () {
-                        ProximityScreenLock.setActive(false);
-                      });
-                    },
-                    child: const Text('Activate Lock & Auto Unlock in 5s'),
-                  ),
-                  const SizedBox(height: 20),
-
-                  // ✅ Accelerometer Data Display
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Column(
-                      children: [
-                        const Text(
-                          "Accelerometer Data",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                        Container(
+                          height: 200,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: Colors.black12),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: state.position != null
+                                ? LiveLocationScreen(
+                                    latitude: state.position!.latitude,
+                                    longitude: state.position!.longitude,
+                                  )
+                                : const Center(
+                                    child:
+                                        CircularProgressIndicator()), // Loading indicator while fetching location
                           ),
                         ),
-                        const SizedBox(height: 5),
-                        Text(
-                          state.accelerometerEvent != null
-                              ? 'X: ${state.accelerometerEvent!.x.toStringAsFixed(2)}, '
-                                  'Y: ${state.accelerometerEvent!.y.toStringAsFixed(2)}, '
-                                  'Z: ${state.accelerometerEvent!.z.toStringAsFixed(2)}'
-                              : 'No Data',
-                          style: const TextStyle(fontSize: 16),
-                        ),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 20),
+
+                  // // ✅ Accelerometer Data Display
+                  // Container(
+                  //   padding: const EdgeInsets.all(12),
+                  //   decoration: BoxDecoration(
+                  //     color: Colors.grey[200],
+                  //     borderRadius: BorderRadius.circular(10),
+                  //   ),
+                  //   child: Column(
+                  //     children: [
+                  //       const Text(
+                  //         "Accelerometer Data",
+                  //         style: TextStyle(
+                  //           fontSize: 18,
+                  //           fontWeight: FontWeight.bold,
+                  //         ),
+                  //       ),
+                  //       const SizedBox(height: 5),
+                  //       Text(
+                  //         state.accelerometerEvent != null
+                  //             ? 'X: ${state.accelerometerEvent!.x.toStringAsFixed(2)}, '
+                  //                 'Y: ${state.accelerometerEvent!.y.toStringAsFixed(2)}, '
+                  //                 'Z: ${state.accelerometerEvent!.z.toStringAsFixed(2)}'
+                  //             : 'No Data',
+                  //         style: const TextStyle(fontSize: 16),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                 ],
               ),
             );
@@ -166,10 +187,10 @@ class FitnessView extends StatelessWidget {
   }
 
   /// ✅ Builds a Metric Widget for Steps, Distance, etc.
-  Widget _buildMetric(String label, String value, IconData icon) {
+  Widget _buildMetric(String label, String value, IconData icon, Color color) {
     return Column(
       children: [
-        Icon(icon, size: 30, color: Colors.deepOrange),
+        Icon(icon, size: 30, color: color),
         const SizedBox(height: 5),
         Text(value,
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),

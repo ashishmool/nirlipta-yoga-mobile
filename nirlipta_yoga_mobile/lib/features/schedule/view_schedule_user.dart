@@ -47,6 +47,16 @@ class _ViewScheduleUserState extends State<ViewScheduleUser> {
   List<Schedule> schedules = [];
   bool isLoading = true;
 
+  final List<String> dayOrder = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday"
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -56,11 +66,10 @@ class _ViewScheduleUserState extends State<ViewScheduleUser> {
   Future<void> fetchSchedules() async {
     try {
       final response = await Dio().get(
-        'http://10.0.2.2:5000/api/schedules/user/${widget.userId}',
+        'http://192.168.1.19:5000/api/schedules/user/${widget.userId}',
       );
 
       List<dynamic> data = response.data;
-      print(response.data);
       setState(() {
         schedules = data.map((json) => Schedule.fromJson(json)).toList();
         isLoading = false;
@@ -73,6 +82,7 @@ class _ViewScheduleUserState extends State<ViewScheduleUser> {
     }
   }
 
+  /// Groups schedules by day and sorts them in correct order
   Map<String, List<Schedule>> groupByDay(List<Schedule> schedules) {
     Map<String, List<Schedule>> grouped = {};
     for (var schedule in schedules) {
@@ -80,43 +90,29 @@ class _ViewScheduleUserState extends State<ViewScheduleUser> {
         grouped.putIfAbsent(day, () => []).add(schedule);
       }
     }
-    return grouped;
-  }
 
-  Color getStatusColor(String status) {
-    switch (status.toLowerCase()) {
-      case 'canceled':
-        return Colors.red;
-      case 'paused':
-        return Colors.yellow;
-      case 'active':
-      default:
-        return Colors.green;
+    // Sort keys based on predefined order
+    Map<String, List<Schedule>> sortedGrouped = {};
+    for (var day in dayOrder) {
+      if (grouped.containsKey(day)) {
+        sortedGrouped[day] = grouped[day]!;
+      }
     }
+    return sortedGrouped;
   }
 
   @override
   Widget build(BuildContext context) {
-    final themeCubit = context.watch<ThemeCubit>(); // Watch theme state
-    final isDarkMode = themeCubit.state.isDarkMode; // Check theme mode
+    final themeCubit = context.watch<ThemeCubit>();
+    final isDarkMode = themeCubit.state.isDarkMode;
     final groupedSchedules = groupByDay(schedules);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Routines'),
-        backgroundColor: isDarkMode ? Colors.grey[900] : primaryColor,
-        actions: [
-          // Padding(
-          //   padding: const EdgeInsets.all(8.0),
-          //   child: ElevatedButton(
-          //     onPressed: () {
-          //       // Handle "Request Leave" action
-          //     },
-          //     style: ElevatedButton.styleFrom(backgroundColor: Colors.pink),
-          //     child: const Text("Request Leave"),
-          //   ),
-          // ),
-        ],
+        title: const Text('My Weekly Schedule'),
+        backgroundColor: isDarkMode ? Colors.black : primaryColor,
+        iconTheme:
+            IconThemeData(color: isDarkMode ? Colors.white : Colors.white),
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -128,54 +124,113 @@ class _ViewScheduleUserState extends State<ViewScheduleUser> {
                   ),
                 )
               : ListView(
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(16),
                   children: groupedSchedules.entries.map((entry) {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           entry.key, // Day of the week
-                          style: const TextStyle(
-                            fontSize: 18,
+                          style: TextStyle(
+                            fontSize: 20,
                             fontWeight: FontWeight.bold,
+                            color: isDarkMode ? Colors.white : Colors.black,
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 12),
                         ...entry.value.map((schedule) {
                           return Container(
-                            margin: const EdgeInsets.only(bottom: 10),
-                            padding: const EdgeInsets.all(12),
+                            width: double.infinity,
+                            margin: const EdgeInsets.only(bottom: 12),
+                            padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
-                              color: getStatusColor(schedule.status),
-                              borderRadius: BorderRadius.circular(8),
+                              color: _getStatusColor(schedule.status),
+                              borderRadius: BorderRadius.circular(12),
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  "Title: ${schedule.title}",
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        schedule.title,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 6),
+                                      Row(
+                                        children: [
+                                          const Icon(Icons.access_time,
+                                              color: Colors.white70, size: 18),
+                                          const SizedBox(width: 6),
+                                          Text(
+                                            "${schedule.startTime} - ${schedule.endTime}",
+                                            style: const TextStyle(
+                                              color: Colors.white70,
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 6),
+                                      Text(
+                                        "Status: ${schedule.status}",
+                                        style: const TextStyle(
+                                          color: Colors.white70,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                Text(
-                                  "${schedule.startTime} - ${schedule.endTime}",
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                  ),
+                                Icon(
+                                  _getStatusIcon(schedule.status),
+                                  color: Colors.white,
+                                  size: 30,
                                 ),
                               ],
                             ),
                           );
                         }).toList(),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: 16),
                       ],
                     );
                   }).toList(),
                 ),
     );
+  }
+
+  /// Returns solid color based on status
+  Color _getStatusColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'canceled':
+        return Colors.red;
+      case 'paused':
+        return Colors.orange;
+      case 'active':
+      default:
+        return Colors.green;
+    }
+  }
+
+  /// Returns appropriate icon based on status
+  IconData _getStatusIcon(String status) {
+    switch (status.toLowerCase()) {
+      case 'canceled':
+        return Icons.cancel;
+      case 'paused':
+        return Icons.pause;
+      case 'active':
+      default:
+        return Icons.timelapse;
+    }
   }
 }

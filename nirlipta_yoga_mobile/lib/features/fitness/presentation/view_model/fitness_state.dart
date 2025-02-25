@@ -1,24 +1,26 @@
 part of 'fitness_bloc.dart';
 
 @immutable
-sealed class FitnessState {}
+abstract class FitnessState {}
 
-final class FitnessInitial extends FitnessState {}
+class FitnessInitial extends FitnessState {}
 
-final class FitnessUpdated extends FitnessState {
+class FitnessUpdated extends FitnessState {
   final double stepCount;
   final double distanceKm;
   final int durationMinutes;
   final double caloriesBurned;
+  final Position? position;
   final AccelerometerEvent? accelerometerEvent;
-  final Position? position; // Add position field
+  final int proximityValue;
 
   FitnessUpdated({
     required this.stepCount,
+    this.position,
     required this.distanceKm,
     required this.durationMinutes,
     required this.caloriesBurned,
     this.accelerometerEvent,
-    this.position, // Include position
+    required this.proximityValue,
   });
 }

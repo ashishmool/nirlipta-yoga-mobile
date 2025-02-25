@@ -21,7 +21,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     emit(DashboardLoading());
     try {
       final response =
-          await http.get(Uri.parse("http://10.0.2.2:5000/api/workshops/"));
+          await http.get(Uri.parse("http://192.168.1.19:5000/api/workshops/"));
 
       if (response.statusCode == 200) {
         List<dynamic> jsonData = json.decode(response.body);
@@ -41,7 +41,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
             "category": workshop["category"]["name"],
             "price": workshop["price"].toDouble(),
             "discountPrice": workshop["discount_price"].toDouble(),
-            "photo": "http://10.0.2.2:5000" + workshop["photo"],
+            "photo": "http://192.168.1.19:5000" + workshop["photo"],
             "description": workshop["description"] ?? null,
           };
         }).toList();

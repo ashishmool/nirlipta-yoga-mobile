@@ -229,7 +229,7 @@ class _ProfileViewState extends State<ProfileView> {
                                       : (state.user?.photo != null &&
                                                   state.user!.photo!.isNotEmpty
                                               ? NetworkImage(
-                                                  "http://10.0.2.2:5000/uploads/${state.user!.photo!}")
+                                                  "http://192.168.1.19:5000/uploads/${state.user!.photo!}")
                                               : const AssetImage(
                                                   'assets/images/profile-placeholder.png'))
                                           as ImageProvider,
@@ -283,7 +283,7 @@ class _ProfileViewState extends State<ProfileView> {
                         children: [
                           // Gender Dropdown takes 30% of the width
                           Expanded(
-                            flex: 4,
+                            flex: 5,
                             child: DropdownButtonFormField<String>(
                               value: _genderValue,
                               items: ['male', 'female', 'other']
