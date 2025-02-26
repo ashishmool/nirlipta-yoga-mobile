@@ -77,4 +77,17 @@ class UserLocalRepository implements IUserRepository {
     // TODO: implement updateUser
     throw UnimplementedError();
   }
+
+  @override
+  Future<Either<Failure, String>> receiveOtp(String email) {
+    // TODO: implement receiveOtp
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<Failure, void>> resetPassword(
+      String email, String password, String? otp) {
+    // TODO: implement setNewPassword
+    throw UnimplementedError();
+  }
 }

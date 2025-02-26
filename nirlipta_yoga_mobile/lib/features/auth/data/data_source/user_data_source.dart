@@ -10,4 +10,8 @@ abstract interface class IUserDataSource {
   Future<void> updateUser(String id, String token);
 
   Future<List<String>> login(String email, String password);
+
+  Future<String> receiveOtp(String email);
+
+  Future<void> setNewPassword(String email, String newPassword, String otp);
 }

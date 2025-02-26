@@ -27,6 +27,16 @@ class NavigateHomeScreenEvent extends LoginEvent {
   });
 }
 
+class NavigateOtpScreenEvent extends LoginEvent {
+  final BuildContext context;
+  final Widget destination;
+
+  const NavigateOtpScreenEvent({
+    required this.context,
+    required this.destination,
+  });
+}
+
 class LoginUserEvent extends LoginEvent {
   final BuildContext context;
   final Widget destination;

@@ -20,4 +20,9 @@ abstract interface class IUserRepository {
   Future<Either<Failure, List<String>>> login(String email, String password);
 
   Future<Either<Failure, String>> uploadImage(File file);
+
+  Future<Either<Failure, String>> receiveOtp(String email);
+
+  Future<Either<Failure, void>> resetPassword(
+      String email, String newPassword, String otp);
 }

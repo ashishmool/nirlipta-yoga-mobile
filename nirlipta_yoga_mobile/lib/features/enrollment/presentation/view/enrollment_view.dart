@@ -14,7 +14,7 @@ import '../view_model/enrollment_bloc.dart';
 class EnrollmentView extends StatelessWidget {
   EnrollmentView({super.key});
 
-  final String baseUrl = "http://192.168.1.19:5000";
+  final String baseUrl = "http://10.0.2.2:5000";
 
   @override
   Widget build(BuildContext context) {

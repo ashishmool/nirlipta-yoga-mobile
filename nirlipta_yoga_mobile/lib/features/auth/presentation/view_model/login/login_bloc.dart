@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nirlipta_yoga_mobile/features/auth/presentation/view_model/request_otp/request_otp_bloc.dart';
 
 import '../../../../../core/common/snackbar/snackbar.dart';
 import '../../../../home/presentation/view_model/home_cubit.dart';
@@ -12,6 +13,7 @@ part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final RegisterBloc _registerBloc;
+  final RequestOtpBloc _requestOtpBloc;
   final HomeCubit _homeCubit;
 
   final LoginUserUsecase _loginUserUsecase;
@@ -19,12 +21,28 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc({
     required RegisterBloc registerBloc,
     required HomeCubit homeCubit,
+    required RequestOtpBloc requestOtpBloc,
     required LoginUserUsecase loginUserUsecase,
   })  : _registerBloc = registerBloc,
         _homeCubit = homeCubit,
+        _requestOtpBloc = requestOtpBloc,
         _loginUserUsecase = loginUserUsecase,
         super(LoginState.initial()) {
     on<NavigateRegisterScreenEvent>((event, emit) {
+      Navigator.push(
+        event.context,
+        MaterialPageRoute(
+          builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider.value(value: _registerBloc),
+            ],
+            child: event.destination,
+          ),
+        ),
+      );
+    });
+
+    on<NavigateOtpScreenEvent>((event, emit) {
       Navigator.push(
         event.context,
         MaterialPageRoute(

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nirlipta_yoga_mobile/app/shared_prefs/user_shared_prefs.dart';
+import 'package:nirlipta_yoga_mobile/features/auth/domain/use_case/get_otp_usecase.dart';
 import 'package:nirlipta_yoga_mobile/features/auth/domain/use_case/get_user_by_id_usecase.dart';
 import 'package:nirlipta_yoga_mobile/features/auth/domain/use_case/update_user_usecase.dart';
 import 'package:nirlipta_yoga_mobile/features/auth/domain/use_case/upload_image_usecase.dart';
@@ -17,7 +18,10 @@ import '../../features/auth/data/data_source/remote_datasource/user_remote_data_
 import '../../features/auth/data/repository/user_remote_repository.dart';
 import '../../features/auth/domain/use_case/create_user_usecase.dart';
 import '../../features/auth/domain/use_case/login_user_usecase.dart';
+import '../../features/auth/domain/use_case/reset_password_usecase.dart';
 import '../../features/auth/presentation/view_model/profile/profile_bloc.dart';
+import '../../features/auth/presentation/view_model/request_otp/request_otp_bloc.dart';
+import '../../features/auth/presentation/view_model/reset_password/reset_password_bloc.dart';
 import '../../features/enrollment/data/data_source/remote_datasource/enrollment_remote_data_source.dart';
 import '../../features/enrollment/data/repository/enrollment_remote_repository.dart';
 import '../../features/enrollment/domain/use_case/create_enrollment_usecase.dart';
@@ -68,6 +72,8 @@ Future<void> initDependencies() async {
   // Initialize Authentication Dependencies
   await _initLoginDependencies();
   await _initRegisterDependencies();
+  await _initRequestOtpDependencies();
+  await _initResetPasswordDependencies();
 
   // Initialize Home
   await _initHomeDependencies();
@@ -95,6 +101,29 @@ _initApiService() {
 Future<void> _initSharedPreferences() async {
   final sharedPreferences = await SharedPreferences.getInstance();
   getIt.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
+}
+
+_initRequestOtpDependencies() {
+  if (!getIt.isRegistered<GetOtpUseCase>()) {
+    getIt.registerLazySingleton<GetOtpUseCase>(() => GetOtpUseCase(
+          userRepository: getIt<UserRemoteRepository>(),
+        ));
+  }
+
+  getIt.registerFactory<RequestOtpBloc>(
+    () => RequestOtpBloc(getOtpUseCase: getIt<GetOtpUseCase>()),
+  );
+}
+
+_initResetPasswordDependencies() {
+  getIt.registerLazySingleton<ResetPasswordUseCase>(
+    () => ResetPasswordUseCase(userRepository: getIt<UserRemoteRepository>()),
+  );
+
+  getIt.registerFactory<ResetPasswordBloc>(
+    () =>
+        ResetPasswordBloc(resetPasswordUseCase: getIt<ResetPasswordUseCase>()),
+  );
 }
 
 _initWorkshopDependencies() async {
@@ -303,6 +332,7 @@ _initLoginDependencies() async {
       // batchBloc: getIt<BatchBloc>(),
       // workshopBloc: getIt<WorkshopBloc>(),
       loginUserUsecase: getIt<LoginUserUsecase>(),
+      requestOtpBloc: getIt<RequestOtpBloc>(),
     ),
   );
 }

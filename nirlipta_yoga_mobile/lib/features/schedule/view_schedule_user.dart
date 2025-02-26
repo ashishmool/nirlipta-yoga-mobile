@@ -66,7 +66,7 @@ class _ViewScheduleUserState extends State<ViewScheduleUser> {
   Future<void> fetchSchedules() async {
     try {
       final response = await Dio().get(
-        'http://192.168.1.19:5000/api/schedules/user/${widget.userId}',
+        'http://10.0.2.2:5000/api/schedules/user/${widget.userId}',
       );
 
       List<dynamic> data = response.data;

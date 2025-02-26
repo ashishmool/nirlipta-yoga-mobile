@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 
 import '../../../../../app/constants/api_endpoints.dart';
+import '../../../../../core/error/failure.dart';
 import '../../../domain/entity/user_entity.dart';
 import '../../model/user_api_model.dart';
 
@@ -172,6 +173,49 @@ class UserRemoteDataSource {
             'Content-Type': 'application/json',
           },
         ),
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception(response.statusMessage);
+      }
+    } on DioException catch (e) {
+      throw Exception('Network error: ${e.message}');
+    } catch (e) {
+      throw Exception('Unexpected error: $e');
+    }
+  }
+
+  /// Receives OTP
+  @override
+  Future<String> receiveOtp(String email) async {
+    try {
+      print("EMAIL TO SEND: $email");
+
+      var response = await _dio.get(
+        ApiEndpoints.receiveOtp,
+        data: {'email': email},
+        options: Options(headers: {
+          "Content-Type": "application/json",
+        }),
+      );
+
+      print("RESPONSE RECEIVED: ${response.data}");
+
+      return response.data["message"] as String; // Ensure this returns a string
+    } catch (e) {
+      print("DIO ERROR: ${e.toString()}");
+      throw ApiFailure(message: e.toString());
+    }
+  }
+
+  /// Sets a new password
+  @override
+  Future<void> setNewPassword(
+      String? otp, String newPassword, String email) async {
+    try {
+      var response = await _dio.post(
+        ApiEndpoints.setNewPassword,
+        data: {'email': email, 'newPassword': newPassword, 'otp': otp},
       );
 
       if (response.statusCode != 200) {

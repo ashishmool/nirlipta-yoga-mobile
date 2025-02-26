@@ -5,6 +5,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:nirlipta_yoga_mobile/features/auth/domain/use_case/login_user_usecase.dart';
 import 'package:nirlipta_yoga_mobile/features/auth/presentation/view/login_view.dart';
 import 'package:nirlipta_yoga_mobile/features/auth/presentation/view_model/login/login_bloc.dart';
+import 'package:nirlipta_yoga_mobile/features/auth/presentation/view_model/request_otp/request_otp_bloc.dart';
 import 'package:nirlipta_yoga_mobile/features/auth/presentation/view_model/signup/register_bloc.dart';
 import 'package:nirlipta_yoga_mobile/features/home/presentation/view_model/home_cubit.dart';
 
@@ -13,6 +14,8 @@ import 'package:nirlipta_yoga_mobile/features/home/presentation/view_model/home_
 // Mock dependencies
 class MockRegisterBloc extends Mock implements RegisterBloc {}
 
+class MockRequestOtpBloc extends Mock implements RequestOtpBloc {}
+
 class MockHomeCubit extends Mock implements HomeCubit {}
 
 class MockLoginUserUsecase extends Mock implements LoginUserUsecase {}
@@ -20,11 +23,13 @@ class MockLoginUserUsecase extends Mock implements LoginUserUsecase {}
 void main() {
   late LoginBloc loginBloc;
   late RegisterBloc registerBloc;
+  late RequestOtpBloc requestOtpBloc;
   late HomeCubit homeCubit;
   late LoginUserUsecase loginUserUsecase;
 
   setUp(() {
     registerBloc = MockRegisterBloc();
+    requestOtpBloc = MockRequestOtpBloc();
     homeCubit = MockHomeCubit();
     loginUserUsecase = MockLoginUserUsecase();
 
@@ -32,6 +37,7 @@ void main() {
       registerBloc: registerBloc,
       homeCubit: homeCubit,
       loginUserUsecase: loginUserUsecase,
+      requestOtpBloc: requestOtpBloc,
     );
   });
 

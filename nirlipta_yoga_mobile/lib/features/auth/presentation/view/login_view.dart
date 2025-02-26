@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nirlipta_yoga_mobile/features/auth/presentation/view/register_view.dart';
+import 'package:nirlipta_yoga_mobile/features/auth/presentation/view/request_otp_view.dart';
 
+import '../../../../app/di/di.dart';
 import '../../../../core/common/logo.dart';
 import '../../../home/presentation/view/home_view.dart';
 import '../view_model/login/login_bloc.dart';
+import '../view_model/request_otp/request_otp_bloc.dart';
 
 class LoginView extends StatelessWidget {
   LoginView({super.key});
@@ -105,7 +108,6 @@ class LoginView extends StatelessWidget {
                           final email = _emailController.text.trim();
                           final password = _passwordController.text.trim();
 
-
                           context.read<LoginBloc>().add(
                                 LoginUserEvent(
                                   email: email,
@@ -131,28 +133,64 @@ class LoginView extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      // Center the content
+                    const SizedBox(height: 8),
+                    Column(
                       children: [
-                        const Text('Don’t have an account?'),
-                        TextButton(
-                          key: const ValueKey('registerButton'),
-                          onPressed: () {
-                            context.read<LoginBloc>().add(
-                                  NavigateRegisterScreenEvent(
-                                    destination: RegisterView(),
-                                    context: context,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text('Reset Password?'),
+                            TextButton(
+                              key: const ValueKey('resetButton'),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => BlocProvider(
+                                      create: (context) =>
+                                          getIt<RequestOtpBloc>(),
+                                      // Provide the bloc
+                                      child: RequestOtpView(),
+                                    ),
                                   ),
                                 );
-                          },
-                          child: const Text(
-                            'Register',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontFamily: 'Brand Bold',
+                              },
+                              child: const Text(
+                                'Reset',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontFamily: 'Brand Bold',
+                                ),
+                              ),
                             ),
-                          ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 8), // Space between rows
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text('Don’t have an account?'),
+                            TextButton(
+                              key: const ValueKey('registerButton'),
+                              onPressed: () {
+                                context.read<LoginBloc>().add(
+                                      NavigateRegisterScreenEvent(
+                                        destination: RegisterView(),
+                                        context: context,
+                                      ),
+                                    );
+                              },
+                              child: const Text(
+                                'Register',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontFamily: 'Brand Bold',
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),

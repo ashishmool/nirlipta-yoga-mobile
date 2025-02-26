@@ -12,6 +12,7 @@ class UserApiModel extends Equatable {
   final String phone;
   final String email;
   final String password;
+  final String? otp;
 
   // @JsonKey(name: 'photo') // Maps the server field "photo" to the "image" field
   final String? photo;
@@ -20,6 +21,7 @@ class UserApiModel extends Equatable {
 
   const UserApiModel({
     this.id,
+    this.otp,
     required this.name,
     required this.username,
     required this.phone,
@@ -33,6 +35,7 @@ class UserApiModel extends Equatable {
   const UserApiModel.empty()
       : id = '',
         name = '',
+        otp = '',
         username = '',
         phone = '',
         email = '',
@@ -46,6 +49,7 @@ class UserApiModel extends Equatable {
     return UserApiModel(
       id: json['_id'] as String?,
       name: json['name'] as String,
+      otp: json['otp'] as String,
       username: json['username'] as String,
       phone: json['phone'] as String,
       email: json['email'] as String,
@@ -61,6 +65,7 @@ class UserApiModel extends Equatable {
     return {
       '_id': id,
       'name': name,
+      'otp': otp,
       'username': username,
       'phone': phone,
       'email': email,
@@ -75,6 +80,7 @@ class UserApiModel extends Equatable {
   UserEntity toEntity() => UserEntity(
         id: id,
         name: name,
+        otp: otp,
         username: username,
         phone: phone,
         email: email,
@@ -89,6 +95,7 @@ class UserApiModel extends Equatable {
     return UserApiModel(
       id: entity.id,
       name: entity.name,
+      otp: entity.otp,
       username: entity.username,
       phone: entity.phone,
       email: entity.email,
@@ -108,6 +115,7 @@ class UserApiModel extends Equatable {
   List<Object?> get props => [
         id,
         name,
+        otp,
         username,
         phone,
         email,

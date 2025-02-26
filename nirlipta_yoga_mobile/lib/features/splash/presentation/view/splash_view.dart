@@ -52,7 +52,7 @@ class _SplashViewState extends State<SplashView> {
               bottom: 10,
               left: screenWidth / 4,
               child: const Text(
-                'Developed by: Ashish Mool', // Replace with your name
+                'Developed by: Ashish Mool (220417)',
                 style: TextStyle(fontSize: 15),
               ),
             ),

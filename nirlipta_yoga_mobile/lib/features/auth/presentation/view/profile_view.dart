@@ -229,7 +229,7 @@ class _ProfileViewState extends State<ProfileView> {
                                       : (state.user?.photo != null &&
                                                   state.user!.photo!.isNotEmpty
                                               ? NetworkImage(
-                                                  "http://192.168.1.19:5000/uploads/${state.user!.photo!}")
+                                                  "http://10.0.2.2:5000/uploads/${state.user!.photo!}")
                                               : const AssetImage(
                                                   'assets/images/profile-placeholder.png'))
                                           as ImageProvider,

@@ -1,12 +1,14 @@
 class ApiEndpoints {
   ApiEndpoints._();
 
-  static const Duration connectionTimeout = Duration(seconds: 1000);
-  static const Duration receiveTimeout = Duration(seconds: 1000);
+  static const Duration connectionTimeout = Duration(seconds: 10000);
+  static const Duration receiveTimeout = Duration(seconds: 10000);
 
   // For Android Emulator
 
-  static const String baseUrl = "http://192.168.1.19:5000/api/";
+  // static const String baseUrl = "http://10.0.2.2:5000/api/";
+
+  static const String baseUrl = "http://10.0.2.2:5000/api/";
 
   // // For iPhone
   // static const String baseUrl = "http://localhost:5000/api/";
@@ -19,8 +21,11 @@ class ApiEndpoints {
   static const String deleteUser = "auth/delete/";
   static const String getAllUsers = "auth/getAllUsers/";
 
-  // static const String imageUrl = "http://192.168.1.19:5000/uploads/";
-  static const String imageUrl = "http://192.168.1.19:5000/uploads/";
+  static const String receiveOtp = "/auth/otp";
+  static const String setNewPassword = "auth/set-new-password/";
+
+  // static const String imageUrl = "http://10.0.2.2:5000/uploads/";
+  static const String imageUrl = "http://10.0.2.2:5000/uploads/";
 
   static const String uploadImage = "auth/uploadImage";
 

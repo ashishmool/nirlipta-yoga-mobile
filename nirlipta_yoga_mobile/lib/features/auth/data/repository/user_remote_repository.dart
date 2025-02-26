@@ -104,4 +104,26 @@ class UserRemoteRepository implements IUserRepository {
       return Left(ApiFailure(message: e.toString())); // Error handling
     }
   }
+
+  @override
+  Future<Either<Failure, String>> receiveOtp(String email) async {
+    try {
+      final response = await _userRemoteDataSource.receiveOtp(email);
+      print("Response Coming: ${response}");
+      return Right(response);
+    } catch (e) {
+      return Left(ApiFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> resetPassword(
+      String email, String newPassword, String otp) async {
+    try {
+      await _userRemoteDataSource.setNewPassword(email, newPassword, otp);
+      return const Right(null);
+    } catch (e) {
+      return Left(ApiFailure(message: e.toString()));
+    }
+  }
 }

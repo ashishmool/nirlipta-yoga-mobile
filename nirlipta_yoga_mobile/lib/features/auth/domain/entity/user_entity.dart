@@ -8,6 +8,7 @@ class UserEntity extends Equatable {
   final String email;
   final String password;
   final String? photo;
+  final String? otp;
 
   // final DateTime? dob;
   final String gender;
@@ -21,6 +22,7 @@ class UserEntity extends Equatable {
     required this.email,
     required this.password,
     this.photo,
+    this.otp,
     required this.medical_conditions,
     // this.dob,
     required this.gender,
@@ -36,6 +38,7 @@ class UserEntity extends Equatable {
         password = '_empty.password',
         photo = '_empty.photo',
         medical_conditions = null,
+        otp = '_empty.otp',
         gender = '_empty.gender';
 
   @override
