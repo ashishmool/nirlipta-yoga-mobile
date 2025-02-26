@@ -191,7 +191,7 @@ class UserRemoteDataSource {
     try {
       print("EMAIL TO SEND: $email");
 
-      var response = await _dio.get(
+      var response = await _dio.post(
         ApiEndpoints.receiveOtp,
         data: {'email': email},
         options: Options(headers: {

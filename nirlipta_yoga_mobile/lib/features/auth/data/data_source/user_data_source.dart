@@ -7,7 +7,8 @@ abstract interface class IUserDataSource {
 
   Future<void> deleteUser(String id);
 
-  Future<void> updateUser(String id, String token);
+  Future<void> updateUser(
+      String id, String token, Map<String, dynamic> userData);
 
   Future<List<String>> login(String email, String password);
 

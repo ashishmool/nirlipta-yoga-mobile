@@ -3,11 +3,14 @@ import 'package:json_annotation/json_annotation.dart';
 
 import '../../domain/entity/user_entity.dart';
 
+part 'user_api_model.g.dart';
+
 @JsonSerializable()
 class UserApiModel extends Equatable {
   @JsonKey(name: '_id') // Maps the server field "_id" to the "userId" field
   final String? id;
   final String name;
+  final String? role;
   final String username;
   final String phone;
   final String email;
@@ -23,6 +26,7 @@ class UserApiModel extends Equatable {
     this.id,
     this.otp,
     required this.name,
+    this.role,
     required this.username,
     required this.phone,
     required this.email,
@@ -38,6 +42,7 @@ class UserApiModel extends Equatable {
         otp = '',
         username = '',
         phone = '',
+        role = '',
         email = '',
         password = '',
         photo = '',
@@ -52,6 +57,7 @@ class UserApiModel extends Equatable {
       otp: json['otp'] as String,
       username: json['username'] as String,
       phone: json['phone'] as String,
+      role: json['role'] as String,
       email: json['email'] as String,
       password: json['password'] as String,
       photo: json['photo'] as String?,
@@ -67,6 +73,7 @@ class UserApiModel extends Equatable {
       'name': name,
       'otp': otp,
       'username': username,
+      'role': role,
       'phone': phone,
       'email': email,
       'password': password,
@@ -88,6 +95,7 @@ class UserApiModel extends Equatable {
         photo: photo,
         gender: gender,
         medical_conditions: medical_conditions,
+        role: role,
       );
 
   /// Converts a domain entity to an API model
@@ -96,6 +104,7 @@ class UserApiModel extends Equatable {
       id: entity.id,
       name: entity.name,
       otp: entity.otp,
+      role: entity.role,
       username: entity.username,
       phone: entity.phone,
       email: entity.email,

@@ -132,6 +132,25 @@ class ResetPasswordView extends StatelessWidget {
                         );
                       },
                     ),
+                    const SizedBox(height: 32), // Space between rows
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextButton(
+                          key: const ValueKey('backButton'),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text(
+                            'Go Back',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Brand Bold',
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),

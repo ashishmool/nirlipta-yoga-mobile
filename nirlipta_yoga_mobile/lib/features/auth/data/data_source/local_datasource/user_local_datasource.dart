@@ -42,27 +42,44 @@ class UserLocalDatasource implements IUserDataSource {
   Future<List<String>> login(String email, String password) async {
     try {
       final userHiveModel = await _hiveService.loginUser(email, password);
-      return [''];
+      return ['']; // ❌ This should return meaningful data
     } catch (e) {
       throw Exception(e);
     }
   }
 
   @override
-  Future<void> updateUser(String id, String token) {
-    // TODO: implement updateUser
-    throw UnimplementedError();
+  Future<void> updateUser(
+      String id, String token, Map<String, dynamic> userData) async {
+    try {
+      await _hiveService.updateUser(id, token, userData);
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 
   @override
-  Future<String> receiveOtp(String email) {
-    // TODO: implement receiveOtp
-    throw UnimplementedError();
+  Future<String> receiveOtp(String email) async {
+    try {
+      String? otp = await _hiveService.receiveOtp(email);
+
+      if (otp == null) {
+        throw Exception("User not found or OTP generation failed.");
+      }
+
+      return otp;
+    } catch (e) {
+      throw Exception("Error receiving OTP: ${e.toString()}");
+    }
   }
 
   @override
-  Future<void> setNewPassword(String email, String newPassword, String otp) {
-    // TODO: implement resetPassword
-    throw UnimplementedError();
+  Future<void> setNewPassword(
+      String email, String newPassword, String otp) async {
+    try {
+      await _hiveService.setNewPassword(email, newPassword, otp);
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 }

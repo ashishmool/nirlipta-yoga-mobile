@@ -25,31 +25,102 @@ class HiveService {
 
 // User Queries
 
+  /// Adds a new user
   Future<void> addUser(UserHiveModel user) async {
     var box = await Hive.openBox<UserHiveModel>(HiveTableConstant.userBox);
     await box.put(user.id, user);
   }
 
+  /// Deletes a user by ID
   Future<void> deleteUser(String id) async {
     var box = await Hive.openBox<UserHiveModel>(HiveTableConstant.userBox);
     await box.delete(id);
   }
 
+  /// Retrieves all users
   Future<List<UserHiveModel>> getAllUsers() async {
     var box = await Hive.openBox<UserHiveModel>(HiveTableConstant.userBox);
-    var users = box.values.toList();
-    return users;
+    return box.values.toList();
   }
 
+  /// Retrieves a user by ID
+  Future<UserHiveModel?> getUserById(String userId) async {
+    var box = await Hive.openBox<UserHiveModel>(HiveTableConstant.userBox);
+    return box.get(userId);
+  }
+
+  /// Updates an existing user
+  Future<void> updateUser(
+      String userId, String token, Map<String, dynamic> updatedData) async {
+    var box = await Hive.openBox<UserHiveModel>(HiveTableConstant.userBox);
+    var existingUser = box.get(userId);
+
+    if (existingUser != null) {
+      var updatedUser = UserHiveModel(
+        id: userId,
+        name: updatedData['name'] ?? existingUser.name,
+        email: updatedData['email'] ?? existingUser.email,
+        password: updatedData['password'] ?? existingUser.password,
+        photo: updatedData['photo'] ?? existingUser.photo,
+        username: existingUser.username,
+        phone: updatedData['phone'] ?? existingUser.phone,
+        gender: updatedData['gender'] ?? existingUser.gender,
+        role: existingUser.role,
+      );
+
+      await box.put(userId, updatedUser);
+    }
+  }
+
+  /// Logs in a user
   Future<UserHiveModel?> loginUser(String email, String password) async {
     var box = await Hive.openBox<UserHiveModel>(HiveTableConstant.userBox);
 
-    var auth = box.values.firstWhere(
-        (element) => element.email == email && element.password == password,
+    return box.values.firstWhere(
+      (user) => user.email == email && user.password == password,
+      orElse: () => UserHiveModel.initial(),
+    );
+  }
+
+  /// Sends an OTP to the user’s email for password reset
+  Future<String?> receiveOtp(String email) async {
+    var box = await Hive.openBox<UserHiveModel>(HiveTableConstant.userBox);
+    var user = box.values.firstWhere((user) => user.email == email,
         orElse: () => UserHiveModel.initial());
 
-    return auth;
+    if (user.id != null) {
+      String otp = generateOtp(); // Generate a 6-digit OTP
+      var updatedUser = user.copyWith(otp: otp);
+
+      await box.put(user.id, updatedUser);
+      return otp;
+    }
+    return null;
   }
+
+  /// Verifies OTP and updates the user's password
+  Future<bool> setNewPassword(
+      String email, String otp, String newPassword) async {
+    var box = await Hive.openBox<UserHiveModel>(HiveTableConstant.userBox);
+    var user = box.values.firstWhere((user) => user.email == email,
+        orElse: () => UserHiveModel.initial());
+
+    if (user.id != null && user.otp == otp) {
+      var updatedUser = user.copyWith(
+          password: newPassword, otp: null); // Clear OTP after reset
+
+      await box.put(user.id, updatedUser);
+      return true; // Password reset successful
+    }
+    return false; // OTP mismatch or user not found
+  }
+
+  //
+  // /// Clears all users (for debugging purposes)
+  // Future<void> clearUsers() async {
+  //   var box = await Hive.openBox<UserHiveModel>(HiveTableConstant.userBox);
+  //   await box.clear();
+  // }
 
   // Workshop Queries
   Future<void> addWorkshop(WorkshopHiveModel workshop) async {
@@ -143,4 +214,8 @@ class HiveService {
         HiveTableConstant.enrollmentBox);
     await box.put(enrollment.id, enrollment);
   }
+}
+
+String generateOtp() {
+  return (100000 + (DateTime.now().millisecondsSinceEpoch % 900000)).toString();
 }

@@ -37,18 +37,53 @@ class UserHiveModel extends Equatable {
   @HiveField(8)
   final List<String>? medicalConditions;
 
+  @HiveField(9)
+  final String? otp;
+
+  @HiveField(10)
+  final String? role;
+
   UserHiveModel({
     String? id,
     required this.name,
     required this.username,
     required this.phone,
     required this.email,
+    this.role,
     required this.password,
     this.photo,
+    this.otp,
     required this.gender,
     List<String>? medicalConditions,
   })  : id = id ?? const Uuid().v4(),
         medicalConditions = medicalConditions ?? null;
+
+  UserHiveModel copyWith({
+    String? id,
+    String? name,
+    String? username,
+    String? phone,
+    String? email,
+    String? password,
+    String? role,
+    String? gender,
+    String? photo,
+    String? otp,
+    String? medicalConditions,
+  }) {
+    return UserHiveModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      password: password ?? this.password,
+      role: role ?? this.role,
+      photo: photo ?? this.photo,
+      otp: otp ?? this.otp,
+      username: username ?? this.username,
+      phone: '',
+      gender: gender ?? this.gender,
+    );
+  }
 
   /// Initial constructor with default values
   const UserHiveModel.initial()
@@ -56,9 +91,11 @@ class UserHiveModel extends Equatable {
         name = '',
         username = '',
         phone = '',
+        role = '',
         email = '',
         password = '',
         photo = null,
+        otp = '',
         gender = '',
         medicalConditions = null;
 
@@ -75,6 +112,7 @@ class UserHiveModel extends Equatable {
       // Handle empty image
       gender: entity.gender,
       medicalConditions: entity.medical_conditions,
+      role: entity.role,
     );
   }
 
@@ -85,6 +123,7 @@ class UserHiveModel extends Equatable {
       name: name,
       username: username,
       phone: phone,
+      role: role,
       email: email,
       password: password,
       photo: photo,
@@ -111,5 +150,6 @@ class UserHiveModel extends Equatable {
         photo,
         gender,
         medicalConditions,
+        role,
       ];
 }
