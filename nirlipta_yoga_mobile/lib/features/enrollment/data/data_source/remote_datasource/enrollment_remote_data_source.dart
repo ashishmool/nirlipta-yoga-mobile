@@ -71,23 +71,6 @@ class EnrollmentRemoteDataSource implements IEnrollmentDataSource {
     }
   }
 
-  // @override
-  // Future<EnrollmentEntity> getEnrollmentByUser(String userId) async {
-  //   try {
-  //     var response =
-  //         await _dio.get('${ApiEndpoints.getEnrollmentById}/$userId');
-  //     if (response.statusCode == 200) {
-  //       return EnrollmentApiModel.fromJson(response.data).toEntity();
-  //     } else {
-  //       throw Exception(response.statusMessage);
-  //     }
-  //   } on DioException catch (e) {
-  //     throw Exception(e.message);
-  //   } catch (e) {
-  //     throw Exception(e.toString());
-  //   }
-  // }
-
   @override
   Future<void> updateEnrollment(EnrollmentEntity enrollmentEntity) async {
     try {

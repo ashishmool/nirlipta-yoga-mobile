@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nirlipta_yoga_mobile/core/theme/app_theme.dart';
 import 'package:nirlipta_yoga_mobile/features/auth/presentation/view/register_view.dart';
 import 'package:nirlipta_yoga_mobile/features/auth/presentation/view/request_otp_view.dart';
 
@@ -100,7 +101,27 @@ class LoginView extends StatelessWidget {
                         );
                       },
                     ),
-                    _gap,
+                    // Forgot Password
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => BlocProvider(
+                                create: (context) => getIt<RequestOtpBloc>(),
+                                child: RequestOtpView(),
+                              ),
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          'Reset Password',
+                          style: TextStyle(color: secondaryColor, fontSize: 14),
+                        ),
+                      ),
+                    ),
                     _gap,
                     ElevatedButton(
                       onPressed: () {
@@ -133,40 +154,9 @@ class LoginView extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    const SizedBox(height: 8),
                     Column(
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text('Reset Password?'),
-                            TextButton(
-                              key: const ValueKey('resetButton'),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => BlocProvider(
-                                      create: (context) =>
-                                          getIt<RequestOtpBloc>(),
-                                      // Provide the bloc
-                                      child: RequestOtpView(),
-                                    ),
-                                  ),
-                                );
-                              },
-                              child: const Text(
-                                'Reset',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontFamily: 'Brand Bold',
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        const SizedBox(height: 8), // Space between rows
+                        const SizedBox(height: 48), // Space between rows
 
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,

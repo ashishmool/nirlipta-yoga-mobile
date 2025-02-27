@@ -8,7 +8,7 @@ import 'package:nirlipta_yoga_mobile/core/theme/app_theme.dart';
 
 import '../../../../app/shared_prefs/user_shared_prefs.dart';
 import '../../../../core/theme/theme_cubit.dart';
-import '../../../schedule/view_schedule_user.dart';
+import '../../../schedule/presentation/view/view_schedule_user.dart';
 import '../view_model/enrollment_bloc.dart';
 
 class EnrollmentView extends StatelessWidget {
