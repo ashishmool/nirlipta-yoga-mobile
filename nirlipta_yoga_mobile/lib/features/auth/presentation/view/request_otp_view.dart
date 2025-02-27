@@ -77,7 +77,8 @@ class RequestOtpView extends StatelessWidget {
                           MaterialPageRoute(
                             builder: (context) => BlocProvider(
                               create: (context) => getIt<ResetPasswordBloc>(),
-                              child: ResetPasswordView(),
+                              child: ResetPasswordView(
+                                  email: _emailController.text.trim()),
                             ),
                           ),
                         );

@@ -54,6 +54,7 @@ dependencies:
   bloc: ^9.0.0
   fluttertoast: ^8.2.11
 
+
   proximity_screen_lock: ^2.1.1
   flutter_screen_lock: ^9.2.1
   pedometer: ^4.0.2
