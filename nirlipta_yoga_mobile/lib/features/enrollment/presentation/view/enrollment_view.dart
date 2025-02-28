@@ -180,15 +180,57 @@ class EnrollmentView extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              Text(
-                                "Price: ₹${enrollment.workshop.price ?? 'N/A'}",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: isDarkMode
-                                      ? Colors.white
-                                      : Colors.black87,
-                                ),
+                              Row(
+                                children: [
+                                  // Show discounted price if valid
+                                  if (enrollment.workshop.discountPrice !=
+                                          null &&
+                                      enrollment.workshop.discountPrice! > 0 &&
+                                      enrollment.workshop.discountPrice! <
+                                          enrollment.workshop.price!)
+                                    Row(
+                                      children: [
+                                        // Strikethrough original price
+                                        Text(
+                                          "₹${enrollment.workshop.price}",
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                            color: isDarkMode
+                                                ? Colors.white70
+                                                : Colors.black54,
+                                            decoration: TextDecoration
+                                                .lineThrough, // Strikethrough
+                                          ),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        // Add some spacing
+                                        // Show discounted price
+                                        Text(
+                                          "₹${enrollment.workshop.discountPrice}",
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                            color: isDarkMode
+                                                ? Colors.white
+                                                : Colors.black87,
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  else
+                                    // Show original price if no valid discount
+                                    Text(
+                                      "₹${enrollment.workshop.price ?? 'N/A'}",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: isDarkMode
+                                            ? Colors.white
+                                            : Colors.black87,
+                                      ),
+                                    ),
+                                ],
                               ),
                             ],
                           ),
@@ -253,7 +295,8 @@ class EnrollmentView extends StatelessWidget {
                                       Expanded(
                                         child: ElevatedButton(
                                           onPressed: () {
-                                            // _processPayment(context, enrollment.id)
+                                            _processPayment(
+                                                context, enrollment.id!);
                                           },
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: Colors.red[700],
@@ -367,6 +410,7 @@ class EnrollmentView extends StatelessWidget {
 
       if (response.statusCode == 200) {
         showMySnackBar(context: context, message: "Payment Successful!");
+        // Dispatch an event to reload the enrollments
         context.read<EnrollmentBloc>().add(LoadEnrollments());
       } else {
         showMySnackBar(context: context, message: "Payment Failed. Try again.");
@@ -376,9 +420,9 @@ class EnrollmentView extends StatelessWidget {
       showMySnackBar(context: context, message: "Error processing payment.");
     }
   }
-}
 
-Future<String?> _getUserId() async {
-  final userData = await UserSharedPrefs().getUserData();
-  return userData.fold((failure) => null, (data) => data[2]);
+  Future<String?> _getUserId() async {
+    final userData = await UserSharedPrefs().getUserData();
+    return userData.fold((failure) => null, (data) => data[2]);
+  }
 }

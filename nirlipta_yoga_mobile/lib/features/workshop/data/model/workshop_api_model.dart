@@ -59,7 +59,11 @@ class WorkshopApiModel extends Equatable {
       difficultyLevel: json['difficulty_level'] as String? ?? '',
       categoryId: json['category'] as String? ?? '',
       photo: json['photo'] as String? ?? '',
-      price: json['price'] ?? 0.0,
+      price: json['price'] != null ? json['price'].toDouble() : null,
+      // Add this
+      discountPrice: json['discount_price'] != null
+          ? json['discount_price'].toDouble()
+          : null, // Add this
     );
   }
 

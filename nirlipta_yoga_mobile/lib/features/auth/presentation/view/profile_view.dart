@@ -25,10 +25,8 @@ class _ProfileViewState extends State<ProfileView> {
   final _medicalConditionsController = TextEditingController();
   final _phoneController = TextEditingController();
   final _emailController = TextEditingController();
-  final _passwordController = TextEditingController(text: '');
+  final _passwordController = TextEditingController();
   String? _genderValue = 'male';
-  bool _isPasswordVisible = false;
-  bool _isPasswordEditable = false;
   bool _isNoneSelected = true;
 
   File? _img;
@@ -55,7 +53,7 @@ class _ProfileViewState extends State<ProfileView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: const Text('Manage Profile'),
         backgroundColor: isDarkMode ? Colors.grey[900] : primaryColor,
         centerTitle: true,
         iconTheme: const IconThemeData(
@@ -152,6 +150,8 @@ class _ProfileViewState extends State<ProfileView> {
               if (state.isLoading) {
                 return const Center(child: CircularProgressIndicator());
               }
+
+              print(state.user);
 
               if (state.user == null) {
                 return const Center(child: Text("User data not available"));
@@ -331,63 +331,7 @@ class _ProfileViewState extends State<ProfileView> {
                       ),
                       _gap,
                       _gap,
-                      Row(
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: TextFormField(
-                              controller: _passwordController,
-                              obscureText: !_isPasswordVisible,
-                              enabled: _isPasswordEditable,
-                              // Check if it's enabled
-                              decoration: InputDecoration(
-                                labelText: 'Password',
-                                suffixIcon: IconButton(
-                                  icon: Icon(
-                                    _isPasswordVisible
-                                        ? Icons.visibility
-                                        : Icons.visibility_off,
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      _isPasswordVisible = !_isPasswordVisible;
-                                    });
-                                  },
-                                ),
-                              ),
-                              validator: (value) {
-                                if (_isPasswordEditable &&
-                                    (value == null || value.isEmpty)) {
-                                  return 'Please enter password';
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                        ],
-                      ),
 
-                      // Add a checkbox for enabling/disabling the password field
-                      Row(
-                        children: [
-                          Checkbox(
-                            value: _isPasswordEditable,
-                            onChanged: (bool? value) {
-                              setState(() {
-                                _isPasswordEditable = value ?? false;
-                                if (!_isPasswordEditable) {
-                                  _passwordController
-                                      .clear(); // Clear the password when disabled
-                                }
-                              });
-                            },
-                          ),
-                          const Text('Select to Change Password'),
-                        ],
-                      ),
-                      _gap,
-                      _gap,
                       Row(
                         children: [
                           // Email Field takes 50% of the width

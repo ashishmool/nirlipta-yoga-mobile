@@ -113,7 +113,8 @@ class RequestOtpView extends StatelessWidget {
                               },
                         icon: state.isLoading
                             ? const CircularProgressIndicator(
-                                color: Colors.white) // Loader when loading
+                                color: primaryColor,
+                              ) // Loader when loading
                             : const Icon(Icons.send, color: Colors.white),
                         // Send icon
                         label: state.isLoading

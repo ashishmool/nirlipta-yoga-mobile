@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:nirlipta_yoga_mobile/app/shared_prefs/token_shared_prefs.dart';
 import 'package:nirlipta_yoga_mobile/features/workshop/domain/entity/workshop_entity.dart';
 
+import '../../../../app/shared_prefs/user_shared_prefs.dart';
 import '../../../../app/usecase/usecase.dart';
 import '../../../../core/error/failure.dart';
 import '../entity/enrollment_entity.dart';
@@ -24,9 +25,9 @@ class UpdateEnrollmentParams extends Equatable {
     required this.userId,
     required this.workshop,
     // required this.workshopId,
-    this.paymentStatus = "pending",
+    this.paymentStatus = "paid",
     DateTime? enrollmentDate,
-    this.completionStatus = "not started",
+    this.completionStatus = "in progress",
     this.feedback,
   }) : enrollmentDate = enrollmentDate ?? DateTime.now(); // Default dynamically
 
@@ -53,37 +54,62 @@ class UpdateEnrollmentParams extends Equatable {
         completionStatus,
         feedback,
       ];
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'user_id': userId,
+      'workshop_id': workshop,
+      'payment_status': paymentStatus,
+      'enrollment_date': enrollmentDate,
+      'completion_status': completionStatus,
+      'feedback': feedback,
+    };
+  }
 }
 
 class UpdateEnrollmentUseCase
     implements UsecaseWithParams<void, UpdateEnrollmentParams> {
   final IEnrollmentRepository enrollmentRepository;
   final TokenSharedPrefs tokenSharedPrefs;
+  final UserSharedPrefs userSharedPrefs;
 
   UpdateEnrollmentUseCase({
     required this.enrollmentRepository,
     required this.tokenSharedPrefs,
+    required this.userSharedPrefs,
   });
 
   @override
   Future<Either<Failure, void>> call(UpdateEnrollmentParams params) async {
-    final tokenResult = await tokenSharedPrefs.getToken();
+    // final tokenResult = await tokenSharedPrefs.getToken();
+    final userDataResult = await userSharedPrefs.getUserData();
 
-    // Handle token retrieval failure
-    return tokenResult.fold(
+    return userDataResult.fold(
       (failure) => Left(failure),
-      (token) async => await enrollmentRepository.updateEnrollment(
-        EnrollmentEntity(
-          id: params.id,
-          userId: params.userId,
-          workshop: params.workshop,
-          paymentStatus: params.paymentStatus,
-          enrollmentDate: params.enrollmentDate,
-          completionStatus: params.completionStatus,
-          feedback: params.feedback,
-        ),
-        token, // Pass token here
-      ),
+      // Return failure if fetching user data fails
+      (userData) async {
+        if (userData[2] == null || userData[1] == null) {
+          return Left(
+              SharedPrefsFailure(message: "User ID or Token is missing"));
+        }
+
+        final String userId = userData[2]!; // Extract userId
+        final String token = userData[1]!; // Extract token
+
+        return await enrollmentRepository.updateEnrollment(
+          EnrollmentEntity(
+            id: params.id,
+            userId: params.userId,
+            workshop: params.workshop,
+            paymentStatus: params.paymentStatus,
+            enrollmentDate: params.enrollmentDate,
+            completionStatus: params.completionStatus,
+            feedback: params.feedback,
+          ),
+          token,
+        );
+      },
     );
   }
 }

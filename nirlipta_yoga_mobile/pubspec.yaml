@@ -53,6 +53,7 @@ dependencies:
   json_serializable: ^6.9.0
   bloc: ^9.0.0
   fluttertoast: ^8.2.11
+  pinput: ^5.0.1
 
 
   proximity_screen_lock: ^2.1.1

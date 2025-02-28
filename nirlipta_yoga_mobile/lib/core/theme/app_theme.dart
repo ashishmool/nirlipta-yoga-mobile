@@ -88,7 +88,7 @@ class AppTheme {
       checkboxTheme: CheckboxThemeData(
         checkColor: WidgetStateProperty.all(primaryColor),
         fillColor: WidgetStateProperty.all(
-          isDarkMode ? Colors.white : Colors.black,
+          isDarkMode ? Colors.black : Colors.white,
         ),
         side: WidgetStateBorderSide.resolveWith((states) {
           return BorderSide(
