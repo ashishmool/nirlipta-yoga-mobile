@@ -66,7 +66,7 @@ class _ProfileViewState extends State<ProfileView> {
           listeners: [
             BlocListener<ProfileBloc, ProfileState>(
               listenWhen: (previous, current) =>
-                  previous.isImageLoading != current.isImageLoading ||
+              previous.isImageLoading != current.isImageLoading ||
                   previous.isImageSuccess != current.isImageSuccess,
               listener: (context, state) {
                 if (state.isImageLoading) {
@@ -87,7 +87,7 @@ class _ProfileViewState extends State<ProfileView> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content:
-                          Text('Failed to upload image. Please try again.'),
+                      Text('Failed to upload image. Please try again.'),
                       backgroundColor: Colors.red,
                     ),
                   );
@@ -96,7 +96,7 @@ class _ProfileViewState extends State<ProfileView> {
             ),
             BlocListener<ProfileBloc, ProfileState>(
               listenWhen: (previous, current) =>
-                  previous.isUpdateLoading != current.isUpdateLoading ||
+              previous.isUpdateLoading != current.isUpdateLoading ||
                   previous.isUpdateSuccess != current.isUpdateSuccess,
               listener: (context, state) {
                 if (state.isUpdateLoading) {
@@ -127,7 +127,7 @@ class _ProfileViewState extends State<ProfileView> {
             // Listener to update form fields when user data is fetched
             BlocListener<ProfileBloc, ProfileState>(
               listenWhen: (previous, current) =>
-                  previous.user != current.user, // Listen for user data changes
+              previous.user != current.user, // Listen for user data changes
               listener: (context, state) {
                 if (state.user != null) {
                   // Update form fields with fetched user data
@@ -176,41 +176,42 @@ class _ProfileViewState extends State<ProfileView> {
                                 top: Radius.circular(20),
                               ),
                             ),
-                            builder: (context) => Padding(
-                              padding: const EdgeInsets.all(20),
-                              child: Row(
-                                mainAxisAlignment:
+                            builder: (context) =>
+                                Padding(
+                                  padding: const EdgeInsets.all(20),
+                                  child: Row(
+                                    mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
-                                children: [
-                                  ElevatedButton.icon(
-                                    onPressed: () async {
-                                      await PermissionChecker
-                                          .checkCameraPermission();
-                                      _browseImage(ImageSource.camera);
-                                      Navigator.pop(context);
-                                    },
-                                    icon: const Icon(
-                                      Icons.camera,
-                                      color: Colors.white,
-                                    ),
-                                    label: const Text('Camera'),
+                                    children: [
+                                      ElevatedButton.icon(
+                                        onPressed: () async {
+                                          await PermissionChecker
+                                              .checkCameraPermission();
+                                          _browseImage(ImageSource.camera);
+                                          Navigator.pop(context);
+                                        },
+                                        icon: const Icon(
+                                          Icons.camera,
+                                          color: Colors.white,
+                                        ),
+                                        label: const Text('Camera'),
+                                      ),
+                                      ElevatedButton.icon(
+                                        onPressed: () async {
+                                          await PermissionChecker
+                                              .checkCameraPermission();
+                                          _browseImage(ImageSource.gallery);
+                                          Navigator.pop(context);
+                                        },
+                                        icon: const Icon(
+                                          Icons.image,
+                                          color: Colors.white,
+                                        ),
+                                        label: const Text('Gallery'),
+                                      ),
+                                    ],
                                   ),
-                                  ElevatedButton.icon(
-                                    onPressed: () async {
-                                      await PermissionChecker
-                                          .checkCameraPermission();
-                                      _browseImage(ImageSource.gallery);
-                                      Navigator.pop(context);
-                                    },
-                                    icon: const Icon(
-                                      Icons.image,
-                                      color: Colors.white,
-                                    ),
-                                    label: const Text('Gallery'),
-                                  ),
-                                ],
-                              ),
-                            ),
+                                ),
                           );
                         },
                         child: SizedBox(
@@ -227,12 +228,13 @@ class _ProfileViewState extends State<ProfileView> {
                                   backgroundImage: _img != null
                                       ? FileImage(_img!)
                                       : (state.user?.photo != null &&
-                                                  state.user!.photo!.isNotEmpty
-                                              ? NetworkImage(
-                                                  "http://10.0.2.2:5000/uploads/${state.user!.photo!}")
-                                              : const AssetImage(
-                                                  'assets/images/profile-placeholder.png'))
-                                          as ImageProvider,
+                                      state.user!.photo!.isNotEmpty
+                                      ? NetworkImage(
+                                      "http://192.168.1.11:5000/uploads/${state
+                                          .user!.photo!}")
+                                      : const AssetImage(
+                                      'assets/images/profile-placeholder.png'))
+                                  as ImageProvider,
                                 ),
                                 Positioned(
                                   bottom: 5,
@@ -287,10 +289,11 @@ class _ProfileViewState extends State<ProfileView> {
                             child: DropdownButtonFormField<String>(
                               value: _genderValue,
                               items: ['male', 'female', 'other']
-                                  .map((gender) => DropdownMenuItem<String>(
-                                        value: gender,
-                                        child: Text(gender),
-                                      ))
+                                  .map((gender) =>
+                                  DropdownMenuItem<String>(
+                                    value: gender,
+                                    child: Text(gender),
+                                  ))
                                   .toList(),
                               onChanged: (value) {
                                 setState(() {
@@ -391,7 +394,7 @@ class _ProfileViewState extends State<ProfileView> {
                                       _isNoneSelected = value ?? false;
                                       if (_isNoneSelected) {
                                         _medicalConditionsController.text =
-                                            'None';
+                                        'None';
                                       } else {
                                         _medicalConditionsController.clear();
                                       }
@@ -434,7 +437,9 @@ class _ProfileViewState extends State<ProfileView> {
                           onPressed: () {
                             if (_key.currentState!.validate()) {
                               final updateState =
-                                  context.read<ProfileBloc>().state;
+                                  context
+                                      .read<ProfileBloc>()
+                                      .state;
                               final imageName = updateState.imageName;
                               final userId = updateState
                                   .userId; // Get userId from the state
@@ -443,19 +448,19 @@ class _ProfileViewState extends State<ProfileView> {
                                 context
                                     .read<ProfileBloc>()
                                     .add(UpdateUserProfile(
-                                      id: userId,
-                                      // Use the userId from the state
-                                      name: _nameController.text,
-                                      username: _usernameController.text,
-                                      phone: _phoneController.text,
-                                      password: _passwordController.text,
-                                      email: _emailController.text,
-                                      gender: _genderValue.toString(),
-                                      medical_conditions: ['None'],
-                                      photo: _img != null
-                                          ? imageName
-                                          : state.user?.photo,
-                                    ));
+                                  id: userId,
+                                  // Use the userId from the state
+                                  name: _nameController.text,
+                                  username: _usernameController.text,
+                                  phone: _phoneController.text,
+                                  password: _passwordController.text,
+                                  email: _emailController.text,
+                                  gender: _genderValue.toString(),
+                                  medical_conditions: ['None'],
+                                  photo: _img != null
+                                      ? imageName
+                                      : state.user?.photo,
+                                ));
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(

@@ -5,6 +5,10 @@ sealed class FitnessEvent {}
 
 class StartTracking extends FitnessEvent {}
 
+class PauseTracking extends FitnessEvent {}
+
+class ResetTracking extends FitnessEvent {}
+
 class UpdateAccelerometer extends FitnessEvent {
   final AccelerometerEvent event;
 
@@ -18,12 +22,13 @@ class UpdatePosition extends FitnessEvent {
 }
 
 class UpdateProximity extends FitnessEvent {
-  final int proximityValue; // ✅ Keep it as int
+  final int proximityValue;
+
   UpdateProximity(this.proximityValue);
 }
 
 class UpdateStepCount extends FitnessEvent {
-  final StepCount stepCount;
+  final int stepCount;
 
   UpdateStepCount(this.stepCount);
 }

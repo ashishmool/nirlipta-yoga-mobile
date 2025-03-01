@@ -16,12 +16,12 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     on<SearchWorkshops>(_onSearchWorkshops);
   }
 
-  void _onLoadDashboardData(
-      LoadDashboardData event, Emitter<DashboardState> emit) async {
+  void _onLoadDashboardData(LoadDashboardData event,
+      Emitter<DashboardState> emit) async {
     emit(DashboardLoading());
     try {
       final response =
-          await http.get(Uri.parse("http://10.0.2.2:5000/api/workshops/"));
+      await http.get(Uri.parse("http://192.168.1.11:5000/api/workshops/"));
 
       if (response.statusCode == 200) {
         List<dynamic> jsonData = json.decode(response.body);
@@ -41,7 +41,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
             "category": workshop["category"]["name"],
             "price": workshop["price"].toDouble(),
             "discountPrice": workshop["discount_price"].toDouble(),
-            "photo": "http://10.0.2.2:5000" + workshop["photo"],
+            "photo": "http://192.168.1.11:5000" + workshop["photo"],
             "description": workshop["description"] ?? null,
           };
         }).toList();
@@ -68,7 +68,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         // Apply filtering
         List<Map<String, dynamic>> filteredWorkshops = allWorkshops
             .where((workshop) =>
-                event.selectedCategories.contains(workshop["category"]))
+            event.selectedCategories.contains(workshop["category"]))
             .toList();
 
         emit(DashboardLoaded(
@@ -89,10 +89,10 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         // Filter workshops based on the search query
         List<Map<String, dynamic>> filteredWorkshops = allWorkshops
             .where((workshop) =>
-                workshop["title"].toLowerCase().contains(query) ||
-                workshop["category"].toLowerCase().contains(query) ||
-                (workshop["description"] != null &&
-                    workshop["description"].toLowerCase().contains(query)))
+        workshop["title"].toLowerCase().contains(query) ||
+            workshop["category"].toLowerCase().contains(query) ||
+            (workshop["description"] != null &&
+                workshop["description"].toLowerCase().contains(query)))
             .toList();
 
         emit(DashboardLoaded(

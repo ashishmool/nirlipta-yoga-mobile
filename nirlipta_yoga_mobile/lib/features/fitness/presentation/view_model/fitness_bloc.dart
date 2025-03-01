@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:meta/meta.dart';
-import 'package:pedometer/pedometer.dart';
 import 'package:proximity_sensor/proximity_sensor.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
@@ -12,7 +11,6 @@ part 'fitness_state.dart';
 
 class FitnessBloc extends Bloc<FitnessEvent, FitnessState> {
   late StreamSubscription<AccelerometerEvent> _accelerometerSubscription;
-  late StreamSubscription<StepCount> _stepCountSubscription;
   late StreamSubscription<int> _proximitySubscription;
   late StreamSubscription<Position> _positionSubscription;
 
@@ -22,18 +20,25 @@ class FitnessBloc extends Bloc<FitnessEvent, FitnessState> {
   double caloriesBurned = 0.0;
   int proximityValue = 0;
 
+  // Variables for step detection
+  double _previousAcceleration = 0.0;
+  double _accelerationThreshold = 1.5; // Adjust this threshold as needed
+  bool _isTracking = false;
+
   FitnessBloc() : super(FitnessInitial()) {
     on<StartTracking>(_startTracking);
     on<UpdateAccelerometer>(_updateAccelerometer);
     on<UpdateProximity>(_updateProximity);
-    on<UpdatePosition>(_updatePosition); // ✅ Now properly registered
-    on<UpdateStepCount>(_updateStepCount); // ✅ Add this line
+    on<UpdatePosition>(_updatePosition);
+    on<UpdateStepCount>(_updateStepCount);
+    on<PauseTracking>(_pauseTracking);
+    on<ResetTracking>(_resetTracking);
   }
 
   void _updateStepCount(UpdateStepCount event, Emitter<FitnessState> emit) {
-    print('Step Count Updated: ${event.stepCount.steps}');
+    print('Step Count Updated: ${event.stepCount}');
 
-    stepCount = event.stepCount.steps.toDouble();
+    stepCount = event.stepCount.toDouble();
 
     emit(FitnessUpdated(
       stepCount: stepCount,
@@ -67,11 +72,6 @@ class FitnessBloc extends Bloc<FitnessEvent, FitnessState> {
       ));
       return;
     }
-    // ✅ Listen for step count updates
-    _stepCountSubscription =
-        Pedometer.stepCountStream.listen((StepCount event) {
-      add(UpdateStepCount(event));
-    });
 
     // Start Listening to Live Location
     _positionSubscription =
@@ -79,15 +79,20 @@ class FitnessBloc extends Bloc<FitnessEvent, FitnessState> {
       add(UpdatePosition(position));
     });
 
+    // Start Listening to Accelerometer for Step Detection
     _accelerometerSubscription =
         accelerometerEventStream().listen((AccelerometerEvent event) {
-      add(UpdateAccelerometer(event));
+      if (_isTracking) {
+        _detectSteps(event);
+      }
     });
 
     _proximitySubscription = ProximitySensor.events.listen((int event) {
       proximityValue = event;
       add(UpdateProximity(proximityValue));
     });
+
+    _isTracking = true;
 
     emit(FitnessUpdated(
       stepCount: stepCount,
@@ -97,6 +102,53 @@ class FitnessBloc extends Bloc<FitnessEvent, FitnessState> {
       position: null,
       proximityValue: proximityValue,
     ));
+  }
+
+  void _pauseTracking(PauseTracking event, Emitter<FitnessState> emit) {
+    _isTracking = false;
+    emit(FitnessUpdated(
+      stepCount: stepCount,
+      distanceKm: distanceKm,
+      durationMinutes: durationMinutes,
+      caloriesBurned: caloriesBurned,
+      position:
+          state is FitnessUpdated ? (state as FitnessUpdated).position : null,
+      proximityValue: proximityValue,
+    ));
+  }
+
+  void _resetTracking(ResetTracking event, Emitter<FitnessState> emit) {
+    stepCount = 0;
+    durationMinutes = 0;
+    _isTracking = false;
+    emit(FitnessUpdated(
+      stepCount: stepCount,
+      distanceKm: distanceKm,
+      durationMinutes: durationMinutes,
+      caloriesBurned: caloriesBurned,
+      position:
+          state is FitnessUpdated ? (state as FitnessUpdated).position : null,
+      proximityValue: proximityValue,
+    ));
+  }
+
+  void _detectSteps(AccelerometerEvent event) {
+    // Calculate the magnitude of acceleration
+    double acceleration = _calculateAcceleration(event);
+
+    // Detect steps based on acceleration changes
+    if (acceleration > _accelerationThreshold &&
+        _previousAcceleration <= _accelerationThreshold) {
+      stepCount++;
+      add(UpdateStepCount(stepCount.toInt()));
+    }
+
+    _previousAcceleration = acceleration;
+  }
+
+  double _calculateAcceleration(AccelerometerEvent event) {
+    // Calculate the magnitude of acceleration
+    return (event.x * event.x + event.y * event.y + event.z * event.z).abs();
   }
 
   void _updateAccelerometer(
@@ -135,7 +187,6 @@ class FitnessBloc extends Bloc<FitnessEvent, FitnessState> {
       durationMinutes: durationMinutes,
       caloriesBurned: caloriesBurned,
       position: event.position,
-      // ✅ Now correctly updating live position
       accelerometerEvent: state is FitnessUpdated
           ? (state as FitnessUpdated).accelerometerEvent
           : null,
@@ -146,7 +197,6 @@ class FitnessBloc extends Bloc<FitnessEvent, FitnessState> {
   @override
   Future<void> close() {
     _accelerometerSubscription.cancel();
-    _stepCountSubscription.cancel();
     _proximitySubscription.cancel();
     _positionSubscription.cancel();
     return super.close();

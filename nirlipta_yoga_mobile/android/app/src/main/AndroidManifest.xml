@@ -24,7 +24,7 @@
     <application
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        android:label="nirlipta_yoga_mobile">
+        android:label="Nirlipta Yoga">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBJ-Da0oaBT3tDBASXNSpfz30qSyPhsVOA" />

@@ -14,7 +14,7 @@ import '../view_model/enrollment_bloc.dart';
 class EnrollmentView extends StatelessWidget {
   EnrollmentView({super.key});
 
-  final String baseUrl = "http://10.0.2.2:5000";
+  final String baseUrl = "http://192.168.1.11:5000";
 
   @override
   Widget build(BuildContext context) {
@@ -93,33 +93,34 @@ class EnrollmentView extends StatelessWidget {
                           ClipRRect(
                             borderRadius: BorderRadius.circular(12),
                             child: enrollment.workshop.photo != null &&
-                                    enrollment.workshop.photo!.isNotEmpty
+                                enrollment.workshop.photo!.isNotEmpty
                                 ? Image.network(
-                                    "$baseUrl${enrollment.workshop.photo}",
-                                    width: double.infinity,
-                                    height: 140,
-                                    fit: BoxFit.cover,
-                                  )
+                              "$baseUrl${enrollment.workshop.photo}",
+                              width: double.infinity,
+                              height: 140,
+                              fit: BoxFit.cover,
+                            )
                                 : Container(
-                                    width: double.infinity,
-                                    height: 140,
-                                    color: isDarkMode
-                                        ? Colors.grey[800]
-                                        : Colors.grey[300],
-                                    child: Icon(
-                                      Icons.image_not_supported,
-                                      size: 50,
-                                      color: isDarkMode
-                                          ? Colors.white54
-                                          : Colors.grey,
-                                    ),
-                                  ),
+                              width: double.infinity,
+                              height: 140,
+                              color: isDarkMode
+                                  ? Colors.grey[800]
+                                  : Colors.grey[300],
+                              child: Icon(
+                                Icons.image_not_supported,
+                                size: 50,
+                                color: isDarkMode
+                                    ? Colors.white54
+                                    : Colors.grey,
+                              ),
+                            ),
                           ),
                           const SizedBox(height: 12),
 
                           /// Workshop Title
                           Text(
-                            "Workshop Title: ${enrollment.workshop.title ?? 'N/A'}",
+                            "Workshop Title: ${enrollment.workshop.title ??
+                                'N/A'}",
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -184,7 +185,7 @@ class EnrollmentView extends StatelessWidget {
                                 children: [
                                   // Show discounted price if valid
                                   if (enrollment.workshop.discountPrice !=
-                                          null &&
+                                      null &&
                                       enrollment.workshop.discountPrice! > 0 &&
                                       enrollment.workshop.discountPrice! <
                                           enrollment.workshop.price!)
@@ -207,7 +208,8 @@ class EnrollmentView extends StatelessWidget {
                                         // Add some spacing
                                         // Show discounted price
                                         Text(
-                                          "₹${enrollment.workshop.discountPrice}",
+                                          "₹${enrollment.workshop
+                                              .discountPrice}",
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold,
@@ -219,7 +221,7 @@ class EnrollmentView extends StatelessWidget {
                                       ],
                                     )
                                   else
-                                    // Show original price if no valid discount
+                                  // Show original price if no valid discount
                                     Text(
                                       "₹${enrollment.workshop.price ?? 'N/A'}",
                                       style: TextStyle(
@@ -258,7 +260,7 @@ class EnrollmentView extends StatelessWidget {
                                             builder: (context) {
                                               return const Center(
                                                 child:
-                                                    CircularProgressIndicator(),
+                                                CircularProgressIndicator(),
                                               );
                                             },
                                           );
@@ -269,7 +271,7 @@ class EnrollmentView extends StatelessWidget {
                                             showMySnackBar(
                                                 context: context,
                                                 message:
-                                                    "Certificate Generated Successfully!");
+                                                "Certificate Generated Successfully!");
                                           }
                                         } catch (e) {
                                           print(
@@ -302,7 +304,7 @@ class EnrollmentView extends StatelessWidget {
                                             backgroundColor: Colors.red[700],
                                             shape: RoundedRectangleBorder(
                                               borderRadius:
-                                                  BorderRadius.circular(8),
+                                              BorderRadius.circular(8),
                                             ),
                                           ),
                                           child: const Text('Pay Now'),
@@ -316,14 +318,14 @@ class EnrollmentView extends StatelessWidget {
                                               context
                                                   .read<EnrollmentBloc>()
                                                   .add(DeleteEnrollment(
-                                                      enrollment.id!));
+                                                  enrollment.id!));
                                             }
                                           },
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: Colors.grey[700],
                                             shape: RoundedRectangleBorder(
                                               borderRadius:
-                                                  BorderRadius.circular(8),
+                                              BorderRadius.circular(8),
                                             ),
                                           ),
                                           child: const Text('Delete'),
@@ -374,8 +376,8 @@ class EnrollmentView extends StatelessWidget {
     }
   }
 
-  Future<void> _processPayment(
-      BuildContext context, String enrollmentId) async {
+  Future<void> _processPayment(BuildContext context,
+      String enrollmentId) async {
     final url = Uri.parse("$baseUrl/api/enrollments/status/$enrollmentId");
 
     try {

@@ -15,8 +15,8 @@ class ShakeDetector {
 
   ShakeDetector({
     required this.onShake,
-    this.shakeThresholdGravity = 2.5,
-    this.shakeSlopTimeMS = 500,
+    this.shakeThresholdGravity = 4.0,
+    this.shakeSlopTimeMS = 2000,
     this.shakeCountResetTime = 3000,
   });
 

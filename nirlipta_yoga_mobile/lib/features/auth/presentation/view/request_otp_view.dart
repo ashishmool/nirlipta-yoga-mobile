@@ -12,7 +12,7 @@ class RequestOtpView extends StatelessWidget {
   RequestOtpView({super.key});
 
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController(text: 'a3.asis@gmail.com');
+  final _emailController = TextEditingController();
 
   final _gap = const SizedBox(height: 8);
 
