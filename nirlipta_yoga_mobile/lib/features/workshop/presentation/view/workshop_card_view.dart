@@ -22,8 +22,8 @@ class WorkshopCardView extends StatelessWidget {
         itemCount: workshops.length,
         itemBuilder: (context, index) {
           final workshop = workshops[index];
-          final difficultyLevel =
-              workshop["difficultyLevel"] ?? "beginner"; // Default to beginner
+          print(workshop);
+          final difficultyLevel = workshop["difficultyLevel"] ?? "beginner";
           final difficultyColor = _getDifficultyColor(difficultyLevel);
           final description = workshop["description"] ?? "No description";
           final excerpt = description.length > 50

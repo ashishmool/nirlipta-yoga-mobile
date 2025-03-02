@@ -27,9 +27,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
       if (response.statusCode == 200) {
         List<dynamic> jsonData = json.decode(response.body);
 
-        // Debugging: Check raw response
-        print("Response: $jsonData");
-
         allCategories = jsonData
             .map<String>((workshop) => workshop["category"]["name"].toString())
             .toSet()
@@ -39,6 +36,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
           return {
             "workshopId": workshop["_id"], // "workshopId" change
             "title": workshop["title"],
+            "difficultyLevel": workshop["difficulty_level"],
             "category": workshop["category"]["name"],
             "price": workshop["price"].toDouble(),
             "discountPrice": workshop["discount_price"].toDouble(),
