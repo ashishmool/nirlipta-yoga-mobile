@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nirlipta_yoga_mobile/core/theme/app_theme.dart';
 
+import '../../../../app/constants/api_endpoints.dart';
 import '../../../../core/common/permission_checker/permission_checker.dart';
 import '../../../../core/theme/theme_cubit.dart';
 import '../../../home/presentation/view_model/home_cubit.dart';
@@ -230,8 +231,9 @@ class _ProfileViewState extends State<ProfileView> {
                                       : (state.user?.photo != null &&
                                       state.user!.photo!.isNotEmpty
                                       ? NetworkImage(
-                                      "http://192.168.1.11:5000/uploads/${state
-                                          .user!.photo!}")
+                                      "${ApiEndpoints.imageUrl}/${state.user!
+                                          .photo!}"
+                                  )
                                       : const AssetImage(
                                       'assets/images/profile-placeholder.png'))
                                   as ImageProvider,
@@ -339,7 +341,7 @@ class _ProfileViewState extends State<ProfileView> {
                         children: [
                           // Email Field takes 50% of the width
                           Expanded(
-                            flex: 2,
+                            flex: 1,
                             child: TextFormField(
                               controller: _emailController,
                               enabled: false,

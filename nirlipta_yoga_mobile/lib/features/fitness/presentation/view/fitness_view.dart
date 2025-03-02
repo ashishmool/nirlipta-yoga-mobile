@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import 'package:nirlipta_yoga_mobile/core/theme/app_theme.dart';
 import 'package:proximity_screen_lock/proximity_screen_lock.dart';
 
@@ -71,7 +72,7 @@ class _FitnessViewState extends State<FitnessView> {
               return const Center(child: CircularProgressIndicator());
             }
 
-            return Padding(
+            return SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -113,67 +114,75 @@ class _FitnessViewState extends State<FitnessView> {
                     ),
                   ),
 
-                  // ✅ Step Count Progress Indicator + Start Button
-                  Center(
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        SizedBox(
-                          width: 150,
-                          height: 150,
-                          child: CircularProgressIndicator(
-                            value: state.stepCount / 10000,
-                            strokeWidth: 10,
-                            backgroundColor: Colors.grey[300],
-                            valueColor: const AlwaysStoppedAnimation<Color>(
-                                Colors.orange),
-                          ),
-                        ),
-                        Column(
-                          children: [
-                            Text(
-                              state.stepCount.toStringAsFixed(0),
-                              style: const TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: primaryColor,
-                              ),
-                            ),
-                            const Text(
-                              'STEPS',
-                              style:
-                                  TextStyle(fontSize: 16, color: Colors.black),
-                            ),
-                            const SizedBox(height: 8),
+                  const SizedBox(height: 16),
 
-                            // ✅ Start/Stop Button
-                            ElevatedButton.icon(
-                              onPressed: _toggleTimer,
-                              icon: Icon(
-                                _isRunning
-                                    ? Icons.stop // Stop Icon
-                                    : Icons.play_arrow, // Play Icon
-                                color: Colors.white,
-                              ),
-                              label: Text(
-                                _isRunning ? "Stop" : "Start",
-                                style: const TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 8),
-                                backgroundColor:
-                                    _isRunning ? Colors.red : Colors.green,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                elevation: 4,
-                              ),
+                  // ✅ Step Count Progress Indicator with Animation on Right
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Step Count + Progress
+                      Column(
+                        children: [
+                          SizedBox(
+                            width: 150,
+                            height: 150,
+                            child: CircularProgressIndicator(
+                              value: state.stepCount / 10000,
+                              strokeWidth: 10,
+                              backgroundColor: Colors.grey[300],
+                              valueColor: const AlwaysStoppedAnimation<Color>(
+                                  Colors.orange),
                             ),
-                          ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(width: 20),
+                      // Walking Animation
+                      SizedBox(
+                        height: 120,
+                        width: 120,
+                        child: Lottie.asset(
+                          'assets/animations/walking.json',
+                          repeat: true,
                         ),
-                      ],
+                      ),
+                      Text(
+                        state.stepCount.toStringAsFixed(0),
+                        style: const TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: primaryColor,
+                        ),
+                      ),
+                      const Text(
+                        'STEPS',
+                        style: TextStyle(fontSize: 16, color: Colors.black),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  // ✅ Start/Stop Button
+                  ElevatedButton.icon(
+                    onPressed: _toggleTimer,
+                    icon: Icon(
+                      _isRunning ? Icons.stop : Icons.play_arrow,
+                      color: Colors.white,
+                    ),
+                    label: Text(
+                      _isRunning ? "Stop" : "Start",
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      backgroundColor: _isRunning ? Colors.red : Colors.green,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      elevation: 4,
                     ),
                   ),
 
@@ -189,7 +198,6 @@ class _FitnessViewState extends State<FitnessView> {
                       // ✅ Timer display below the icon
                       Column(
                         children: [
-                          // _buildMetric('TIMER', '', Icons.timer, primaryColor),
                           const Icon(Icons.timer,
                               size: 40, color: Colors.green),
                           Text(

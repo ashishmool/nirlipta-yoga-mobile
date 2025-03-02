@@ -98,6 +98,7 @@ class _DashboardViewState extends State<DashboardView> {
                       spacing: 10,
                       children: state.categories.map((category) {
                         return FilterChip(
+                          checkmarkColor: Colors.white,
                           label: Text(category),
                           selected: _selectedCategories.contains(category),
                           selectedColor: secondaryColor,

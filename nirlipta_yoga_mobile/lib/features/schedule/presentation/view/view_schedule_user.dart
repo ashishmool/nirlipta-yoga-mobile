@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../app/constants/api_endpoints.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/theme_cubit.dart';
 
@@ -66,7 +67,7 @@ class _ViewScheduleUserState extends State<ViewScheduleUser> {
   Future<void> fetchSchedules() async {
     try {
       final response = await Dio().get(
-        'http://192.168.1.11:5000/api/schedules/user/${widget.userId}',
+        '${ApiEndpoints.baseUrl}schedules/user/${widget.userId}',
       );
 
       List<dynamic> data = response.data;
@@ -112,99 +113,99 @@ class _ViewScheduleUserState extends State<ViewScheduleUser> {
         title: const Text('My Weekly Schedule'),
         backgroundColor: isDarkMode ? Colors.black : primaryColor,
         iconTheme:
-        IconThemeData(color: isDarkMode ? Colors.white : Colors.white),
+            IconThemeData(color: isDarkMode ? Colors.white : Colors.white),
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : schedules.isEmpty
-          ? const Center(
-        child: Text(
-          "No schedules available.",
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-      )
-          : ListView(
-        padding: const EdgeInsets.all(16),
-        children: groupedSchedules.entries.map((entry) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                entry.key, // Day of the week
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: isDarkMode ? Colors.white : Colors.black,
-                ),
-              ),
-              const SizedBox(height: 12),
-              ...entry.value.map((schedule) {
-                return Container(
-                  width: double.infinity,
-                  margin: const EdgeInsets.only(bottom: 12),
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: _getStatusColor(schedule.status),
-                    borderRadius: BorderRadius.circular(12),
+              ? const Center(
+                  child: Text(
+                    "No schedules available.",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment:
-                          CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              schedule.title,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
+                )
+              : ListView(
+                  padding: const EdgeInsets.all(16),
+                  children: groupedSchedules.entries.map((entry) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          entry.key, // Day of the week
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: isDarkMode ? Colors.white : Colors.black,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        ...entry.value.map((schedule) {
+                          return Container(
+                            width: double.infinity,
+                            margin: const EdgeInsets.only(bottom: 12),
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: _getStatusColor(schedule.status),
+                              borderRadius: BorderRadius.circular(12),
                             ),
-                            const SizedBox(height: 6),
-                            Row(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Icon(Icons.access_time,
-                                    color: Colors.white70, size: 18),
-                                const SizedBox(width: 6),
-                                Text(
-                                  "${schedule.startTime} - ${schedule.endTime}",
-                                  style: const TextStyle(
-                                    color: Colors.white70,
-                                    fontSize: 14,
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        schedule.title,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 6),
+                                      Row(
+                                        children: [
+                                          const Icon(Icons.access_time,
+                                              color: Colors.white70, size: 18),
+                                          const SizedBox(width: 6),
+                                          Text(
+                                            "${schedule.startTime} - ${schedule.endTime}",
+                                            style: const TextStyle(
+                                              color: Colors.white70,
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 6),
+                                      Text(
+                                        "Status: ${schedule.status}",
+                                        style: const TextStyle(
+                                          color: Colors.white70,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
                                   ),
+                                ),
+                                Icon(
+                                  _getStatusIcon(schedule.status),
+                                  color: Colors.white,
+                                  size: 30,
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 6),
-                            Text(
-                              "Status: ${schedule.status}",
-                              style: const TextStyle(
-                                color: Colors.white70,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Icon(
-                        _getStatusIcon(schedule.status),
-                        color: Colors.white,
-                        size: 30,
-                      ),
-                    ],
-                  ),
-                );
-              }).toList(),
-              const SizedBox(height: 16),
-            ],
-          );
-        }).toList(),
-      ),
+                          );
+                        }).toList(),
+                        const SizedBox(height: 16),
+                      ],
+                    );
+                  }).toList(),
+                ),
     );
   }
 

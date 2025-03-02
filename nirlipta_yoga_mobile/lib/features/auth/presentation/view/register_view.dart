@@ -17,15 +17,17 @@ class RegisterView extends StatefulWidget {
 class _RegisterViewState extends State<RegisterView> {
   final _gap = const SizedBox(height: 8);
   final _key = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _usernameController = TextEditingController();
-  final _medicalConditionsController = TextEditingController();
-  final _phoneController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
+  final _nameController = TextEditingController(text: 'Test User');
+  final _usernameController = TextEditingController(text: 'testUser001');
+  final _medicalConditionsController =
+      TextEditingController(text: 'Some Condition');
+  final _phoneController = TextEditingController(text: '0123456789');
+  final _emailController =
+      TextEditingController(text: 'ashishmool@yopmail.com');
+  final _passwordController = TextEditingController(text: 'test@12345');
+  final _confirmPasswordController = TextEditingController(text: 'test@12345');
 
-  String? _genderValue;
+  String? _genderValue = 'male';
   bool _isPasswordVisible = false;
   bool _isNoneSelected =
       true; // Track whether "None" is selected for medical conditions

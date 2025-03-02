@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../../app/constants/api_endpoints.dart';
 import '../../../../app/shared_prefs/user_shared_prefs.dart';
 import 'single_workshop_event.dart';
 import 'single_workshop_state.dart';
@@ -14,13 +15,12 @@ class SingleWorkshopBloc
     on<EnrollInWorkshop>(_onEnrollInWorkshop);
   }
 
-  void _onLoadSingleWorkshop(LoadSingleWorkshop event,
-      Emitter<SingleWorkshopState> emit) async {
+  void _onLoadSingleWorkshop(
+      LoadSingleWorkshop event, Emitter<SingleWorkshopState> emit) async {
     emit(SingleWorkshopLoading());
     try {
       final response = await http.get(
-        Uri.parse("http://192.168.1.11:5000/api/workshops/${event.workshopId}"),
-      );
+          Uri.parse("${ApiEndpoints.baseUrl}workshops/${event.workshopId}"));
 
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonData = json.decode(response.body);
@@ -35,22 +35,21 @@ class SingleWorkshopBloc
           "difficulty_level": jsonData["difficulty_level"] ?? "Unknown Level",
           "category": jsonData["category"]?["name"] ?? "No Category",
           "price":
-          jsonData["price"] != null ? jsonData["price"].toDouble() : 0.0,
+              jsonData["price"] != null ? jsonData["price"].toDouble() : 0.0,
           "discount_price": jsonData["discount_price"]?.toDouble(),
           "photo": jsonData["photo"] != null
-              ? "http://192.168.1.11:5000${jsonData["photo"]}"
+              ? "${ApiEndpoints.imageLocationUrl}${jsonData["photo"]}"
               : null,
           "duration": jsonData["duration"] ?? "No Duration",
           "schedule": jsonData["schedule"] ?? [],
           "modules": jsonData["modules"] != null
               ? List<Map<String, dynamic>>.from(
-            jsonData["modules"].map((module) =>
-            {
-              "id": module["_id"] ?? "",
-              "name": module["name"] ?? "No Name",
-              "duration": module["duration"] ?? "No Duration",
-            }),
-          )
+                  jsonData["modules"].map((module) => {
+                        "id": module["_id"] ?? "",
+                        "name": module["name"] ?? "No Name",
+                        "duration": module["duration"] ?? "No Duration",
+                      }),
+                )
               : [],
         };
 
@@ -64,8 +63,7 @@ class SingleWorkshopBloc
           // Check if user is already enrolled
           final enrollResponse = await http.get(
             Uri.parse(
-                "http://192.168.1.11:5000/api/enrollments/check/$userId/${event
-                    .workshopId}"),
+                "${ApiEndpoints.baseUrl}enrollments/check/$userId/${event.workshopId}"),
           );
 
           if (enrollResponse.statusCode == 200) {
@@ -83,12 +81,12 @@ class SingleWorkshopBloc
     }
   }
 
-  void _onEnrollInWorkshop(EnrollInWorkshop event,
-      Emitter<SingleWorkshopState> emit) async {
+  void _onEnrollInWorkshop(
+      EnrollInWorkshop event, Emitter<SingleWorkshopState> emit) async {
     emit(EnrollmentLoading());
     try {
       final response = await http.post(
-        Uri.parse("http://192.168.1.11:5000/api/enrollments/save"),
+        Uri.parse("${ApiEndpoints.baseUrl}enrollments/save"),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode(
             {"user_id": event.userId, "workshop_id": event.workshopId}),
