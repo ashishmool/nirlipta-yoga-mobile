@@ -69,3 +69,30 @@ We welcome contributions from developers and designers worldwide!
 
 ## Conclusion 🌿  
 The **Nirliptah Yoga App** is more than just a tool; it's a wellness companion that empowers users to lead healthier, balanced lives. By integrating AI capabilities, user-centric design, and the timeless benefits of yoga, this app stands as a testament to how technology can enhance our connection to tradition and self-care. 🌱  
+
+## 📸 Application Screenshots
+
+Here are some screenshots of the Nirliptah Yoga App:
+
+![Screenshot 1: App Launch](application_screenshots/1.png)
+![Screenshot 2: Splash Screen](application_screenshots/2.png)
+![Screenshot 3: Onboarding Screen](application_screenshots/3.png)
+![Screenshot 4: Login Screen](application_screenshots/4.png)
+![Screenshot 5: Register Screen](application_screenshots/5.png)
+![Screenshot 6: Request OTP Screen](application_screenshots/6.png)
+![Screenshot 7: Reset Password Screen](application_screenshots/7.png)
+![Screenshot 8: Dashboard Screen (Light Theme)](application_screenshots/8.png)
+![Screenshot 9: Dashboard Screen (Dark Theme)](application_screenshots/9.png)
+![Screenshot 10: Single Workshop Screen (Light Theme)](application_screenshots/10.png)
+![Screenshot 11: Single Workshop Screen (Dark Theme)](application_screenshots/11.png)
+![Screenshot 12: Single Workshop Already Enrolled Status Screen (Light Theme)](application_screenshots/12.png)
+![Screenshot 13: Manage Profile (Light Theme)](application_screenshots/13.png)
+![Screenshot 14: Manage Profile (Dark Theme)](application_screenshots/14.png)
+![Screenshot 15: My Enrollments (Light Theme)](application_screenshots/15.png)
+![Screenshot 16: My Enrollments (Dark Theme)](application_screenshots/16.png)
+![Screenshot 17: My Enrollments - Generate Certificate View (Light Theme)](application_screenshots/17.png)
+![Screenshot 18: My Weekly Schedule (Light Theme)](application_screenshots/18.png)
+![Screenshot 19: : My Weekly Schedule (Dark Theme)](application_screenshots/19.png)
+![Screenshot 20: Fitness Dashboard (Light Theme)](application_screenshots/20.png)
+![Screenshot 21: Fitness Dashboard (Dark Theme)](application_screenshots/21.png)
+![Screenshot 22: User Permissions](application_screenshots/22.png)
