@@ -12,7 +12,6 @@ import 'package:nirlipta_yoga_mobile/features/workshop/data/data_source/local_da
 import 'package:nirlipta_yoga_mobile/features/workshop/data/data_source/remote_datasource/workshop_remote_data_source.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../core/common/internet_checker/internet_checker.dart';
 import '../../core/network/api_service.dart';
 import '../../core/network/hive_service.dart';
 import '../../features/auth/data/data_source/remote_datasource/user_remote_data_source.dart';
@@ -63,7 +62,6 @@ Future<void> initDependencies() async {
   await _initHiveService();
   await _initApiService();
   await _initSharedPreferences();
-  await _initInternetChecker();
 
   // Start with Splash
   await _initSplashScreenDependencies();
@@ -87,11 +85,6 @@ Future<void> initDependencies() async {
   await _initWorkshopDependencies();
   await _initCategoryDependencies();
   await _initProfileDependencies();
-}
-
-_initInternetChecker() {
-  // Register InternetChecker
-  getIt.registerLazySingleton<InternetChecker>(() => InternetChecker());
 }
 
 _initHiveService() {

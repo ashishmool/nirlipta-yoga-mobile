@@ -26,8 +26,8 @@ class WorkshopCardView extends StatelessWidget {
           final difficultyLevel = workshop["difficultyLevel"] ?? "beginner";
           final difficultyColor = _getDifficultyColor(difficultyLevel);
           final description = workshop["description"] ?? "No description";
-          final excerpt = description.length > 50
-              ? "${description.substring(0, 50)}..."
+          final excerpt = description.length > 25
+              ? "${description.substring(0, 25)}..."
               : description;
 
           return GestureDetector(

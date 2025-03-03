@@ -14,8 +14,8 @@ class LoginView extends StatelessWidget {
   LoginView({super.key});
 
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController(text: 'asis.mool@gmail.com');
-  final _passwordController = TextEditingController(text: 'test@12345');
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   final _gap = const SizedBox(height: 8);
 
@@ -88,7 +88,9 @@ class LoginView extends StatelessWidget {
                                 ),
                               ),
                               validator: (value) {
-                                if (value == null || value.trim().isEmpty) {
+                                if (value == null || value
+                                    .trim()
+                                    .isEmpty) {
                                   return 'Password is required';
                                 }
                                 if (value.length < 8) {
@@ -109,10 +111,12 @@ class LoginView extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => BlocProvider(
-                                create: (context) => getIt<RequestOtpBloc>(),
-                                child: RequestOtpView(),
-                              ),
+                              builder: (context) =>
+                                  BlocProvider(
+                                    create: (context) =>
+                                        getIt<RequestOtpBloc>(),
+                                    child: RequestOtpView(),
+                                  ),
                             ),
                           );
                         },
@@ -130,13 +134,13 @@ class LoginView extends StatelessWidget {
                           final password = _passwordController.text.trim();
 
                           context.read<LoginBloc>().add(
-                                LoginUserEvent(
-                                  email: email,
-                                  password: password,
-                                  context: context,
-                                  destination: HomeView(),
-                                ),
-                              );
+                            LoginUserEvent(
+                              email: email,
+                              password: password,
+                              context: context,
+                              destination: HomeView(),
+                            ),
+                          );
                         }
                       },
                       child: const SizedBox(
@@ -166,11 +170,11 @@ class LoginView extends StatelessWidget {
                               key: const ValueKey('registerButton'),
                               onPressed: () {
                                 context.read<LoginBloc>().add(
-                                      NavigateRegisterScreenEvent(
-                                        destination: RegisterView(),
-                                        context: context,
-                                      ),
-                                    );
+                                  NavigateRegisterScreenEvent(
+                                    destination: RegisterView(),
+                                    context: context,
+                                  ),
+                                );
                               },
                               child: const Text(
                                 'Register',

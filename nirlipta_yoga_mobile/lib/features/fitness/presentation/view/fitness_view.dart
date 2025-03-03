@@ -20,7 +20,7 @@ class FitnessView extends StatefulWidget {
 class _FitnessViewState extends State<FitnessView> {
   Timer? _timer;
   int _seconds = 0;
-  bool _isRunning = false; // ✅ Toggle state for button
+  bool _isRunning = false;
 
   @override
   void initState() {
@@ -50,6 +50,18 @@ class _FitnessViewState extends State<FitnessView> {
     });
   }
 
+  void _resetAll() {
+    // Reset the timer
+    _timer?.cancel();
+    setState(() {
+      _seconds = 0;
+      _isRunning = false;
+    });
+
+    // Dispatch ResetTracking event to the bloc
+    context.read<FitnessBloc>().add(ResetTracking());
+  }
+
   @override
   Widget build(BuildContext context) {
     final themeCubit = context.watch<ThemeCubit>();
@@ -77,125 +89,14 @@ class _FitnessViewState extends State<FitnessView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // ✅ Live Location Display
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          "Live Location",
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 5),
-                        Container(
-                          height: 200,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: Colors.black12),
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: state.position != null
-                                ? LiveLocationScreen(
-                                    latitude: state.position!.latitude,
-                                    longitude: state.position!.longitude,
-                                  )
-                                : const Center(
-                                    child: CircularProgressIndicator()),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  // ✅ Step Count Progress Indicator with Animation on Right
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Step Count + Progress
-                      Column(
-                        children: [
-                          SizedBox(
-                            width: 150,
-                            height: 150,
-                            child: CircularProgressIndicator(
-                              value: state.stepCount / 10000,
-                              strokeWidth: 10,
-                              backgroundColor: Colors.grey[300],
-                              valueColor: const AlwaysStoppedAnimation<Color>(
-                                  Colors.orange),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(width: 20),
-                      // Walking Animation
-                      SizedBox(
-                        height: 120,
-                        width: 120,
-                        child: Lottie.asset(
-                          'assets/animations/walking.json',
-                          repeat: true,
-                        ),
-                      ),
-                      Text(
-                        state.stepCount.toStringAsFixed(0),
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: primaryColor,
-                        ),
-                      ),
-                      const Text(
-                        'STEPS',
-                        style: TextStyle(fontSize: 16, color: Colors.black),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  // ✅ Start/Stop Button
-                  ElevatedButton.icon(
-                    onPressed: _toggleTimer,
-                    icon: Icon(
-                      _isRunning ? Icons.stop : Icons.play_arrow,
-                      color: Colors.white,
-                    ),
-                    label: Text(
-                      _isRunning ? "Stop" : "Start",
-                      style: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      backgroundColor: _isRunning ? Colors.red : Colors.green,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      elevation: 4,
-                    ),
-                  ),
-
-                  const SizedBox(height: 32),
-
-                  // ✅ Metrics Row (Distance, Duration, Calories)
+                  // Metrics Row (Distance, Duration, Calories)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       _buildMetric('KM', state.distanceKm.toStringAsFixed(2),
                           Icons.directions_walk, secondaryColor),
 
-                      // ✅ Timer display below the icon
+                      // Timer display below the icon
                       Column(
                         children: [
                           const Icon(Icons.timer,
@@ -215,6 +116,156 @@ class _FitnessViewState extends State<FitnessView> {
                           Colors.red),
                     ],
                   ),
+
+                  const SizedBox(height: 16),
+
+                  // Step Count Progress Indicator with Animation
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Step Count + Progress
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          SizedBox(
+                            width: 150,
+                            height: 150,
+                            child: CircularProgressIndicator(
+                              value: state.stepCount / 10000,
+                              strokeWidth: 10,
+                              backgroundColor: Colors.grey[300],
+                              valueColor: const AlwaysStoppedAnimation<Color>(
+                                  Colors.orange),
+                            ),
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                state.stepCount.toStringAsFixed(0),
+                                style: const TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: primaryColor,
+                                ),
+                              ),
+                              Text(
+                                'STEPS',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: isDarkMode
+                                        ? Colors.white
+                                        : Colors.black),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(width: 20),
+                      // Walking Animation
+                      SizedBox(
+                        height: 120,
+                        width: 120,
+                        child: Lottie.asset(
+                          'assets/animations/walking.json',
+                          repeat: true,
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  // Start and Reset Buttons
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Start Button
+                      ElevatedButton.icon(
+                        onPressed: _toggleTimer,
+                        icon: Icon(
+                          _isRunning ? Icons.pause : Icons.play_arrow,
+                          color: Colors.white,
+                        ),
+                        label: Text(
+                          _isRunning ? "Pause" : "Start",
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 8),
+                          backgroundColor:
+                              _isRunning ? Colors.red : Colors.green,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          elevation: 4,
+                        ),
+                      ),
+                      const SizedBox(width: 16), // Spacing between buttons
+                      // Reset Button
+                      ElevatedButton.icon(
+                        onPressed: _resetAll,
+                        icon: const Icon(
+                          Icons.refresh,
+                          color: Colors.white,
+                        ),
+                        label: const Text(
+                          "Reset",
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 8),
+                          backgroundColor: Colors.blue,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          elevation: 4,
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 16),
+                  // Live Location Display
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Live Location",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 5),
+                        Container(
+                          height: 240,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: Colors.black12),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: state.position != null
+                                ? LiveLocationScreen(
+                                    latitude: state.position!.latitude,
+                                    longitude: state.position!.longitude,
+                                  )
+                                : const Center(
+                                    child: CircularProgressIndicator()),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             );
@@ -224,7 +275,7 @@ class _FitnessViewState extends State<FitnessView> {
     );
   }
 
-  /// ✅ Builds a Metric Widget for Steps, Distance, etc.
+  /// Builds a Metric Widget for Steps, Distance, etc.
   Widget _buildMetric(String label, String value, IconData icon, Color color) {
     return Column(
       children: [

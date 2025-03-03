@@ -5,12 +5,10 @@ class ApiEndpoints {
   static const Duration receiveTimeout = Duration(seconds: 10000);
 
   // For Android Emulator
-  
+
   static const String baseUrl = "http://10.0.2.2:5000/api/";
   static const String imageLocationUrl = "http://10.0.2.2:5000";
-
-  // // For iPhone
-  // static const String baseUrl = "http://localhost:5000/api/";
+  static const String imageUrl = "http://10.0.2.2:5000/uploads/";
 
   // ============= Auth Routes =============
   static const String login = "auth/login";
@@ -22,9 +20,6 @@ class ApiEndpoints {
 
   static const String receiveOtp = "/auth/otp";
   static const String setNewPassword = "auth/set-new-password/";
-
-  // static const String imageUrl = "http://10.0.2.2:5000/uploads/";
-  static const String imageUrl = "http://10.0.2.2:5000/uploads/";
 
   static const String uploadImage = "auth/uploadImage";
 

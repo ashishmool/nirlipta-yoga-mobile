@@ -36,8 +36,6 @@ class FitnessBloc extends Bloc<FitnessEvent, FitnessState> {
   }
 
   void _updateStepCount(UpdateStepCount event, Emitter<FitnessState> emit) {
-    print('Step Count Updated: ${event.stepCount}');
-
     stepCount = event.stepCount.toDouble();
 
     emit(FitnessUpdated(
